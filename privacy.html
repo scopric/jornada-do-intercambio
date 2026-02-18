@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Política de Privacidade — Jornada do Intercâmbio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .legal-hero {
+            background: var(--bg2);
+            border-bottom: 1px solid var(--border);
+            padding: 80px 0 48px;
+            text-align: center;
+        }
+
+        .legal-hero .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 200, 150, 0.08);
+            border: 1px solid rgba(0, 200, 150, 0.2);
+            color: var(--green);
+            padding: 5px 14px;
+            border-radius: 100px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+        }
+
+        .legal-hero h1 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .legal-hero p {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .legal-body {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 60px 40px 80px;
+        }
+
+        .legal-toc {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: var(--r2);
+            padding: 24px 28px;
+            margin-bottom: 48px;
+        }
+
+        .legal-toc h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--muted2);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .legal-toc ol {
+            padding-left: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .legal-toc a {
+            font-size: 0.82rem;
+            color: var(--green);
+        }
+
+        .legal-toc a:hover {
+            text-decoration: underline;
+        }
+
+        h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin: 44px 0 14px;
+            padding-top: 12px;
+            color: var(--white);
+            border-top: 1px solid var(--border);
+        }
+
+        h2:first-of-type {
+            border-top: none;
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 24px 0 10px;
+            color: var(--muted2);
+        }
+
+        p {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            margin-bottom: 14px;
+        }
+
+        li {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.7;
+        }
+
+        strong {
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .highlight {
+            background: rgba(0, 200, 150, 0.06);
+            border: 1px solid rgba(0, 200, 150, 0.15);
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin: 20px 0;
+        }
+
+        .highlight p {
+            margin: 0;
+            font-size: 0.82rem;
+        }
+
+        .contact-box {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: var(--r2);
+            padding: 28px 32px;
+            margin-top: 48px;
+        }
+
+        .contact-box h3 {
+            color: var(--white);
+            margin-top: 0;
+            margin-bottom: 14px;
+            font-size: 1.1rem;
+        }
+
+        .contact-box p {
+            font-size: 0.875rem;
+        }
+
+        .contact-box a {
+            color: var(--green);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--muted);
+            font-size: 0.82rem;
+            margin-bottom: 32px;
+            transition: var(--t);
+        }
+
+        .back-link:hover {
+            color: var(--white);
+        }
+
+        @media(max-width:600px) {
+            .legal-body {
+                padding: 40px 20px 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="legal-hero">
+        <div class="pill">🔒 Privacidade</div>
+        <h1>Política de Privacidade</h1>
+        <p>Última atualização: 18 de fevereiro de 2025 · Versão 1.0</p>
+    </div>
+
+    <div class="legal-body">
+        <a href="index.html" class="back-link">← Voltar para o site</a>
+
+        <div class="legal-toc">
+            <h3>Índice</h3>
+            <ol>
+                <li><a href="#controlador">Quem somos — Controlador de dados</a></li>
+                <li><a href="#dados">Quais dados coletamos</a></li>
+                <li><a href="#base">Base legal para o tratamento</a></li>
+                <li><a href="#uso">Como usamos seus dados</a></li>
+                <li><a href="#compartilhamento">Compartilhamento com terceiros</a></li>
+                <li><a href="#transferencia">Transferência internacional de dados</a></li>
+                <li><a href="#retencao">Retenção de dados</a></li>
+                <li><a href="#direitos">Seus direitos como titular</a></li>
+                <li><a href="#cookies">Cookies e tecnologias similares</a></li>
+                <li><a href="#seguranca">Segurança dos dados</a></li>
+                <li><a href="#menores">Menores de 13 anos</a></li>
+                <li><a href="#atualizacoes">Atualizações desta política</a></li>
+                <li><a href="#contato">Contato e DPO</a></li>
+            </ol>
+        </div>
+
+        <!-- 1 -->
+        <h2 id="controlador">1. Quem somos — Controlador de dados</h2>
+        <p><strong>Jornada do Intercâmbio</strong> é uma plataforma de conteúdo digital voltada para brasileiros que
+            estudam, trabalham ou vivem na Irlanda. Somos os <strong>controladores de dados</strong> responsáveis pelo
+            tratamento das informações coletadas neste site.</p>
+        <p>Nossa plataforma está comprometida com o cumprimento da <strong>Lei Geral de Proteção de Dados (LGPD — Lei nº
+                13.709/2018)</strong> e, por atender usuários residentes na União Europeia e na Irlanda, também
+            observamos os princípios do <strong>Regulamento Geral sobre a Proteção de Dados (GDPR — Regulamento (UE)
+                2016/679)</strong>.</p>
+
+        <!-- 2 -->
+        <h2 id="dados">2. Quais dados coletamos</h2>
+
+        <h3>2.1 Dados de cadastro obrigatórios</h3>
+        <ul>
+            <li>Nome completo</li>
+            <li>Endereço de e-mail</li>
+            <li>Número de telefone / WhatsApp</li>
+            <li>Senha (armazenada em formato de hash criptográfico — SHA-256 — nunca em texto plano)</li>
+        </ul>
+
+        <h3>2.2 Dados de perfil e jornada (questionário de onboarding)</h3>
+        <ul>
+            <li>País de origem e localização atual</li>
+            <li>Data de nascimento (opcional)</li>
+            <li>Apelido / nome preferido</li>
+            <li>Fase da jornada de intercâmbio (planejando, chegando em breve, já chegou etc.)</li>
+            <li>Tipo de visto na Irlanda</li>
+            <li>Escola de inglês</li>
+            <li>Interesses selecionados (inglês, trabalho, cultura, finanças etc.)</li>
+            <li>Principal desafio ou dúvida sobre a Irlanda</li>
+            <li>Situação de moradia</li>
+            <li>Como ficou sabendo da plataforma</li>
+            <li>Observações livres (campo texto — opcional)</li>
+            <li>Data prevista de chegada à Irlanda</li>
+        </ul>
+
+        <h3>2.3 Dados do chat com a IA</h3>
+        <ul>
+            <li>Nome, e-mail e telefone informados antes de iniciar a conversa</li>
+            <li>Conteúdo das mensagens trocadas com o assistente</li>
+        </ul>
+
+        <h3>2.4 Dados técnicos e de uso (coletados automaticamente)</h3>
+        <ul>
+            <li>Endereço IP (parcialmente anonimizado)</li>
+            <li>Tipo de navegador e sistema operacional</li>
+            <li>Páginas visitadas e tempo de permanência</li>
+            <li>Origem do acesso (referral, busca orgânica, redes sociais)</li>
+            <li>Erros de JavaScript e performance da página</li>
+        </ul>
+
+        <h3>2.5 Cookies</h3>
+        <p>Detalhados na seção 9 desta política.</p>
+
+        <div class="highlight">
+            <p>🔒 <strong>Não coletamos:</strong> documentos de identidade, CPF, números de passaporte, dados de cartão
+                de crédito, dados biométricos ou informações sensíveis de saúde. Nunca solicitaremos esses dados por
+                e-mail ou chat.</p>
+        </div>
+
+        <!-- 3 -->
+        <h2 id="base">3. Base legal para o tratamento</h2>
+        <p>Tratamos seus dados com base nas seguintes hipóteses legais previstas na LGPD (Art. 7º) e no GDPR (Art. 6º):
+        </p>
+        <ul>
+            <li><strong>Execução de contrato:</strong> dados necessários para criar e manter sua conta, processar o
+                trial e fornecer o serviço contratado.</li>
+            <li><strong>Legítimo interesse:</strong> dados técnicos e de uso para melhorar a plataforma, segurança
+                antifraude e comunicações operacionais.</li>
+            <li><strong>Consentimento:</strong> envio de newsletters, notificações de marketing e cookies não essenciais
+                (analíticos, marketing) — coletado via banner de cookies e checkbox no cadastro. Você pode revogar a
+                qualquer momento.</li>
+            <li><strong>Cumprimento de obrigação legal:</strong> quando exigido por autoridade competente.</li>
+        </ul>
+
+        <!-- 4 -->
+        <h2 id="uso">4. Como usamos seus dados</h2>
+        <ul>
+            <li>Criar e gerenciar sua conta e período de trial</li>
+            <li>Personalizar o conteúdo exibido na plataforma com base no seu perfil</li>
+            <li>Responder às suas dúvidas via chat ou e-mail</li>
+            <li>Enviar newsletter, dicas e conteúdos relevantes (somente com seu consentimento)</li>
+            <li>Melhorar continuamente a plataforma com base no comportamento de uso</li>
+            <li>Notificar sobre vencimento do trial, novos conteúdos e atualizações</li>
+            <li>Prevenir fraudes e garantir a segurança das contas</li>
+            <li>Cumprir obrigações legais e regulatórias</li>
+            <li>Conectar você com parceiros estratégicos relevantes para sua jornada (somente com consentimento)</li>
+        </ul>
+
+        <!-- 5 -->
+        <h2 id="compartilhamento">5. Compartilhamento com terceiros</h2>
+        <p>Não vendemos seus dados pessoais. Podemos compartilhar dados com:</p>
+        <ul>
+            <li><strong>Parceiros estratégicos</strong> (Seda College, Revolut, StudentStay etc.) — somente dados
+                básicos de contato e interesse, apenas com seu consentimento explícito.</li>
+            <li><strong>Provedores de serviço técnico</strong> (hospedagem, análise de dados, envio de e-mail) —
+                vinculados por contratos de processamento de dados e proibidos de usar suas informações para fins
+                próprios.</li>
+            <li><strong>Autoridades competentes</strong> — quando exigido por lei, ordem judicial ou para proteção de
+                direitos.</li>
+        </ul>
+
+        <!-- 6 -->
+        <h2 id="transferencia">6. Transferência internacional de dados</h2>
+        <p>Como operamos na Irlanda e no Brasil, seus dados podem ser transferidos entre esses países. Garantimos que
+            essa transferência ocorre com salvaguardas adequadas: cláusulas contratuais padrão (SCCs) aprovadas pela
+            Comissão Europeia ou com base em decisões de adequação quando aplicável.</p>
+
+        <!-- 7 -->
+        <h2 id="retencao">7. Retenção de dados</h2>
+        <ul>
+            <li><strong>Conta ativa:</strong> enquanto você mantiver registros na plataforma.</li>
+            <li><strong>Conta inativa:</strong> dados de cadastro são anonimizados após <strong>24 meses</strong> de
+                inatividade.</li>
+            <li><strong>Dados do chat IA:</strong> transcrições são retidas por <strong>12 meses</strong>, depois
+                anonimizadas.</li>
+            <li><strong>Logs técnicos:</strong> mantidos por <strong>90 dias</strong> para fins de segurança.</li>
+            <li><strong>Solicitação de exclusão:</strong> atendida em até <strong>15 dias úteis</strong>.</li>
+        </ul>
+
+        <!-- 8 -->
+        <h2 id="direitos">8. Seus direitos como titular</h2>
+        <p>Você tem os seguintes direitos, garantidos pela LGPD e pelo GDPR:</p>
+        <ul>
+            <li>📋 <strong>Acesso:</strong> solicitar cópia de todos os dados que armazenamos sobre você.</li>
+            <li>✏️ <strong>Retificação:</strong> corrigir dados incorretos ou desatualizados.</li>
+            <li>🗑️ <strong>Eliminação:</strong> solicitar a exclusão de seus dados pessoais.</li>
+            <li>📦 <strong>Portabilidade:</strong> receber seus dados em formato estruturado (JSON/CSV).</li>
+            <li>🚫 <strong>Oposição:</strong> opor-se ao tratamento baseado em legítimo interesse.</li>
+            <li>⏸️ <strong>Limitação:</strong> solicitar a suspensão do tratamento enquanto uma contestação é analisada.
+            </li>
+            <li>🔕 <strong>Revogação do consentimento:</strong> a qualquer momento, sem prejuízo do tratamento anterior.
+            </li>
+        </ul>
+        <p>Para exercer seus direitos, entre em contato: <strong>privacidade@jornadadointercambio.com.br</strong>.
+            Respondemos em até 15 dias úteis.</p>
+
+        <!-- 9 -->
+        <h2 id="cookies">9. Cookies e tecnologias similares</h2>
+        <h3>O que são cookies</h3>
+        <p>Cookies são pequenos arquivos armazenados no seu navegador que permitem reconhecer suas preferências entre
+            visitas.</p>
+        <h3>Tipos que usamos</h3>
+        <ul>
+            <li><strong>Essenciais:</strong> necessários para login, segurança e funcionamento básico. Não podem ser
+                desativados.</li>
+            <li><strong>Analíticos:</strong> medem o tráfego e comportamento de uso (ex: páginas mais visitadas). Podem
+                ser desativados.</li>
+            <li><strong>Marketing:</strong> personalizam anúncios nas redes sociais (ex: Meta Pixel). Apenas com
+                consentimento.</li>
+            <li><strong>Funcionais:</strong> lembram suas preferências (idioma, tema). Podem ser desativados.</li>
+        </ul>
+        <p>Você pode gerenciar suas preferências a qualquer momento clicando em <strong>"Preferências de
+                cookies"</strong> no rodapé do site ou diretamente nas configurações do seu navegador.</p>
+
+        <!-- 10 -->
+        <h2 id="seguranca">10. Segurança dos dados</h2>
+        <ul>
+            <li>Senhas armazenadas com hash SHA-256 — nunca em texto plano.</li>
+            <li>Comunicações protegidas por HTTPS/TLS.</li>
+            <li>Headers de segurança: CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy.</li>
+            <li>Rate limiting nas funcionalidades do chat para prevenção de abuso.</li>
+            <li>Sanitização de entradas para prevenção de XSS.</li>
+            <li>Revisões periódicas de segurança.</li>
+        </ul>
+        <p>Em caso de incidente de segurança que afete seus dados, você será notificado dentro de <strong>72
+                horas</strong> após o nosso conhecimento, conforme exigido pelo GDPR.</p>
+
+        <!-- 11 -->
+        <h2 id="menores">11. Menores de 13 anos</h2>
+        <p>Nossa plataforma não é direcionada a menores de 13 anos. Não coletamos intencionalmente dados de crianças. Se
+            você acredita que um menor nos forneceu dados, entre em contato imediatamente para que possamos excluí-los.
+        </p>
+
+        <!-- 12 -->
+        <h2 id="atualizacoes">12. Atualizações desta política</h2>
+        <p>Esta política pode ser atualizada periodicamente para refletir mudanças na lei, em nossas práticas ou em
+            nossos serviços. Quando fizermos alterações significativas, você será notificado por e-mail e por aviso na
+            plataforma. A data da última atualização será sempre indicada no topo deste documento.</p>
+
+        <!-- 13 -->
+        <h2 id="contato">13. Contato e DPO</h2>
+        <div class="contact-box">
+            <h3>📬 Entre em contato</h3>
+            <p>Para dúvidas, solicitações de direitos ou denúncias relacionadas à privacidade:</p>
+            <p>
+                📧 E-mail: <a
+                    href="mailto:privacidade@jornadadointercambio.com.br">privacidade@jornadadointercambio.com.br</a><br>
+                🌐 Site: <a href="index.html">jornadadointercambio.com.br</a><br>
+                📋 Formulário LGPD: disponível na sua área de conta (em breve)
+            </p>
+            <p>Nos compromissamos a responder todas as solicitações em até <strong>15 dias úteis</strong>.</p>
+            <p>Se não ficar satisfeito com nossa resposta, você pode registrar uma queixa:<br>
+                🇧🇷 <strong>Brasil:</strong> Autoridade Nacional de Proteção de Dados (ANPD) — <a
+                    href="https://www.gov.br/anpd" target="_blank" rel="noopener">gov.br/anpd</a><br>
+                🇮🇪 <strong>Irlanda:</strong> Data Protection Commission (DPC) — <a
+                    href="https://www.dataprotection.ie" target="_blank" rel="noopener">dataprotection.ie</a></p>
+        </div>
+    </div>
+
+    <script src="cookie-consent.js"></script>
+</body>
+
+</html>

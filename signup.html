@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <title>Criar Perfil Completo — Jornada do Intercâmbio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            background: var(--bg);
+            padding: 40px 20px 60px;
+        }
+
+        .su-wrap {
+            width: 100%;
+            max-width: 560px;
+        }
+
+        .su-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            justify-content: center;
+        }
+
+        .su-trial {
+            background: linear-gradient(135deg, rgba(0, 200, 150, 0.08), rgba(245, 166, 35, 0.08));
+            border: 1px solid rgba(0, 200, 150, 0.2);
+            border-radius: 10px;
+            padding: 12px 18px;
+            text-align: center;
+            font-size: 0.82rem;
+            color: var(--muted2);
+            margin-bottom: 28px;
+        }
+
+        .su-trial strong {
+            color: var(--green);
+        }
+
+        /* Progress */
+        .su-progress {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 28px;
+        }
+
+        .su-step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .su-step:last-child {
+            flex: 0;
+        }
+
+        .su-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: var(--bg2);
+            color: var(--muted);
+            font-size: 0.7rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: var(--t);
+        }
+
+        .su-dot.active {
+            border-color: var(--green);
+            background: var(--green);
+            color: #0A0E1A;
+        }
+
+        .su-dot.done {
+            border-color: var(--green);
+            background: rgba(0, 200, 150, 0.15);
+            color: var(--green);
+        }
+
+        .su-line {
+            flex: 1;
+            height: 2px;
+            background: var(--border);
+            margin: 0 4px;
+            transition: var(--t);
+        }
+
+        .su-line.active {
+            background: var(--green);
+        }
+
+        .su-step-label {
+            font-size: 0.65rem;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        /* Card */
+        .su-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 36px 36px 32px;
+        }
+
+        .su-card h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .su-card p.sub {
+            font-size: 0.82rem;
+            color: var(--muted);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .panel {
+            display: none;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        /* Fields */
+        .f {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .f label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--muted2);
+        }
+
+        .f input,
+        .f select,
+        .f textarea {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 11px 14px;
+            color: var(--white);
+            font-size: 0.875rem;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            transition: var(--t);
+            width: 100%;
+        }
+
+        .f select {
+            appearance: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236B7280' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 38px;
+        }
+
+        .f select option {
+            background: #1a2030;
+        }
+
+        .f input:focus,
+        .f select:focus,
+        .f textarea:focus {
+            border-color: var(--green);
+        }
+
+        .f input::placeholder,
+        .f textarea::placeholder {
+            color: var(--muted);
+        }
+
+        .f textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .f-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .f-opt {
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-top: -10px;
+            margin-bottom: 0;
+        }
+
+        /* Checkboxes grid */
+        .check-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: var(--t);
+        }
+
+        .check-item:hover {
+            border-color: rgba(0, 200, 150, 0.3);
+        }
+
+        .check-item input {
+            width: 15px;
+            height: 15px;
+            accent-color: var(--green);
+            flex-shrink: 0;
+        }
+
+        .check-item label {
+            font-size: 0.8rem;
+            cursor: pointer;
+            line-height: 1.3;
+        }
+
+        .check-item.selected {
+            border-color: rgba(0, 200, 150, 0.4);
+            background: rgba(0, 200, 150, 0.06);
+        }
+
+        /* Errors */
+        .su-err {
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.25);
+            color: #f87171;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.8rem;
+            margin-bottom: 14px;
+            display: none;
+        }
+
+        .su-err.show {
+            display: block;
+        }
+
+        /* Nav buttons */
+        .su-nav {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn-back {
+            background: var(--bg3);
+            color: var(--muted2);
+            border: 1px solid var(--border);
+            padding: 12px 22px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer;
+            transition: var(--t);
+        }
+
+        .btn-back:hover {
+            color: var(--white);
+            border-color: var(--border2);
+        }
+
+        .btn-next {
+            flex: 1;
+            padding: 12px;
+            font-size: 0.95rem;
+        }
+
+        /* Password */
+        .pass-wrap {
+            position: relative;
+        }
+
+        .pass-wrap input {
+            padding-right: 42px;
+        }
+
+        .pass-eye {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 0.9rem;
+            padding: 4px;
+        }
+
+        .pw-strength {
+            height: 3px;
+            border-radius: 2px;
+            margin-top: 5px;
+            background: var(--border);
+        }
+
+        .pw-strength-bar {
+            height: 100%;
+            border-radius: 2px;
+            width: 0;
+            transition: width 0.3s var(--ease);
+        }
+
+        /* Checkbox row */
+        .cb-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .cb-row input[type=checkbox] {
+            width: 16px;
+            height: 16px;
+            margin-top: 2px;
+            accent-color: var(--green);
+            flex-shrink: 0;
+        }
+
+        .cb-row label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .cb-row a {
+            color: var(--green);
+        }
+
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(10, 14, 26, 0.5);
+            border-top-color: #0A0E1A;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .su-bottom {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .su-bottom a {
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        @media(max-width:480px) {
+            .su-card {
+                padding: 24px 18px;
+            }
+
+            .f-row {
+                grid-template-columns: 1fr;
+            }
+
+            .check-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="su-wrap">
+
+        <div class="su-logo">
+            <div class="logo-mark">J</div>
+            <div class="logo-text"><span class="logo-green">Jornada</span><br>do Intercâmbio</div>
+        </div>
+
+        <div class="su-trial">
+            🎁 <strong>Trial gratuito de 3 dias</strong> — Acesso total à plataforma. Sem cartão de crédito.
+        </div>
+
+        <!-- Progress bar -->
+        <div class="su-progress">
+            <div class="su-step">
+                <div class="su-dot active" id="dot1">1</div>
+                <span class="su-step-label">Seus dados</span>
+            </div>
+            <div class="su-line" id="line1"></div>
+            <div class="su-step">
+                <div class="su-dot" id="dot2">2</div>
+                <span class="su-step-label">Sua jornada</span>
+            </div>
+            <div class="su-line" id="line2"></div>
+            <div class="su-step">
+                <div class="su-dot" id="dot3">3</div>
+                <span class="su-step-label">Acesso</span>
+            </div>
+        </div>
+
+        <div class="su-card">
+
+            <!-- STEP 1 — Dados pessoais -->
+            <div class="panel active" id="step1">
+                <h2>Conta me falar um pouco sobre você?</h2>
+                <p class="sub">Essas informações nos ajudam a personalizar sua experiência na plataforma.</p>
+                <div class="su-err" id="err1"></div>
+                <div class="f-row">
+                    <div class="f"><label>Nome completo *</label><input type="text" id="s1-name"
+                            placeholder="Seu nome completo" /></div>
+                    <div class="f"><label>Como quer ser chamado</label><input type="text" id="s1-nick"
+                            placeholder="Apelido (opcional)" /></div>
+                </div>
+                <div class="f"><label>E-mail *</label><input type="email" id="s1-email" placeholder="seu@email.com" />
+                </div>
+                <div class="f-row">
+                    <div class="f"><label>Telefone / WhatsApp *</label><input type="tel" id="s1-phone"
+                            placeholder="+55 11 99999-9999" /></div>
+                    <div class="f"><label>Data de nascimento</label><input type="date" id="s1-bday" /></div>
+                </div>
+                <div class="f">
+                    <label>País de origem *</label>
+                    <select id="s1-country">
+                        <option value="">Selecione seu país…</option>
+                        <option value="BR">🇧🇷 Brasil</option>
+                        <option value="PT">🇵🇹 Portugal</option>
+                        <option value="IT">🇮🇹 Itália</option>
+                        <option value="ES">🇪🇸 Espanha</option>
+                        <option value="AR">🇦🇷 Argentina</option>
+                        <option value="CO">🇨🇴 Colômbia</option>
+                        <option value="MX">🇲🇽 México</option>
+                        <option value="US">🇺🇸 Estados Unidos</option>
+                        <option value="OTHER">🌍 Outro</option>
+                    </select>
+                </div>
+                <div class="f">
+                    <label>Onde você mora atualmente?</label>
+                    <select id="s1-location">
+                        <option value="">Selecione…</option>
+                        <option value="BR_capital">Brasil — Capital</option>
+                        <option value="BR_interior">Brasil — Interior</option>
+                        <option value="IE_dublin">Irlanda — Dublin (já cheguei!)</option>
+                        <option value="IE_other">Irlanda — Outra cidade</option>
+                        <option value="OTHER">Outro país</option>
+                    </select>
+                </div>
+                <div class="su-nav">
+                    <button class="btn btn-primary btn-next" onclick="goStep(2)">Próximo — Sua jornada →</button>
+                </div>
+            </div>
+
+            <!-- STEP 2 — Jornada na Irlanda -->
+            <div class="panel" id="step2">
+                <h2>Conta sobre a sua jornada ☘️</h2>
+                <p class="sub">Essas informações nos ajudam a criar conteúdo relevante e conectar você com parceiros
+                    certos.</p>
+                <div class="su-err" id="err2"></div>
+
+                <div class="f">
+                    <label>Em que fase você está?</label>
+                    <select id="s2-phase">
+                        <option value="">Selecione…</option>
+                        <option value="planning">Ainda planejando ir para a Irlanda</option>
+                        <option value="soon">Vou em breve (nos próximos 3 meses)</option>
+                        <option value="arriving">Acabei de chegar (menos de 3 meses)</option>
+                        <option value="established">Já estou estabelecido (mais de 6 meses)</option>
+                        <option value="returning">Retornando para o Brasil em breve</option>
+                    </select>
+                </div>
+
+                <div class="f-row">
+                    <div class="f"><label>Data prevista de chegada à Irlanda</label><input type="date"
+                            id="s2-arrival" /></div>
+                    <div class="f">
+                        <label>Tipo de visto</label>
+                        <select id="s2-visa">
+                            <option value="">Selecione…</option>
+                            <option value="stamp2">Stamp 2 — Estudante</option>
+                            <option value="stamp1">Stamp 1 — Trabalho</option>
+                            <option value="stamp1g">Stamp 1G — Busca de emprego pós-graduação</option>
+                            <option value="eu">Cidadão EU / Direito de residência</option>
+                            <option value="none">Ainda não tenho visto</option>
+                            <option value="other">Outro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="f">
+                    <label>Qual escola de inglês você estuda/vai estudar?</label>
+                    <select id="s2-school">
+                        <option value="">Selecione…</option>
+                        <option value="seda">Seda College (parceira)</option>
+                        <option value="ec">EC Dublin</option>
+                        <option value="kaplan">Kaplan International</option>
+                        <option value="bels">BELS</option>
+                        <option value="acet">ACET</option>
+                        <option value="other">Outra escola</option>
+                        <option value="none">Ainda não escolhi</option>
+                        <option value="na">Não vou estudar inglês</option>
+                    </select>
+                </div>
+
+                <div class="f">
+                    <label>O que você busca na Irlanda? (selecione os que se aplicam)</label>
+                    <div class="check-grid" id="interests-grid">
+                        <div class="check-item"><input type="checkbox" id="int-english" value="english"><label
+                                for="int-english">🗣️ Aprender inglês</label></div>
+                        <div class="check-item"><input type="checkbox" id="int-work" value="work"><label
+                                for="int-work">💼 Trabalho / carreira</label></div>
+                        <div class="check-item"><input type="checkbox" id="int-culture" value="culture"><label
+                                for="int-culture">☘️ Experiência cultural</label></div>
+                        <div class="check-item"><input type="checkbox" id="int-finance" value="finance"><label
+                                for="int-finance">💰 Estabilidade financeira</label></div>
+                        <div class="check-item"><input type="checkbox" id="int-degree" value="degree"><label
+                                for="int-degree">🎓 Graduação / pós</label></div>
+                        <div class="check-item"><input type="checkbox" id="int-residency" value="residency"><label
+                                for="int-residency">🪪 Residência europeia</label></div>
+                        <div class="check-item"><input type="checkbox" id="int-network" value="network"><label
+                                for="int-network">🤝 Networking</label></div>
+                        <div class="check-item"><input type="checkbox" id="int-adventure" value="adventure"><label
+                                for="int-adventure">✈️ Aventura / viagens</label></div>
+                    </div>
+                </div>
+
+                <div class="f">
+                    <label>Qual é o seu maior desafio ou dúvida sobre a Irlanda?</label>
+                    <select id="s2-challenge">
+                        <option value="">Selecione o principal…</option>
+                        <option value="housing">🏠 Encontrar moradia em Dublin</option>
+                        <option value="docs">🪪 Documentação (PPS, IRP, Stamp)</option>
+                        <option value="finance">💸 Finanças e orçamento</option>
+                        <option value="work">💼 Encontrar trabalho</option>
+                        <option value="english">🗣️ Melhorar o inglês</option>
+                        <option value="gp">🏥 Saúde e médico (GP)</option>
+                        <option value="transport">🚌 Transporte e cidade</option>
+                        <option value="culture">🤝 Adaptação cultural</option>
+                        <option value="all">😅 Tudo ao mesmo tempo!</option>
+                    </select>
+                </div>
+
+                <div class="f">
+                    <label>Situação atual de moradia na Irlanda</label>
+                    <select id="s2-housing">
+                        <option value="">Selecione…</option>
+                        <option value="looking">Ainda procurando quarto / flat</option>
+                        <option value="homestay">Homestay (casa de família)</option>
+                        <option value="shared">Apartamento compartilhado</option>
+                        <option value="student_res">Residência estudantil</option>
+                        <option value="own">Apartamento próprio/individual</option>
+                        <option value="notyet">Ainda no Brasil, não aplica</option>
+                    </select>
+                </div>
+
+                <div class="f">
+                    <label>Como ficou sabendo da Jornada do Intercâmbio?</label>
+                    <select id="s2-howfound">
+                        <option value="">Selecione…</option>
+                        <option value="instagram">Instagram / Reels</option>
+                        <option value="tiktok">TikTok</option>
+                        <option value="youtube">YouTube</option>
+                        <option value="whatsapp">Grupo de WhatsApp</option>
+                        <option value="google">Google / pesquisa</option>
+                        <option value="friend">Indicação de amigo</option>
+                        <option value="seda">Pela Seda College</option>
+                        <option value="other">Outra forma</option>
+                    </select>
+                </div>
+
+                <div class="f">
+                    <label>Algo mais que queira nos contar? <span class="f-opt">(opcional)</span></label>
+                    <textarea id="s2-notes"
+                        placeholder="Ex: tenho 28 anos, chego em março, minha maior dúvida é sobre o PPS Number…"></textarea>
+                </div>
+
+                <div class="su-nav">
+                    <button class="btn-back" onclick="goStep(1)">← Voltar</button>
+                    <button class="btn btn-primary btn-next" onclick="goStep(3)">Próximo — Criar acesso →</button>
+                </div>
+            </div>
+
+            <!-- STEP 3 — Senha e finalização -->
+            <div class="panel" id="step3">
+                <h2>Quase lá! Crie sua senha 🔐</h2>
+                <p class="sub">Seu trial de 3 dias começa agora — sem cartão de crédito.</p>
+                <div class="su-err" id="err3"></div>
+                <div class="f">
+                    <label>Senha *</label>
+                    <div class="pass-wrap">
+                        <input type="password" id="s3-pwd" placeholder="Mín. 8 caracteres" autocomplete="new-password"
+                            oninput="checkStr(this)" />
+                        <button class="pass-eye" onclick="tglPass('s3-pwd',this)">👁</button>
+                    </div>
+                    <div class="pw-strength">
+                        <div class="pw-strength-bar" id="str-bar"></div>
+                    </div>
+                </div>
+                <div class="f">
+                    <label>Confirmar senha *</label>
+                    <div class="pass-wrap">
+                        <input type="password" id="s3-pwd2" placeholder="Repita a senha" autocomplete="new-password" />
+                        <button class="pass-eye" onclick="tglPass('s3-pwd2',this)">👁</button>
+                    </div>
+                </div>
+                <div class="cb-row">
+                    <input type="checkbox" id="su-comms" />
+                    <label for="su-comms">Quero receber dicas, novidades e conteúdos exclusivos por e-mail e
+                        WhatsApp.</label>
+                </div>
+                <div class="cb-row">
+                    <input type="checkbox" id="su-terms" />
+                    <label for="su-terms">Li e aceito os <a href="terms.html" target="_blank">Termos de Serviço</a> e a
+                        <a href="privacy.html" target="_blank">Política de Privacidade</a>. *</label>
+                </div>
+                <div class="su-nav">
+                    <button class="btn-back" onclick="goStep(2)">← Voltar</button>
+                    <button class="btn btn-primary btn-next btn-submit" id="btn-signup" onclick="doSignup()">Criar minha
+                        conta →</button>
+                </div>
+            </div>
+
+        </div><!-- /su-card -->
+
+        <div class="su-bottom">Já tem conta? <a href="login.html">Entrar →</a></div>
+    </div><!-- /su-wrap -->
+
+    <script src="auth.js"></script>
+    <script src="cookie-consent.js"></script>
+    <script>
+        let currentStep = 1;
+
+        function setProgress(step) {
+            [1, 2, 3].forEach(n => {
+                const dot = document.getElementById('dot' + n);
+                dot.classList.toggle('active', n === step);
+                dot.classList.toggle('done', n < step);
+                if (n < 3) {
+                    const line = document.getElementById('line' + n);
+                    line.classList.toggle('active', n < step);
+                }
+            });
+        }
+
+        function showErr(id, msg) {
+            const el = document.getElementById(id);
+            el.textContent = msg; el.classList.add('show');
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => el.classList.remove('show'), 6000);
+        }
+
+        function goStep(n) {
+            // Validation per step
+            if (n > currentStep) {
+                if (currentStep === 1) {
+                    const name = document.getElementById('s1-name').value.trim();
+                    const email = document.getElementById('s1-email').value.trim();
+                    const phone = document.getElementById('s1-phone').value.trim();
+                    const country = document.getElementById('s1-country').value;
+                    if (!name) { showErr('err1', 'Por favor, informe seu nome completo.'); return; }
+                    if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { showErr('err1', 'Informe um e-mail válido.'); return; }
+                    if (!phone) { showErr('err1', 'Informe seu telefone / WhatsApp.'); return; }
+                    if (!country) { showErr('err1', 'Selecione seu país de origem.'); return; }
+                }
+            }
+            document.getElementById('step' + currentStep).classList.remove('active');
+            currentStep = n;
+            document.getElementById('step' + currentStep).classList.add('active');
+            setProgress(n);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function tglPass(id, btn) {
+            const el = document.getElementById(id);
+            el.type = el.type === 'password' ? 'text' : 'password';
+            btn.textContent = el.type === 'password' ? '👁' : '🙈';
+        }
+
+        function checkStr(input) {
+            const v = input.value; let s = 0;
+            if (v.length >= 8) s++; if (/[A-Z]/.test(v)) s++; if (/[0-9]/.test(v)) s++; if (/[^A-Za-z0-9]/.test(v)) s++;
+            const bar = document.getElementById('str-bar');
+            const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e'];
+            bar.style.width = (s * 25) + '%'; bar.style.background = colors[s - 1] || 'var(--border)';
+        }
+
+        // Mark check-items as selected
+        document.querySelectorAll('.check-item input').forEach(cb => {
+            cb.addEventListener('change', () => cb.closest('.check-item').classList.toggle('selected', cb.checked));
+        });
+
+        async function doSignup() {
+            const pwd = document.getElementById('s3-pwd').value;
+            const pwd2 = document.getElementById('s3-pwd2').value;
+            const terms = document.getElementById('su-terms').checked;
+
+            if (!pwd || pwd.length < 8) { showErr('err3', 'A senha deve ter pelo menos 8 caracteres.'); return; }
+            if (pwd !== pwd2) { showErr('err3', 'As senhas não coincidem.'); return; }
+            if (!terms) { showErr('err3', 'Você precisa aceitar os Termos de Serviço para continuar.'); return; }
+
+            // Collect interests
+            const interests = Array.from(document.querySelectorAll('#interests-grid input:checked')).map(c => c.value);
+
+            const btn = document.getElementById('btn-signup');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Criando sua conta…';
+
+            const data = {
+                name: document.getElementById('s1-name').value.trim(),
+                email: document.getElementById('s1-email').value.trim().toLowerCase(),
+                phone: document.getElementById('s1-phone').value.trim(),
+                password: pwd,
+                plan: 'trial',
+                country: document.getElementById('s1-country').value,
+                interests,
+                school: document.getElementById('s2-school').value,
+                arrivalDate: document.getElementById('s2-arrival').value,
+                mainChallenge: document.getElementById('s2-challenge').value,
+                howFound: document.getElementById('s2-howfound').value,
+                acceptsComms: document.getElementById('su-comms').checked,
+                phase: document.getElementById('s2-phase').value,
+                visa: document.getElementById('s2-visa').value,
+                housing: document.getElementById('s2-housing').value,
+                notes: document.getElementById('s2-notes').value.trim(),
+                nickname: document.getElementById('s1-nick').value.trim(),
+                birthdate: document.getElementById('s1-bday').value,
+                location: document.getElementById('s1-location').value,
+            };
+
+            const res = await JAuth.register(data);
+            if (res.ok) {
+                window.location.href = 'index.html?welcome=1';
+            } else {
+                btn.disabled = false;
+                btn.textContent = 'Criar minha conta →';
+                showErr('err3', res.error);
+                if (res.error.includes('e-mail')) goStep(1);
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <title>Entrar — Jornada do Intercâmbio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg);
+            padding: 24px;
+        }
+
+        .auth-wrap {
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .auth-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 36px;
+            justify-content: center;
+        }
+
+        .auth-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 36px 36px 32px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            background: var(--bg3);
+            border-radius: 9px;
+            padding: 3px;
+            margin-bottom: 28px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 9px;
+            border-radius: 7px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--muted);
+            transition: var(--t);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .auth-tab.active {
+            background: var(--bg2);
+            color: var(--white);
+        }
+
+        .auth-panel {
+            display: none;
+        }
+
+        .auth-panel.active {
+            display: block;
+        }
+
+        .auth-panel h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .auth-panel p.sub {
+            font-size: 0.82rem;
+            color: var(--muted);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .field label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--muted2);
+        }
+
+        .field input {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 11px 14px;
+            color: var(--white);
+            font-size: 0.875rem;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            transition: var(--t);
+        }
+
+        .field input:focus {
+            border-color: var(--green);
+        }
+
+        .field input::placeholder {
+            color: var(--muted);
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .auth-err {
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.25);
+            color: #f87171;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.8rem;
+            margin-bottom: 14px;
+            display: none;
+        }
+
+        .auth-err.show {
+            display: block;
+        }
+
+        .auth-ok {
+            background: rgba(0, 200, 150, 0.08);
+            border: 1px solid rgba(0, 200, 150, 0.2);
+            color: var(--green);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.8rem;
+            margin-bottom: 14px;
+            display: none;
+        }
+
+        .auth-ok.show {
+            display: block;
+        }
+
+        .auth-divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 20px 0;
+        }
+
+        .auth-link {
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .auth-link a {
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .trial-badge {
+            background: linear-gradient(135deg, rgba(245, 166, 35, 0.1), rgba(0, 200, 150, 0.1));
+            border: 1px solid rgba(245, 166, 35, 0.25);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: var(--muted2);
+        }
+
+        .trial-badge strong {
+            color: var(--gold);
+            display: block;
+            margin-bottom: 3px;
+            font-size: 0.9rem;
+        }
+
+        .pass-wrap {
+            position: relative;
+        }
+
+        .pass-wrap input {
+            width: 100%;
+            padding-right: 42px;
+        }
+
+        .pass-eye {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 0.9rem;
+            padding: 4px;
+        }
+
+        .pw-strength {
+            height: 3px;
+            border-radius: 2px;
+            margin-top: 5px;
+            background: var(--border);
+            transition: var(--t);
+        }
+
+        .pw-strength-bar {
+            height: 100%;
+            border-radius: 2px;
+            width: 0;
+            transition: width 0.3s var(--ease);
+        }
+
+        .pw-hint {
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        .checkbox-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 14px 0;
+        }
+
+        .checkbox-row input[type=checkbox] {
+            width: 16px;
+            height: 16px;
+            margin-top: 2px;
+            accent-color: var(--green);
+            flex-shrink: 0;
+        }
+
+        .checkbox-row label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .checkbox-row a {
+            color: var(--green);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 13px;
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(10, 14, 26, 0.5);
+            border-top-color: #0A0E1A;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media(max-width:480px) {
+            .auth-card {
+                padding: 28px 20px;
+            }
+
+            .field-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-wrap">
+        <div class="auth-logo">
+            <div class="logo-mark">J</div>
+            <div class="logo-text"><span class="logo-green">Jornada</span><br>do Intercâmbio</div>
+        </div>
+
+        <div class="auth-card">
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">Entrar</div>
+                <div class="auth-tab" data-tab="register">Criar conta</div>
+            </div>
+
+            <!-- LOGIN -->
+            <div class="auth-panel active" id="panel-login">
+                <h2>Bem-vindo de volta</h2>
+                <p class="sub">Acesse sua conta para continuar sua jornada.</p>
+                <div class="auth-err" id="login-err"></div>
+                <div class="auth-ok" id="login-ok"></div>
+                <div class="field">
+                    <label>E-mail</label>
+                    <input type="email" id="login-email" placeholder="seu@email.com" autocomplete="email" />
+                </div>
+                <div class="field">
+                    <label>Senha</label>
+                    <div class="pass-wrap">
+                        <input type="password" id="login-pwd" placeholder="Sua senha" autocomplete="current-password" />
+                        <button class="pass-eye" onclick="togglePass('login-pwd',this)">👁</button>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-submit" id="btn-login">Entrar</button>
+                <hr class="auth-divider" />
+                <p class="auth-link">Não tem conta? <a href="#" onclick="switchTab('register')">Crie uma grátis</a></p>
+                <p class="auth-link" style="margin-top:6px"><a href="signup.html">Trial de 3 dias — Começar agora →</a>
+                </p>
+            </div>
+
+            <!-- REGISTER QUICK -->
+            <div class="auth-panel" id="panel-register">
+                <div class="trial-badge">
+                    <strong>🎁 Trial gratuito de 3 dias</strong>
+                    Acesso completo à plataforma. Sem cartão de crédito. Cancele quando quiser.
+                </div>
+                <h2>Criar sua conta</h2>
+                <p class="sub">Para uma experiência personalizada, complete o perfil completo. Ou cadastre-se
+                    rapidamente abaixo.</p>
+                <div class="auth-err" id="reg-err"></div>
+                <div class="field-row">
+                    <div class="field"><label>Nome completo *</label><input type="text" id="reg-name"
+                            placeholder="Seu nome" autocomplete="name" /></div>
+                    <div class="field"><label>Telefone / WhatsApp</label><input type="tel" id="reg-phone"
+                            placeholder="+55 11 99999-9999" /></div>
+                </div>
+                <div class="field"><label>E-mail *</label><input type="email" id="reg-email" placeholder="seu@email.com"
+                        autocomplete="email" /></div>
+                <div class="field">
+                    <label>Senha * <span class="pw-hint">(mín. 8 caracteres)</span></label>
+                    <div class="pass-wrap">
+                        <input type="password" id="reg-pwd" placeholder="Crie uma senha forte"
+                            autocomplete="new-password" oninput="checkStrength(this)" />
+                        <button class="pass-eye" onclick="togglePass('reg-pwd',this)">👁</button>
+                    </div>
+                    <div class="pw-strength">
+                        <div class="pw-strength-bar" id="pw-bar"></div>
+                    </div>
+                </div>
+                <div class="field"><label>Confirmar senha *</label>
+                    <div class="pass-wrap">
+                        <input type="password" id="reg-pwd2" placeholder="Repita a senha" autocomplete="new-password" />
+                        <button class="pass-eye" onclick="togglePass('reg-pwd2',this)">👁</button>
+                    </div>
+                </div>
+                <div class="checkbox-row">
+                    <input type="checkbox" id="reg-terms" />
+                    <label for="reg-terms">Li e aceito os <a href="terms.html" target="_blank">Termos de Serviço</a> e a
+                        <a href="privacy.html" target="_blank">Política de Privacidade</a>.</label>
+                </div>
+                <button class="btn btn-primary btn-submit" id="btn-register">Criar conta e iniciar trial</button>
+                <hr class="auth-divider" />
+                <p class="auth-link">Quer preencher seu perfil completo e personalizar a experiência? <a
+                        href="signup.html">Cadastro completo →</a></p>
+                <p class="auth-link" style="margin-top:6px">Já tem conta? <a href="#"
+                        onclick="switchTab('login')">Entrar</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="cookie-consent.js"></script>
+    <script>
+        // Redirect se já logado
+        if (JAuth.isLoggedIn() && JAuth.hasAccess()) window.location.href = 'index.html';
+
+        function switchTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+            document.querySelectorAll('.auth-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + tab));
+        }
+        document.querySelectorAll('.auth-tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+
+        function togglePass(id, btn) {
+            const el = document.getElementById(id);
+            el.type = el.type === 'password' ? 'text' : 'password';
+            btn.textContent = el.type === 'password' ? '👁' : '🙈';
+        }
+
+        function checkStrength(input) {
+            const v = input.value;
+            let score = 0;
+            if (v.length >= 8) score++;
+            if (/[A-Z]/.test(v)) score++;
+            if (/[0-9]/.test(v)) score++;
+            if (/[^A-Za-z0-9]/.test(v)) score++;
+            const bar = document.getElementById('pw-bar');
+            const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e'];
+            bar.style.width = (score * 25) + '%';
+            bar.style.background = colors[score - 1] || 'var(--border)';
+        }
+
+        function showErr(id, msg) {
+            const el = document.getElementById(id);
+            el.textContent = msg; el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 5000);
+        }
+        function showOk(id, msg) {
+            const el = document.getElementById(id);
+            el.textContent = msg; el.classList.add('show');
+        }
+        function setLoading(btnId, loading, text) {
+            const btn = document.getElementById(btnId);
+            btn.disabled = loading;
+            btn.innerHTML = loading ? `<span class="spinner"></span>${text}` : text;
+        }
+
+        // Login
+        document.getElementById('btn-login').addEventListener('click', async () => {
+            const email = document.getElementById('login-email').value.trim();
+            const pwd = document.getElementById('login-pwd').value;
+            if (!email || !pwd) { showErr('login-err', 'Preencha e-mail e senha.'); return; }
+            setLoading('btn-login', true, 'Entrando…');
+            const res = await JAuth.login(email, pwd);
+            setLoading('btn-login', false, 'Entrar');
+            if (res.ok) {
+                showOk('login-ok', '✓ Bem-vindo! Redirecionando…');
+                setTimeout(() => window.location.href = 'index.html', 1200);
+            } else {
+                showErr('login-err', res.error);
+            }
+        });
+        document.getElementById('login-pwd').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('btn-login').click(); });
+
+        // Register
+        document.getElementById('btn-register').addEventListener('click', async () => {
+            const name = document.getElementById('reg-name').value.trim();
+            const phone = document.getElementById('reg-phone').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const pwd = document.getElementById('reg-pwd').value;
+            const pwd2 = document.getElementById('reg-pwd2').value;
+            const terms = document.getElementById('reg-terms').checked;
+
+            if (!name || !email || !pwd) { showErr('reg-err', 'Preencha todos os campos obrigatórios.'); return; }
+            if (pwd !== pwd2) { showErr('reg-err', 'As senhas não coincidem.'); return; }
+            if (!terms) { showErr('reg-err', 'Você precisa aceitar os Termos de Serviço para continuar.'); return; }
+
+            setLoading('btn-register', true, 'Criando conta…');
+            const res = await JAuth.register({ name, email, phone, password: pwd, plan: 'trial' });
+            setLoading('btn-register', false, 'Criar conta e iniciar trial');
+            if (res.ok) {
+                showOk('reg-err', ''); // limpa erro
+                window.location.href = 'index.html';
+            } else {
+                showErr('reg-err', res.error);
+            }
+        });
+    </script>
+</body>
+
+</html>

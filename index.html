@@ -37,7 +37,7 @@
                 <li><a href="#partners" class="nav-link">Parceiros</a></li>
                 <li><a href="#pricing" class="nav-link">Planos</a></li>
             </ul>
-            <a href="#pricing" class="nav-cta">Começar Grátis</a>
+            <div id="nav-auth"><!-- JS injeta aqui --></div>
             <button class="hamburger" id="hamburger" aria-label="Menu">
                 <span></span><span></span><span></span>
             </button>
@@ -858,6 +858,42 @@
         </div>
     </div>
 
+    <!-- AI PRE-FORM MODAL -->
+    <div class="modal-overlay" id="aiPreModal" role="dialog" aria-label="Identificação para chat">
+        <div class="modal-box">
+            <div class="modal-icon">🤖</div>
+            <h3>Antes de começar</h3>
+            <p class="sub">Precisamos de alguns dados para personalizar a conversa e registrar sua dúvida. Suas
+                informações são protegidas conforme nossa <a href="privacy.html" target="_blank">Política de
+                    Privacidade</a>.</p>
+            <div class="modal-err" id="preform-err"></div>
+            <div class="mf"><label>Nome completo *</label><input type="text" id="pf-name" placeholder="Seu nome"
+                    autocomplete="name" /></div>
+            <div class="mf"><label>E-mail *</label><input type="email" id="pf-email" placeholder="seu@email.com"
+                    autocomplete="email" /></div>
+            <div class="mf"><label>Telefone / WhatsApp *</label><input type="tel" id="pf-phone"
+                    placeholder="+55 11 99999-9999" /></div>
+            <div class="modal-consent">
+                <input type="checkbox" id="pf-consent" />
+                <label for="pf-consent">Concordo com a coleta e uso dos meus dados conforme a <a href="privacy.html"
+                        target="_blank">Política de Privacidade</a>. *</label>
+            </div>
+            <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px"
+                id="pf-submit">Iniciar conversa →</button>
+            <p style="text-align:center;font-size:0.72rem;color:var(--muted);margin-top:12px">Já tem conta? <a
+                    href="login.html" style="color:var(--green)">Entrar</a></p>
+        </div>
+    </div>
+
+    <!-- WELCOME TOAST -->
+    <div class="welcome-toast" id="welcomeToast">
+        <span class="wt-close" id="wtClose">✕</span>
+        <div class="wt-line1" id="wtLine1">Bem-vindo! 🎉</div>
+        <div class="wt-line2" id="wtLine2">Seu trial de 3 dias começou. Explore tudo!</div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="cookie-consent.js"></script>
     <script src="main.js"></script>
 </body>
 

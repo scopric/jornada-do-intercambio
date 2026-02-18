@@ -21,6 +21,153 @@ const rateLimiter = (() => {
 let lastMsg = '';
 function isSpam(t) { if (t === lastMsg) return true; lastMsg = t; return false; }
 
+// ── AUTH INTEGRATION ─────────────────────────────────────────
+(function initAuth() {
+    const navAuth = document.getElementById('nav-auth');
+    if (!navAuth) return;
+
+    const loggedIn = typeof JAuth !== 'undefined' && JAuth.isLoggedIn();
+    const user = loggedIn ? JAuth.getCurrentUser() : null;
+
+    if (loggedIn && user) {
+        // Render user avatar + dropdown
+        const initial = (user.name || 'U')[0].toUpperCase();
+        navAuth.innerHTML = `
+          <div class="nav-user">
+            <span class="nav-user-name">${user.name.split(' ')[0]}</span>
+            <div class="nav-avatar" tabindex="0" id="navAvatarBtn" aria-haspopup="true">
+              ${initial}
+              <div class="nav-dropdown" id="navDropdown">
+                <a href="#">Meu Perfil</a>
+                <a href="signup.html">Completar Cadastro</a>
+                <div class="nd-divider"></div>
+                <a href="privacy.html">Privacidade</a>
+                <a href="terms.html">Termos</a>
+                <div class="nd-divider"></div>
+                <button class="nd-logout" id="btnLogout">Sair</button>
+              </div>
+            </div>
+          </div>`;
+
+        document.getElementById('navAvatarBtn')?.addEventListener('click', function (e) {
+            e.stopPropagation();
+            this.classList.toggle('open');
+        });
+        document.addEventListener('click', () => document.getElementById('navAvatarBtn')?.classList.remove('open'));
+        document.getElementById('btnLogout')?.addEventListener('click', () => { JAuth.logout(); window.location.reload(); });
+
+        // Trial bar
+        if (user.plan === 'trial') {
+            const daysLeft = JAuth.trialDaysLeft ? JAuth.trialDaysLeft() : 3;
+            if (daysLeft !== null && daysLeft >= 0) {
+                const bar = document.createElement('div');
+                bar.className = 'trial-bar';
+                bar.id = 'trialBar';
+                bar.innerHTML = `
+                  <strong>⏳ ${daysLeft} dia${daysLeft !== 1 ? 's' : ''} de trial restante${daysLeft !== 1 ? 's' : ''}</strong>
+                  — Aproveite o acesso completo!
+                  <a href="#pricing">Ver planos</a>
+                  <span class="tb-close" id="trialClose">✕</span>`;
+                document.body.prepend(bar);
+                document.body.classList.add('has-trial-bar');
+                document.getElementById('trialClose')?.addEventListener('click', () => {
+                    bar.classList.add('hidden');
+                    document.body.classList.remove('has-trial-bar');
+                });
+            }
+        }
+
+        // Welcome toast for new users
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('welcome') === '1') {
+            const toast = document.getElementById('welcomeToast');
+            if (toast) {
+                document.getElementById('wtLine1').textContent = `Olá, ${user.name.split(' ')[0]}! 🎉`;
+                document.getElementById('wtLine2').textContent = 'Seu trial de 3 dias começou. Explore tudo!';
+                setTimeout(() => toast.classList.add('show'), 500);
+                document.getElementById('wtClose')?.addEventListener('click', () => toast.classList.remove('show'));
+                setTimeout(() => toast.classList.remove('show'), 6000);
+                // Clean URL without reload
+                history.replaceState(null, '', window.location.pathname);
+            }
+        }
+
+    } else {
+        // Not logged in — show login + signup CTA
+        navAuth.innerHTML = `
+          <div style="display:flex;gap:8px;align-items:center">
+            <a href="login.html" class="btn btn-ghost btn-sm">Entrar</a>
+            <a href="signup.html" class="nav-cta">Começar Grátis →</a>
+          </div>`;
+    }
+})();
+
+// ── AI PRE-FORM ──────────────────────────────────────────────
+(function initPreForm() {
+    const modal = document.getElementById('aiPreModal');
+    const submitBtn = document.getElementById('pf-submit');
+    const errEl = document.getElementById('preform-err');
+    if (!modal || !submitBtn) return;
+
+    // Pre-fill if user is logged in
+    const user = typeof JAuth !== 'undefined' && JAuth.getCurrentUser();
+    if (user) {
+        const pf = document.getElementById('pf-name');
+        const pe = document.getElementById('pf-email');
+        const pp = document.getElementById('pf-phone');
+        if (pf) pf.value = user.name || '';
+        if (pe) pe.value = user.email || '';
+        if (pp) pp.value = user.phone || '';
+        const pc = document.getElementById('pf-consent');
+        if (pc) { pc.checked = true; }
+    }
+
+    window._chatUserData = null; // will be set after form submit
+
+    window.openAIChatPreForm = function () {
+        // If already collected or user logged in, skip form
+        if (window._chatUserData) return true;
+        if (user) {
+            window._chatUserData = { name: user.name, email: user.email, phone: user.phone || '' };
+            return true;
+        }
+        modal.classList.add('open');
+        document.getElementById('pf-name')?.focus();
+        return false;
+    };
+
+    submitBtn.addEventListener('click', () => {
+        const name = document.getElementById('pf-name').value.trim();
+        const email = document.getElementById('pf-email').value.trim();
+        const phone = document.getElementById('pf-phone').value.trim();
+        const consent = document.getElementById('pf-consent').checked;
+
+        if (!name) { showPreErr('Informe seu nome.'); return; }
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showPreErr('Informe um e-mail válido.'); return; }
+        if (!phone) { showPreErr('Informe seu telefone.'); return; }
+        if (!consent) { showPreErr('É necessário aceitar a Política de Privacidade.'); return; }
+
+        window._chatUserData = { name, email, phone };
+        modal.classList.remove('open');
+
+        // Focus chat input
+        setTimeout(() => {
+            document.getElementById('chatInput')?.focus();
+            document.getElementById('chatToggle')?.click();
+        }, 300);
+    });
+
+    // Enter key on last field
+    document.getElementById('pf-phone')?.addEventListener('keydown', e => { if (e.key === 'Enter') submitBtn.click(); });
+
+    function showPreErr(msg) {
+        if (!errEl) return;
+        errEl.textContent = msg;
+        errEl.classList.add('show');
+        setTimeout(() => errEl.classList.remove('show'), 4000);
+    }
+})();
+
 // ── NAVBAR ───────────────────────────────────────────────────
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 60));
@@ -35,6 +182,7 @@ navLinks?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
     navLinks.classList.remove('open');
     hamburger.classList.remove('active');
 }));
+
 
 // ── ROW ARROWS ───────────────────────────────────────────────
 document.querySelectorAll('.row-arrow').forEach(btn => {
@@ -215,9 +363,15 @@ const panelSend = document.getElementById('chatPanelSend');
 const panelMsgs = document.getElementById('chatPanelMessages');
 const openChatBtn = document.getElementById('openChatBtn');
 
-chatBubble?.addEventListener('click', () => chatPanel.classList.toggle('open'));
+chatBubble?.addEventListener('click', () => {
+    const hasData = typeof openAIChatPreForm === 'function' ? openAIChatPreForm() : true;
+    if (hasData) chatPanel.classList.toggle('open');
+});
 chatClose?.addEventListener('click', () => chatPanel.classList.remove('open'));
-openChatBtn?.addEventListener('click', () => { chatPanel.classList.add('open'); panelInput?.focus(); });
+openChatBtn?.addEventListener('click', () => {
+    const hasData = typeof openAIChatPreForm === 'function' ? openAIChatPreForm() : true;
+    if (hasData) { chatPanel.classList.add('open'); panelInput?.focus(); }
+});
 
 function sendPanel() {
     const raw = panelInput?.value.trim();

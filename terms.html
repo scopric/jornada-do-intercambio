@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Termos de Serviço — Jornada do Intercâmbio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .legal-hero {
+            background: var(--bg2);
+            border-bottom: 1px solid var(--border);
+            padding: 80px 0 48px;
+            text-align: center;
+        }
+
+        .legal-hero .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(245, 166, 35, 0.08);
+            border: 1px solid rgba(245, 166, 35, 0.2);
+            color: var(--gold);
+            padding: 5px 14px;
+            border-radius: 100px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+        }
+
+        .legal-hero h1 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .legal-hero p {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .legal-body {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 60px 40px 80px;
+        }
+
+        .legal-toc {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: var(--r2);
+            padding: 24px 28px;
+            margin-bottom: 48px;
+        }
+
+        .legal-toc h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--muted2);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .legal-toc ol {
+            padding-left: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .legal-toc a {
+            font-size: 0.82rem;
+            color: var(--green);
+        }
+
+        .legal-toc a:hover {
+            text-decoration: underline;
+        }
+
+        h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin: 44px 0 14px;
+            padding-top: 12px;
+            color: var(--white);
+            border-top: 1px solid var(--border);
+        }
+
+        h2:first-of-type {
+            border-top: none;
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 24px 0 10px;
+            color: var(--muted2);
+        }
+
+        p {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            margin-bottom: 14px;
+        }
+
+        li {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.7;
+        }
+
+        strong {
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .highlight {
+            background: rgba(245, 166, 35, 0.05);
+            border: 1px solid rgba(245, 166, 35, 0.15);
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin: 20px 0;
+        }
+
+        .highlight p {
+            margin: 0;
+            font-size: 0.82rem;
+        }
+
+        .plan-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.82rem;
+        }
+
+        .plan-table th {
+            background: var(--bg3);
+            color: var(--muted2);
+            font-weight: 700;
+            text-align: left;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+        }
+
+        .plan-table td {
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            color: rgba(255, 255, 255, 0.75);
+            vertical-align: top;
+        }
+
+        .plan-table tr:nth-child(even) td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .contact-box {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: var(--r2);
+            padding: 28px 32px;
+            margin-top: 48px;
+        }
+
+        .contact-box h3 {
+            color: var(--white);
+            margin-top: 0;
+            margin-bottom: 14px;
+            font-size: 1.1rem;
+        }
+
+        .contact-box a {
+            color: var(--green);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--muted);
+            font-size: 0.82rem;
+            margin-bottom: 32px;
+            transition: var(--t);
+        }
+
+        .back-link:hover {
+            color: var(--white);
+        }
+
+        @media(max-width:600px) {
+            .legal-body {
+                padding: 40px 20px 60px;
+            }
+
+            .plan-table {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="legal-hero">
+        <div class="pill">📋 Legal</div>
+        <h1>Termos de Serviço</h1>
+        <p>Última atualização: 18 de fevereiro de 2025 · Versão 1.0</p>
+    </div>
+
+    <div class="legal-body">
+        <a href="index.html" class="back-link">← Voltar para o site</a>
+
+        <div class="legal-toc">
+            <h3>Índice</h3>
+            <ol>
+                <li><a href="#aceitacao">Aceitação dos termos</a></li>
+                <li><a href="#plataforma">A plataforma</a></li>
+                <li><a href="#conta">Criação e segurança da conta</a></li>
+                <li><a href="#trial">Trial gratuito</a></li>
+                <li><a href="#planos">Planos e assinatura</a></li>
+                <li><a href="#conteudo">Conteúdo e propriedade intelectual</a></li>
+                <li><a href="#conduta">Conduta do usuário</a></li>
+                <li><a href="#ia">Assistente com IA — Aviso importante</a></li>
+                <li><a href="#responsabilidade">Limitação de responsabilidade</a></li>
+                <li><a href="#cancelamento">Cancelamento e reembolso</a></li>
+                <li><a href="#alteracoes">Alterações nos termos</a></li>
+                <li><a href="#lei">Lei aplicável e foro</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ol>
+        </div>
+
+        <!-- 1 -->
+        <h2 id="aceitacao">1. Aceitação dos Termos</h2>
+        <p>Ao criar uma conta, acessar ou utilizar a plataforma <strong>Jornada do Intercâmbio</strong> ("Plataforma",
+            "nós", "nosso"), você ("Usuário") concorda integralmente com estes Termos de Serviço e com nossa <a
+                href="privacy.html">Política de Privacidade</a>.</p>
+        <p>Se você não concordar com qualquer parte destes termos, não utilize a plataforma.</p>
+        <p>Ao aceitar, você declara ser maior de 18 anos (ou ter autorização dos responsáveis, se entre 13 e 17 anos) e
+            ter capacidade legal para celebrar este contrato.</p>
+
+        <!-- 2 -->
+        <h2 id="plataforma">2. A Plataforma</h2>
+        <p>A Jornada do Intercâmbio é uma plataforma de conteúdo digital que oferece:</p>
+        <ul>
+            <li>Vídeos, guias e artigos sobre vida na Irlanda para brasileiros</li>
+            <li>Assistente de IA com contexto irlandês em língua portuguesa</li>
+            <li>Comunidade de intercambistas</li>
+            <li>Acesso a parceiros estratégicos (escolas de inglês, serviços financeiros, moradia etc.)</li>
+        </ul>
+        <p>O conteúdo é de natureza <strong>informativa e educacional</strong>. Não prestamos serviços jurídicos,
+            imigratórios, financeiros ou médicos. Recomendamos sempre consultar profissionais habilitados para decisões
+            importantes.</p>
+
+        <!-- 3 -->
+        <h2 id="conta">3. Criação e Segurança da Conta</h2>
+        <ul>
+            <li>Você é responsável pela veracidade das informações fornecidas no cadastro.</li>
+            <li>Cada pessoa pode criar apenas uma conta. Contas duplicadas podem ser suspensas.</li>
+            <li>Você é o único responsável pela segurança de sua senha. Use uma senha forte e única.</li>
+            <li>Notifique-nos imediatamente se suspeitar de acesso não autorizado à sua conta.</li>
+            <li>Não compartilhe seu acesso com terceiros. A conta é pessoal e intransferível.</li>
+        </ul>
+
+        <!-- 4 -->
+        <h2 id="trial">4. Trial Gratuito de 3 Dias</h2>
+        <div class="highlight">
+            <p>🎁 <strong>O trial de 3 dias</strong> dá acesso completo à plataforma (exceto recursos marcados como
+                exclusivos de planos específicos), sem necessidade de informar cartão de crédito. Ao final do período, o
+                acesso é limitado ao plano Free até que você escolha um plano pago.</p>
+        </div>
+        <ul>
+            <li>O trial é concedido <strong>uma única vez</strong> por pessoa e endereço de e-mail.</li>
+            <li>Contas criadas com dados falsos para obter múltiplos trials serão permanentemente banidas.</li>
+            <li>Não há cobrança automática ao final do trial.</li>
+            <li>O período é de exatamente 72 horas a partir da confirmação do cadastro.</li>
+        </ul>
+
+        <!-- 5 -->
+        <h2 id="planos">5. Planos, Preços e Assinatura</h2>
+        <table class="plan-table">
+            <tr>
+                <th>Plano</th>
+                <th>Preço</th>
+                <th>Período</th>
+                <th>Benefícios</th>
+            </tr>
+            <tr>
+                <td><strong>Free</strong></td>
+                <td>R$ 0</td>
+                <td>Permanente</td>
+                <td>Guias básicos gratuitos, 3 perguntas/dia à IA</td>
+            </tr>
+            <tr>
+                <td><strong>Premium</strong></td>
+                <td>R$ 9,90/mês</td>
+                <td>Mensal, renovação automática</td>
+                <td>Biblioteca completa, IA ilimitada, comunidade, descontos parceiros</td>
+            </tr>
+            <tr>
+                <td><strong>Premium Plus</strong></td>
+                <td>R$ 47,90/mês</td>
+                <td>Mensal, renovação automática</td>
+                <td>Tudo do Premium + mentoria individual, revisão de CV, suporte prioritário, grupo VIP</td>
+            </tr>
+        </table>
+        <ul>
+            <li>Preços em Reais (BRL) e sujeitos a alteração com aviso de 30 dias por e-mail.</li>
+            <li>Assinaturas renovam automaticamente. Você pode cancelar a qualquer momento (sem multa).</li>
+            <li>O sistema de cobrança será integrado em breve. Durante o período beta, o acesso premium é manual.</li>
+        </ul>
+
+        <!-- 6 -->
+        <h2 id="conteudo">6. Conteúdo e Propriedade Intelectual</h2>
+        <h3>Nosso conteúdo</h3>
+        <p>Todo o conteúdo da plataforma (vídeos, textos, guias, design, código, logo, marca) é de propriedade exclusiva
+            da Jornada do Intercâmbio ou foi licenciado por terceiros. É protegido por direitos autorais e leis de
+            propriedade intelectual.</p>
+        <p>Você tem permissão para <strong>uso pessoal e não comercial</strong> do conteúdo acessado durante sua
+            assinatura ativa. É proibido:</p>
+        <ul>
+            <li>Reproduzir, distribuir ou revender conteúdo da plataforma</li>
+            <li>Fazer download massivo ou scraping de conteúdo</li>
+            <li>Usar conteúdo para criação de materiais concorrentes</li>
+            <li>Remover marcas d'água ou atribuições</li>
+        </ul>
+
+        <h3>Seu conteúdo</h3>
+        <p>Se você compartilhar conteúdo na comunidade (posts, comentários, respostas), você mantém a propriedade, mas
+            nos concede licença gratuita, não exclusiva e irrevogável para usar esse conteúdo na plataforma.</p>
+
+        <!-- 7 -->
+        <h2 id="conduta">7. Conduta do Usuário</h2>
+        <p>Ao usar a plataforma, você concorda em não:</p>
+        <ul>
+            <li>Publicar conteúdo ofensivo, discriminatório, racista ou de ódio</li>
+            <li>Compartilhar desinformação sobre a Irlanda, imigração ou termos legais</li>
+            <li>Fazer spam, phishing ou tentar enganar outros usuários</li>
+            <li>Tentar acessar contas de terceiros ou sistemas da plataforma de forma não autorizada</li>
+            <li>Usar a IA para fins ilegais, antiéticos ou para criar conteúdo enganoso</li>
+            <li>Cadastrar-se múltiplas vezes para obter benefícios adicionais do trial</li>
+            <li>Usar bots ou automações para interagir com o assistente de IA</li>
+        </ul>
+        <p>Violações podem resultar em suspensão imediata da conta sem direito a reembolso.</p>
+
+        <!-- 8 -->
+        <h2 id="ia">8. Assistente com IA — Aviso Importante</h2>
+        <div class="highlight">
+            <p>⚠️ <strong>O assistente de IA da Jornada do Intercâmbio é uma ferramenta de apoio informativo.</strong>
+                As respostas são baseadas em conhecimento geral sobre a Irlanda e podem não refletir mudanças recentes
+                em leis, regulações ou políticas de vistos. <strong>Não substitui orientação profissional jurídica,
+                    imigratória, médica ou financeira.</strong> Sempre confirme informações importantes com fontes
+                oficiais (inis.ie, hse.ie, revenue.ie).</p>
+        </div>
+        <p>Os dados informados no início da conversa com a IA (nome, e-mail, telefone) são usados para personalização e
+            podem ser armazenados conforme nossa Política de Privacidade.</p>
+
+        <!-- 9 -->
+        <h2 id="responsabilidade">9. Limitação de Responsabilidade</h2>
+        <p>A plataforma é fornecida "no estado em que se encontra", sem garantias de disponibilidade ininterrupta. Não
+            nos responsabilizamos por:</p>
+        <ul>
+            <li>Decisões tomadas com base em conteúdo da plataforma ou da IA</li>
+            <li>Perdas indiretas, danos morais ou lucros cessantes</li>
+            <li>Indisponibilidade temporária do serviço (manutenção, falhas técnicas)</li>
+            <li>Conteúdo de links externos ou sites de parceiros</li>
+            <li>Mudanças em leis de imigração, tributação ou saúde na Irlanda ou no Brasil</li>
+        </ul>
+        <p>Nossa responsabilidade máxima, em qualquer circunstância, é limitada ao valor pago pelo usuário nos últimos 3
+            meses de assinatura.</p>
+
+        <!-- 10 -->
+        <h2 id="cancelamento">10. Cancelamento e Reembolso</h2>
+        <ul>
+            <li>Você pode cancelar sua assinatura a qualquer momento, sem multa ou taxa.</li>
+            <li>O acesso continua ativo até o final do período já pago.</li>
+            <li>Solicitações de reembolso dentro de <strong>7 dias</strong> da cobrança são aceitas (Lei do Consumidor —
+                CDC, Art. 49).</li>
+            <li>Após 7 dias, não oferecemos reembolso proporcional por período não utilizado.</li>
+            <li>Contas banidas por violação de termos não têm direito a reembolso.</li>
+        </ul>
+        <p>Para solicitar cancelamento ou reembolso: <a
+                href="mailto:suporte@jornadadointercambio.com.br">suporte@jornadadointercambio.com.br</a></p>
+
+        <!-- 11 -->
+        <h2 id="alteracoes">11. Alterações nos Termos</h2>
+        <p>Reservamo-nos o direito de atualizar estes Termos. Mudanças significativas serão comunicadas com pelo menos
+            <strong>30 dias de antecedência</strong> por e-mail. O uso continuado da plataforma após a vigência das
+            alterações implica aceitação dos novos termos.</p>
+
+        <!-- 12 -->
+        <h2 id="lei">12. Lei Aplicável e Foro</h2>
+        <p>Estes Termos são regidos pelas leis do <strong>Brasil</strong>, especialmente o Código Civil, o Código de
+            Defesa do Consumidor (CDC) e a Lei Geral de Proteção de Dados (LGPD). Fica eleito o foro da comarca de
+            <strong>São Paulo — SP</strong> para resolução de conflitos, sem prejuízo de outros foros facultativos
+            previstos em lei.</p>
+
+        <!-- 13 -->
+        <h2 id="contato">13. Contato</h2>
+        <div class="contact-box">
+            <h3>📬 Fale conosco</h3>
+            <p>
+                📧 Suporte: <a
+                    href="mailto:suporte@jornadadointercambio.com.br">suporte@jornadadointercambio.com.br</a><br>
+                🔒 Privacidade / LGPD: <a
+                    href="mailto:privacidade@jornadadointercambio.com.br">privacidade@jornadadointercambio.com.br</a><br>
+                🤝 Parcerias: <a
+                    href="mailto:parceiros@jornadadointercambio.com.br">parceiros@jornadadointercambio.com.br</a>
+            </p>
+            <p>Respondemos em até <strong>3 dias úteis</strong>.</p>
+        </div>
+    </div>
+
+    <script src="cookie-consent.js"></script>
+</body>
+
+</html>
