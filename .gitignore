@@ -1,0 +1,11 @@
+# Sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# Editor
+.vscode/
+.idea/
+
+# Arquivos internos
+.system_generated/

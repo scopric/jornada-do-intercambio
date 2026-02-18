@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="Netflix do Intercâmbio — A plataforma definitiva para brasileiros estudando na Irlanda." />
+    <title>Netflix do Intercâmbio — Sua vida na Irlanda, simplificada</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-inner">
+            <a href="#hero" class="nav-logo">
+                <span class="logo-mark">N</span>
+                <span class="logo-text">Netflix do <span class="logo-green">Intercâmbio</span></span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#browse" class="nav-link">Conteúdo</a></li>
+                <li><a href="#categories" class="nav-link">Categorias</a></li>
+                <li><a href="#partners" class="nav-link">Parceiros</a></li>
+                <li><a href="#pricing" class="nav-link">Planos</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="#pricing" class="btn btn-nav">Começar Grátis</a>
+                <button class="hamburger" id="hamburger" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+        <div class="hero-bg">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+        <div class="hero-inner">
+            <div class="hero-badge">🇧🇷 Para brasileiros na Irlanda 🇮🇪</div>
+            <h1 class="hero-title">
+                Aprenda a
+                <span class="rotating-wrap">
+                    <span class="word active">Viver</span>
+                    <span class="word">Trabalhar</span>
+                    <span class="word">Prosperar</span>
+                    <span class="word">Estudar</span>
+                </span>
+                na Irlanda
+            </h1>
+            <p class="hero-sub">Vídeos exclusivos, IA 24/7 em português e uma comunidade que entende você — tudo em um
+                só lugar.</p>
+            <div class="hero-ctas">
+                <a href="#browse" class="btn btn-primary btn-lg">▶ Explorar Conteúdo</a>
+                <a href="#pricing" class="btn btn-ghost btn-lg">Ver Planos</a>
+            </div>
+            <div class="hero-stats">
+                <div class="hstat"><span class="hstat-n" data-target="7000">0</span><span
+                        class="hstat-l">Alunos/ano</span></div>
+                <div class="hstat-div"></div>
+                <div class="hstat"><span class="hstat-n" data-target="20">0</span><span class="hstat-l">Vídeos
+                        exclusivos</span></div>
+                <div class="hstat-div"></div>
+                <div class="hstat"><span class="hstat-t">IA 24/7</span><span class="hstat-l">Assistente pessoal</span>
+                </div>
+                <div class="hstat-div"></div>
+                <div class="hstat"><span class="hstat-n" data-target="10">0</span><span class="hstat-l">Parceiros</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BROWSE — CONTENT ROWS -->
+    <section class="browse" id="browse">
+        <div class="browse-inner">
+
+            <!-- Row 1: Primeiros Passos -->
+            <div class="content-row fade-in">
+                <div class="row-header">
+                    <div>
+                        <h2 class="row-title">Primeiros Passos</h2>
+                        <p class="row-sub">Tudo que você precisa para se estabelecer na Irlanda</p>
+                    </div>
+                    <a href="#" class="row-see-all">Ver todos →</a>
+                </div>
+                <div class="row-track-wrap">
+                    <button class="row-arrow left" data-row="row1">‹</button>
+                    <div class="row-track" id="row1">
+                        <div class="content-card">
+                            <div class="card-thumb" style="background:linear-gradient(160deg,#1a3a5c,#0d5c3a,#c8a800)">
+                                <div class="card-cover">
+                                    <div class="cc-brand">NETFLIX DO INTERCÂMBIO</div>
+                                    <div class="cc-sub">VISTO DE ESTUDANTE</div>
+                                    <div class="cc-title">STAMP 2</div>
+                                    <div class="cc-icon">🪪</div>
+                                </div>
+                                <div class="card-overlay"><button class="play-circle">▶</button></div>
+                                <span class="card-eps">3 episódios</span>
+                            </div>
+                            <div class="card-info"><span class="ctag free">Gratuito</span>
+                                <h4>Visto de Estudante — Stamp 2</h4>
+                                <p>IRP, permissões e renovação</p>
+                            </div>
+                        </div>
+                        <div class="content-card">
+                            <div class="card-thumb" style="background:linear-gradient(160deg,#0d5c3a,#1a3a5c,#c8a800)">
+                                <div class="card-cover">
+                                    <div class="cc-brand">NETFLIX DO INTERCÂMBIO</div>
+                                    <div class="cc-sub">DOCUMENTAÇÃO</div>
+                                    <div class="cc-title">PPS NUMBER</div>
+                                    <div class="cc-icon">🆔</div>
+                                </div>
+                                <div class="card-overlay"><button class="play-circle">▶</button></div>
+                                <span class="card-eps">2 episódios</span>
+                            </div>
+                            <div class="card-info"><span class="ctag free">Gratuito</span>
+                                <h4>Como tirar seu PPS Number</h4>
+                                <p>Passo a passo no Intreo Centre</p>
+                            </div>
+                        </div>
+                        <div class="content-card">
+                            <div class="card-thumb" style="background:linear-gradient(160deg,#1a3a5c,#0d5c3a,#c8a800)">
+                                <div class="card-cover">
+                                    <div class="cc-brand">NETFLIX DO INTERCÂMBIO</div>
+                                    <div class="cc-sub">A PASTA</div>
+                                    <div class="cc-title">DE OURO</div>
+                                    <div class="cc-icon">📁</div>
+                                </div>
+                                <div class="card-overlay"><button class="play-circle">▶</button></div>
+                                <span class="card-eps">4 episódios</span>
+                            </div>
+                            <div class="card-info"><span class="ctag premium">Premium</span>
+                                <h4>A Pasta de Ouro — Documentação</h4>
+                                <p>Organize todos os documentos</p>
+                            </div>
+                        </div>
+                        <div class="content-card">
+                            <div class="card-thumb" style="background:linear-gradient(135deg,#F5A623,#8B5E00)">
+                                <div class="card-cover">
+                                    <div class="cc-brand">NETFLIX DO INTERCÂMBIO</div>
+                                    <div class="cc-sub">MORADIA</div>
+                                    <div class="cc-title">EM DUBLIN</div>
+                                    <div class="cc-icon">🏠</div>
+                                </div>
+                                <div class="card-overlay"><button class="play-circle">▶</button></div>
+                                <span class="card-eps">4 episódios</span>
+                            </div>
+                            <div class="card-info"><span class="ctag premium">Premium</span>
+                                <h4>Encontrando Moradia em Dublin</h4>
+                                <p>Daft.ie, contratos e seus direitos</p>
+                            </div>
+                        </div>
+                        <div class="content-card">
+                            <div class="card-thumb" style="background:linear-gradient(135deg,#00C8FF,#004A8B)">
+                                <div class="card-cover">
+                                    <div class="cc-brand">NETFLIX DO INTERCÂMBIO</div>
+                                    <div class="cc-sub">TRANSPORTE</div>
+                                    <div class="cc-title">LEAP CARD</div>
+                                    <div class="cc-icon">🚌</div>
+                                </div>
+                                <div class="card-overlay"><button class="play-circle">▶</button></div>
+                                <span class="card-eps">2 episódios</span>
+                            </div>
+                            <div class="card-info"><span class="ctag free">Gratuito</span>
+                                <h4>Transporte em Dublin</h4>
+                                <p>Ônibus, Luas, DART e Leap Card</p>
+                            </div>
+                        </div>
+                        <div class="content-card">
+                            <div class="card-thumb" style="background:linear-gradient(135deg,#6C63FF,#2D1B69)">
+                                <div class="card-cover">
+                                    <div class="cc-brand">NETFLIX DO INTERCÂMBIO</div>
+                                    <div class="cc-sub">SAÚDE &</div>
+                                    <div class="cc-title">SEGURO</div>
+                                    <div class="cc-icon">🏥</div>
+                                </div>
+                                <div class="card-overlay"><button class="play-circle">▶</button></div>
+                                <span class="card-eps">3 episódios</span>
+                            </div>
+                            <div class="card-info"><span class="ctag premium">Premium</span>
+                                <h4>Saúde e Seguro na Irlanda</h4>
+                                <p>HSE, médico de família e farmácias</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="row-arrow right" data-row="row1">›</button>
+                </div>
+            </div>
+
+            <!-- Row 2: Finanças -->
+            <div class="content-row fade-in">
+                <div class="row-header">
+                    <div>
+                        <h2 class="row-title">Finanças</h2>
+                        <p class="row-sub">Domine seu dinheiro como estudante no exterior</p>
+                    </div>
+                    <a href="#" class="row-see-all">Ver todos →</a>
+                </div>
+                <div class="row-track-wrap">
+                    <button class="row-arrow left" data-row="row2">‹</button>
+                    <div class="row-track" id="row2">
+                        <div class="content-card">
+                            <div class="card-thumb" style="background:linear-gradient(160deg,#0d5c3a,#1a3a5c,#c8a800)">
+                                <div class="card-cover">
+                                    <div class="cc-brand">NETFLIX DO INTERCÂMBIO</div>
+                                    <div class="cc-sub">COMPROVAÇÃO</div>
+                                    <div class="cc-title">FINANCEIRA</div>
+                                    <div class="cc-icon">💶</div>
+                                </div>
+                                <div class="card-overlay"><button class="play-circle">▶</button></div>
+                                <span class="card-eps">3 episódios</span>
+                            </div>
+                            <div class="card-info"><span class="ctag premium">Premium</span>
+                                <h4>Comprovação Financeira para o Visto</h4>
+                                <p>Extrato bancário e comprovação de renda</p>
+                            </div>
+                        </div>
+                        <div class="content-card">
+                            <div class="card-thumb" style="background:linear-gradient(135deg,#FF6B6B,#8B0000)">
+                                <div class="card-cover">
+                                    <div class="cc-brand">NETFLIX DO INTERCÂMBIO</div>
+                                    <div class="cc-sub">CONTA</div>
+                                    <div class="cc-title">BANCÁRIA</div>
+                                    <div class="cc-icon">🏦</div>
+                                </div>
+                                <div class="card-overlay"><button class="play-circle">▶</button></div>
+                                <span class="card-eps">3 episódios</span>
+                            </div>
+                            <div class="card-info"><span class="ctag free">Gratuito</span>
+                                <h4>Abrindo Conta Bancária na Irlanda</h4>
+                                <p>Revolut, N26 e bancos tradicionais</p>
+                            </div>
+                        </div>
+                        <div class="content-card">
+                            <div class="card-thumb" style="background:linear-gradient(135deg,#F5A623,#8B5E00)">
+                                <div class="card-cover">
+                                    <div class="cc-brand">NETFLIX DO INTERCÂMBIO</div>
+                                    <div class="cc-sub">ORÇAMENTO</div>
+                                    <div class="cc-title">MASTERCLASS</div>
+                                    <div class="cc-icon">📊</div>
+                                </div>
+                                <div class="card-overlay"><button class="play-circle">▶</button></div>
+                                <span class="card-eps">6 episódios</span>
+                            </div>
+                            <div class="card-info"><span class="ctag premium">Premium</span>
+                                <h4>Orçamento Masterclass</h4>
+                                <p>Como sobreviver com €1.200/mês em Dublin</p>
+                            </div>
+                        </div>
+                        <div class="content-card">
+                            <div class="card-thumb" style="background:linear-gradient(135deg,#00C896,#0A5E45)">
+                                <div class="card-cover">
+                                    <div class="cc-brand">NETFLIX DO INTERCÂMBIO</div>
+                                    <div class="cc-sub">IMPOSTOS</div>
+                                    <div class="cc-title">IRLANDESES</div>
+                                    <div class="cc-icon">📋</div>
+                                </div>
+                                <div class="card-overlay"><button class="play-circle">▶</button></div>
+                                <span class="card-eps">4 episódios</span>
+                            </div>
+                            <div class="card-info"><span class="ctag premium">Premium</span>
+                                <h4>Impostos para Estudantes</h4>
+                                <p>Revenue, tax credits e reembolsos</p>
+                            </div>
+                        </div>
+                        <div class="content-card">
+                            <div class="card-thumb" style="background:linear-gradient(135deg,#6C63FF,#2D1B69)">
+                                <div class="card-cover">
+                                    <div class="cc-brand">NETFLIX DO INTERCÂMBIO</div>
+                                    <div class="cc-sub">TRABALHO</div>
+                                    <div class="cc-title">PART-TIME</div>
+                                    <div class="cc-icon">💼</div>
+                                </div>
+                                <div class="card-overlay"><button class="play-circle">▶</button></div>
+                                <span class="card-eps">2 episódios</span>
+                            </div>
+                            <div class="card-info"><span class="ctag premium">Premium</span>
+                                <h4>Trabalho Part-Time com Stamp 2</h4>
+                                <p>Direitos, limite de horas e emprego</p>
+                            </div>
+                        </div>
+                        <div class="content-card">
+                            <div class="card-thumb" style="background:linear-gradient(135deg,#FF9F43,#5A3000)">
+                                <div class="card-cover">
+                                    <div class="cc-brand">NETFLIX DO INTERCÂMBIO</div>
+                                    <div class="cc-sub">REMESSAS</div>
+                                    <div class="cc-title">INTERNACIONAIS</div>
+                                    <div class="cc-icon">💸</div>
+                                </div>
+                                <div class="card-overlay"><button class="play-circle">▶</button></div>
+                                <span class="card-eps">2 episódios</span>
+                            </div>
+                            <div class="card-info"><span class="ctag free">Gratuito</span>
+                                <h4>Enviando Dinheiro Brasil ↔ Irlanda</h4>
+                                <p>Wise, Remessa Online e melhores taxas</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="row-arrow right" data-row="row2">›</button>
+                </div>
+            </div>
+
+            <!-- Row 3: Cultura & Vida -->
+            <div class="content-row fade-in">
+                <div class="row-header">
+                    <div>
+                        <h2 class="row-title">Cultura & Vida na Irlanda</h2>
+                        <p class="row-sub">Descubra o melhor da vida e tradições irlandesas</p>
+                    </div>
+                    <a href="#" class="row-see-all">Ver todos →</a>
+                </div>
+                <div class="row-track-wrap">
+                    <button class="row-arrow left" data-row="row3">‹</button>
+                    <div class="row-track" id="row3">
+                        <div class="content-card">
+                            <div class="card-thumb" style="background:linear-gradient(135deg,#1a3a5c,#0d5c3a)">
+                                <div class="card-cover">
+                                    <div class="cc-brand">NETFLIX DO INTERCÂMBIO</div>
+                                    <div class="cc-sub">CULTURA</div>
+                                    <div class="cc-title">PUB IRLANDÊS</div>
+                                    <div class="cc-icon">🍺</div>
+                                </div>
+                                <div class="card-overlay"><button class="play-circle">▶</button></div>
+                                <span class="card-eps">5 episódios</span>
+                            </div>
+                            <div class="card-info"><span class="ctag free">Gratuito</span>
+                                <h4>Cultura do Pub Irlandês</h4>
+                                <p>Tradições e os melhores pubs de Dublin</p>
+                            </div>
+                        </div>
+                        <div class="content-card">
+                            <div class="card-thumb" style="background:linear-gradient(135deg,#00C896,#0A5E45)">
+                                <div class="card-cover">
+                                    <div class="cc-brand">NETFLIX DO INTERCÂMBIO</div>
+                                    <div class="cc-sub">GASTRONOMIA</div>
+                                    <div class="cc-title">IRLANDESA</div>
+                                    <div class="cc-icon">🥘</div>
+                                </div>
+                                <div class="card-overlay"><button class="play-circle">▶</button></div>
+                                <span class="card-eps">4 episódios</span>
+                            </div>
+                            <div class="card-info"><span class="ctag free">Gratuito</span>
+                                <h4>Comida Irlandesa & Supermercados</h4>
+                                <p>Onde comprar e como economizar</p>
+                            </div>
+                        </div>
+                        <div class="content-card">
+                            <div class="card-thumb" style="background:linear-gradient(135deg,#F5A623,#8B5E00)">
+                                <div class="card-cover">
+                                    <div class="cc-brand">NETFLIX DO INTERCÂMBIO</div>
+                                    <div class="cc-sub">FESTIVAIS</div>
+                                    <div class="cc-title">& EVENTOS</div>
+                                    <div class="cc-icon">🎉</div>
+                                </div>
+                                <div class="card-overlay"><button class="play-circle">▶</button></div>
+                                <span class="card-eps">8 episódios</span>
+                            </div>
+                            <div class="card-info"><span class="ctag free">Gratuito</span>
+                                <h4>Festivais & Eventos na Irlanda</h4>
+                                <p>St. Patrick's, Galway Arts Fest e mais</p>
+                            </div>
+                        </div>
+                        <div class="content-card">
+                            <div class="card-thumb" style="background:linear-gradient(135deg,#6C63FF,#2D1B69)">
+                                <div class="card-cover">
+                                    <div class="cc-brand">NETFLIX DO INTERCÂMBIO</div>
+                                    <div class="cc-sub">ESPORTES</div>
+                                    <div class="cc-title">IRLANDESES</div>
+                                    <div class="cc-icon">🏉</div>
+                                </div>
+                                <div class="card-overlay"><button class="play-circle">▶</button></div>
+                                <span class="card-eps">6 episódios</span>
+                            </div>
+                            <div class="card-info"><span class="ctag free">Gratuito</span>
+                                <h4>GAA, Rugby & Esportes Irlandeses</h4>
+                                <p>Entenda os esportes locais</p>
+                            </div>
+                        </div>
+                        <div class="content-card">
+                            <div class="card-thumb" style="background:linear-gradient(135deg,#FF6B6B,#8B0000)">
+                                <div class="card-cover">
+                                    <div class="cc-brand">NETFLIX DO INTERCÂMBIO</div>
+                                    <div class="cc-sub">MÚSICA</div>
+                                    <div class="cc-title">& ARTE</div>
+                                    <div class="cc-icon">🎵</div>
+                                </div>
+                                <div class="card-overlay"><button class="play-circle">▶</button></div>
+                                <span class="card-eps">4 episódios</span>
+                            </div>
+                            <div class="card-info"><span class="ctag free">Gratuito</span>
+                                <h4>Música ao Vivo & Cena Artística</h4>
+                                <p>Temple Bar e galeries de Dublin</p>
+                            </div>
+                        </div>
+                        <div class="content-card">
+                            <div class="card-thumb" style="background:linear-gradient(135deg,#00C8FF,#004A8B)">
+                                <div class="card-cover">
+                                    <div class="cc-brand">NETFLIX DO INTERCÂMBIO</div>
+                                    <div class="cc-sub">VIAGENS</div>
+                                    <div class="cc-title">PELA EUROPA</div>
+                                    <div class="cc-icon">✈️</div>
+                                </div>
+                                <div class="card-overlay"><button class="play-circle">▶</button></div>
+                                <span class="card-eps">7 episódios</span>
+                            </div>
+                            <div class="card-info"><span class="ctag premium">Premium</span>
+                                <h4>Day Trips & Viagens pela Europa</h4>
+                                <p>Cliff of Moher e voos baratos</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="row-arrow right" data-row="row3">›</button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section class="categories" id="categories">
+        <div class="section-inner">
+            <div class="section-head fade-in">
+                <span class="stag">Categorias</span>
+                <h2 class="stitle">Conteúdo para <span class="grad">cada fase</span></h2>
+                <p class="ssub">Do planejamento à integração — cobrimos toda a sua jornada</p>
+            </div>
+            <div class="cat-grid fade-in">
+                <div class="cat-card">
+                    <div class="cat-icon">✈️</div>
+                    <h3>Antes de Chegar</h3>
+                    <p>Visto, documentos e preparação financeira</p><span class="cat-count">6 séries</span>
+                </div>
+                <div class="cat-card">
+                    <div class="cat-icon">🏙️</div>
+                    <h3>Chegada & Primeiros Passos</h3>
+                    <p>PPS Number, conta bancária e moradia</p><span class="cat-count">8 séries</span>
+                </div>
+                <div class="cat-card">
+                    <div class="cat-icon">💶</div>
+                    <h3>Finanças</h3>
+                    <p>Orçamento, impostos e trabalho part-time</p><span class="cat-count">6 séries</span>
+                </div>
+                <div class="cat-card">
+                    <div class="cat-icon">🎓</div>
+                    <h3>Escola de Inglês</h3>
+                    <p>Como escolher a escola e aproveitar ao máximo</p><span class="cat-count">4 séries</span>
+                </div>
+                <div class="cat-card">
+                    <div class="cat-icon">🍀</div>
+                    <h3>Cultura & Vida</h3>
+                    <p>Tradições irlandesas, festivais e viagens</p><span class="cat-count">7 séries</span>
+                </div>
+                <div class="cat-card">
+                    <div class="cat-icon">🤖</div>
+                    <h3>IA Assistente 24/7</h3>
+                    <p>Tire dúvidas em português a qualquer hora</p><span class="cat-count">Ilimitado</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI SECTION -->
+    <section class="ai-section" id="ai">
+        <div class="section-inner">
+            <div class="ai-wrap">
+                <div class="ai-info fade-in">
+                    <span class="stag">IA Integrada</span>
+                    <h2 class="stitle">Seu assistente pessoal<br /><span class="grad">disponível 24/7</span></h2>
+                    <p class="ssub">Treinada com informações específicas sobre a Irlanda, responde em português a
+                        qualquer hora.</p>
+                    <ul class="ai-list">
+                        <li><span class="ai-check">✓</span> PPS Number, conta bancária, visto</li>
+                        <li><span class="ai-check">✓</span> Moradia, transporte, saúde</li>
+                        <li><span class="ai-check">✓</span> Trabalho, direitos e legislação</li>
+                        <li><span class="ai-check">✓</span> Cultura, lazer e dicas locais</li>
+                    </ul>
+                    <button class="btn btn-primary" id="openChatBtn">🤖 Conversar com a IA</button>
+                </div>
+                <div class="ai-demo fade-in">
+                    <div class="chat-window">
+                        <div class="chat-head">
+                            <div class="chat-av">🤖</div>
+                            <div><strong>Assistente do Intercâmbio</strong>
+                                <div class="chat-online">● Online agora</div>
+                            </div>
+                        </div>
+                        <div class="chat-msgs" id="chatMessages">
+                            <div class="msg bot">
+                                <div class="bubble">Olá! 👋 Sou a IA do Netflix do Intercâmbio. Como posso te ajudar
+                                    hoje?</div>
+                            </div>
+                            <div class="msg user">
+                                <div class="bubble">Como eu tiro meu PPS Number?</div>
+                            </div>
+                            <div class="msg bot">
+                                <div class="bubble">Ótima pergunta! 🆔 Para tirar seu PPS Number:<br><br>1️⃣ Agende no
+                                    <strong>Intreo Centre</strong> mais próximo<br>2️⃣ Leve passaporte + comprovante de
+                                    endereço<br>3️⃣ Preencha o formulário REG1<br><br>O número chega por carta em 5-7
+                                    dias úteis!</div>
+                            </div>
+                        </div>
+                        <div class="chat-input-row">
+                            <input type="text" id="chatInput" placeholder="Pergunte sobre a Irlanda..." />
+                            <button id="chatSend">➤</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PARTNERS -->
+    <section class="partners" id="partners">
+        <div class="section-inner">
+            <div class="section-head fade-in">
+                <span class="stag">Parceiros</span>
+                <h2 class="stitle">Economize com <span class="grad">parceiros exclusivos</span></h2>
+                <p class="ssub">Centenas de euros em descontos com empresas que atendem brasileiros na Irlanda</p>
+            </div>
+            <div class="partners-grid fade-in">
+                <div class="partner-card">
+                    <div class="partner-logo">🎓</div>
+                    <div class="partner-cat">Educação</div>
+                    <h4>Seda College</h4>
+                    <p>Escola de inglês parceira oficial com condições especiais para assinantes.</p><span
+                        class="partner-badge">Parceiro Oficial</span>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-logo">💳</div>
+                    <div class="partner-cat">Banco</div>
+                    <h4>Revolut</h4>
+                    <p>Conta gratuita com transferências internacionais sem taxa para estudantes.</p><span
+                        class="partner-badge">Recomendado</span>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-logo">🚌</div>
+                    <div class="partner-cat">Transporte</div>
+                    <h4>Leap Card</h4>
+                    <p>Viagem com desconto em todo o transporte público de Dublin.</p><span
+                        class="partner-badge">Desconto 30%</span>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-logo">📱</div>
+                    <div class="partner-cat">Telefonia</div>
+                    <h4>SIM Local</h4>
+                    <p>Chips pré-pagos com dados ilimitados para estudantes internacionais.</p><span
+                        class="partner-badge">Dados Ilimitados</span>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-logo">🏠</div>
+                    <div class="partner-cat">Acomodação</div>
+                    <h4>StudentStay</h4>
+                    <p>Moradia verificada em Dublin, Cork e Galway com condições especiais.</p><span
+                        class="partner-badge">Verificado</span>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-logo">🏥</div>
+                    <div class="partner-cat">Saúde</div>
+                    <h4>Irish Life</h4>
+                    <p>Cobertura de saúde completa para estudantes internacionais na Irlanda.</p><span
+                        class="partner-badge">Cobertura Total</span>
+                </div>
+            </div>
+            <div class="partners-cta fade-in">
+                <h3>Tem um negócio que atende brasileiros na Irlanda?</h3>
+                <p>Junte-se à nossa rede e alcance milhares de estudantes todo mês.</p>
+                <a href="#" class="btn btn-primary">🤝 Seja um Parceiro</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing" id="pricing">
+        <div class="section-inner">
+            <div class="section-head fade-in">
+                <span class="stag">Planos</span>
+                <h2 class="stitle">Invista no seu <span class="grad">intercâmbio</span></h2>
+                <p class="ssub">Comece grátis. Cancele quando quiser. Sem taxas ocultas.</p>
+            </div>
+            <div class="pricing-grid fade-in">
+                <div class="price-card">
+                    <div class="price-icon">🌱</div>
+                    <h3 class="price-name">Free</h3>
+                    <div class="price-val"><span class="price-cur">R$</span><span class="price-num">0</span><span
+                            class="price-per">/mês</span></div>
+                    <p class="price-desc">Para quem está começando a planejar</p>
+                    <ul class="price-feats">
+                        <li class="yes">✅ 5 vídeos gratuitos</li>
+                        <li class="yes">✅ 1 e-book gratuito</li>
+                        <li class="yes">✅ Blog completo</li>
+                        <li class="yes">✅ 10 perguntas/mês para IA</li>
+                        <li class="no">❌ Vídeos premium</li>
+                        <li class="no">❌ IA ilimitada</li>
+                        <li class="no">❌ Descontos parceiros</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline btn-block">Começar Grátis</a>
+                </div>
+                <div class="price-card featured">
+                    <div class="price-badge">⭐ Mais Popular</div>
+                    <div class="price-icon">🚀</div>
+                    <h3 class="price-name">Premium</h3>
+                    <div class="price-val"><span class="price-cur">R$</span><span class="price-num">9</span><span
+                            class="price-dec">,90</span><span class="price-per">/mês</span></div>
+                    <p class="price-desc">Para quem está vivendo o intercâmbio</p>
+                    <ul class="price-feats">
+                        <li class="yes">✅ Todos os vídeos</li>
+                        <li class="yes">✅ Todos os e-books</li>
+                        <li class="yes">✅ Blog completo</li>
+                        <li class="yes">✅ IA ilimitada</li>
+                        <li class="yes">✅ Descontos parceiros</li>
+                        <li class="no">❌ Consultoria 1:1</li>
+                        <li class="no">❌ Grupo VIP</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary btn-block">Assinar Premium</a>
+                </div>
+                <div class="price-card">
+                    <div class="price-icon">💎</div>
+                    <h3 class="price-name">Premium Plus</h3>
+                    <div class="price-val"><span class="price-cur">R$</span><span class="price-num">47</span><span
+                            class="price-dec">,90</span><span class="price-per">/mês</span></div>
+                    <p class="price-desc">Para quem quer o máximo da experiência</p>
+                    <ul class="price-feats">
+                        <li class="yes">✅ Tudo do Premium</li>
+                        <li class="yes">✅ Consultoria 1:1 mensal</li>
+                        <li class="yes">✅ Grupo VIP no WhatsApp</li>
+                        <li class="yes">✅ Conteúdo exclusivo</li>
+                        <li class="yes">✅ Suporte prioritário</li>
+                        <li class="yes">✅ Certificado de conclusão</li>
+                        <li class="yes">✅ Marketplace antecipado</li>
+                    </ul>
+                    <a href="#" class="btn btn-gold btn-block">Assinar Plus</a>
+                </div>
+            </div>
+            <p class="pricing-note">💳 Pagamento seguro via Stripe · Cancele quando quiser · Sem taxas ocultas</p>
+        </div>
+    </section>
+
+    <!-- FOOTER CTA -->
+    <section class="footer-cta">
+        <div class="section-inner">
+            <div class="fcta-inner fade-in">
+                <h2>Pronto para começar sua aventura?</h2>
+                <p>Junte-se a mais de 7.000 brasileiros que já estão aprendendo com a plataforma.</p>
+                <a href="#pricing" class="btn btn-primary btn-lg">🚀 Começar Grátis Agora</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <a href="#hero" class="nav-logo">
+                    <span class="logo-mark">N</span>
+                    <span class="logo-text">Netflix do <span class="logo-green">Intercâmbio</span></span>
+                </a>
+                <p>A plataforma definitiva para brasileiros que estudam na Irlanda.</p>
+                <div class="footer-socials">
+                    <a href="#" aria-label="Instagram">📸</a>
+                    <a href="#" aria-label="YouTube">▶️</a>
+                    <a href="#" aria-label="TikTok">🎵</a>
+                    <a href="#" aria-label="WhatsApp">💬</a>
+                </div>
+                <div class="seda-badge">🎓 Parceiro oficial <strong>Seda College</strong></div>
+            </div>
+            <div class="footer-col">
+                <h5>Plataforma</h5>
+                <ul>
+                    <li><a href="#browse">Conteúdo</a></li>
+                    <li><a href="#ai">IA Assistente</a></li>
+                    <li><a href="#partners">Parceiros</a></li>
+                    <li><a href="#pricing">Planos</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Recursos</h5>
+                <ul>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Guias de Cidades</a></li>
+                    <li><a href="#">Ajuda com Visto</a></li>
+                    <li><a href="#">FAQs</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Empresa</h5>
+                <ul>
+                    <li><a href="#">Sobre Nós</a></li>
+                    <li><a href="#">Contato</a></li>
+                    <li><a href="#">Seja Parceiro</a></li>
+                    <li><a href="#">Imprensa</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Legal</h5>
+                <ul>
+                    <li><a href="#">Termos de Uso</a></li>
+                    <li><a href="#">Privacidade</a></li>
+                    <li><a href="#">GDPR</a></li>
+                    <li><a href="#">Cookies</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Netflix do Intercâmbio. Todos os direitos reservados.</p>
+            <p>🔒 Em conformidade com o GDPR europeu.</p>
+        </div>
+    </footer>
+
+    <!-- FLOATING CHAT -->
+    <button class="chat-bubble" id="chatBubble" aria-label="Abrir IA"><span>🤖</span><span
+            class="bubble-pulse"></span></button>
+    <div class="chat-panel" id="chatPanel">
+        <div class="chat-panel-head">
+            <div class="chat-av">🤖</div>
+            <div><strong>Assistente IA</strong>
+                <div class="chat-online">● Online agora</div>
+            </div>
+            <button class="chat-close" id="chatClose">✕</button>
+        </div>
+        <div class="chat-panel-msgs" id="chatPanelMessages">
+            <div class="msg bot">
+                <div class="bubble">Olá! 👋 Pergunte qualquer coisa sobre a Irlanda!</div>
+            </div>
+        </div>
+        <div class="chat-panel-input">
+            <input type="text" id="chatPanelInput" placeholder="Digite sua pergunta..." />
+            <button id="chatPanelSend">➤</button>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
