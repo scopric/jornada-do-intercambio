@@ -1,5 +1,42 @@
 /* ===== NETFLIX DO INTERCÂMBIO — main.js ===== */
 
+// ── ⚠️ SECURITY LAYER ────────────────────────────────────────
+// Sanitiza input do usuário — previne XSS
+function sanitizeInput(str) {
+    if (typeof str !== 'string') return '';
+    // Limitar tamanho
+    str = str.slice(0, 500);
+    // Escapar HTML
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#x27;', '/': '&#x2F;' };
+    return str.replace(/[&<>"'/]/g, ch => map[ch]);
+}
+
+// Rate limiting — max 10 msgs/min por sessão
+const rateLimiter = (() => {
+    const timestamps = [];
+    const MAX = 10;
+    const WINDOW = 60 * 1000; // 1 minuto
+    return {
+        allow() {
+            const now = Date.now();
+            // Remove timestamps antigos
+            while (timestamps.length && timestamps[0] < now - WINDOW) timestamps.shift();
+            if (timestamps.length >= MAX) return false;
+            timestamps.push(now);
+            return true;
+        }
+    };
+})();
+
+// Anti-spam: bloqueia mensagens repetidas consecutivas
+let lastUserMsg = '';
+function isSpam(text) {
+    if (text === lastUserMsg) return true;
+    lastUserMsg = text;
+    return false;
+}
+
+
 // ── Navbar scroll ──────────────────────────────────────────
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
@@ -106,14 +143,17 @@ const chatSend = document.getElementById('chatSend');
 const chatMsgs = document.getElementById('chatMessages');
 
 function sendDemoMsg() {
-    const text = chatInput?.value.trim();
-    if (!text) return;
-    addMsg(chatMsgs, text, true);
+    const raw = chatInput?.value.trim();
+    if (!raw) return;
+    if (!rateLimiter.allow()) { addMsg(chatMsgs, '⚠️ Muitas mensagens. Aguarde um momento.', false); return; }
+    if (isSpam(raw)) return;
+    const safe = sanitizeInput(raw);
+    addMsg(chatMsgs, safe, true);
     chatInput.value = '';
     const typing = addTyping(chatMsgs);
     setTimeout(() => {
         typing.remove();
-        addMsg(chatMsgs, getAIResponse(text), false);
+        addMsg(chatMsgs, getAIResponse(raw), false);
     }, 900);
 }
 
@@ -137,14 +177,17 @@ openChatBtn?.addEventListener('click', () => {
 });
 
 function sendPanelMsg() {
-    const text = chatPanelInput?.value.trim();
-    if (!text) return;
-    addMsg(chatPanelMsgs, text, true);
+    const raw = chatPanelInput?.value.trim();
+    if (!raw) return;
+    if (!rateLimiter.allow()) { addMsg(chatPanelMsgs, '⚠️ Muitas mensagens. Aguarde um momento.', false); return; }
+    if (isSpam(raw)) return;
+    const safe = sanitizeInput(raw);
+    addMsg(chatPanelMsgs, safe, true);
     chatPanelInput.value = '';
     const typing = addTyping(chatPanelMsgs);
     setTimeout(() => {
         typing.remove();
-        addMsg(chatPanelMsgs, getAIResponse(text), false);
+        addMsg(chatPanelMsgs, getAIResponse(raw), false);
     }, 900);
 }
 

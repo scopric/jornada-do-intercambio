@@ -1,0 +1,35 @@
+﻿name: Security Audit
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 9 * * 1'
+
+jobs:
+  audit:
+    name: Auditoria de Seguranca
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verificar arquivos sensiveis
+        run: |
+          echo "Verificando tokens e senhas no codigo..."
+          if grep -rn "ghp_\|ghb_\|github_pat_\|sk-\|password\s*=\|secret\s*=" --include="*.js" --include="*.html" --include="*.css" .; then
+            echo "AVISO: Possiveis dados sensiveis encontrados!"
+            exit 1
+          else
+            echo "OK: Nenhum dado sensivel encontrado."
+          fi
+
+      - name: Verificar estrutura de seguranca
+        run: |
+          echo "Verificando arquivos de seguranca..."
+          test -f .github/SECURITY.md && echo "OK: SECURITY.md presente" || echo "FALTA: SECURITY.md"
+          test -f .github/CODEOWNERS && echo "OK: CODEOWNERS presente" || echo "FALTA: CODEOWNERS"
+          test -f .gitignore && echo "OK: .gitignore presente" || echo "FALTA: .gitignore"
+          echo "Auditoria concluida!"

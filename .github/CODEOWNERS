@@ -1,0 +1,7 @@
+﻿# CODEOWNERS — Responsaveis pelo codigo
+# Todo pull request precisa de aprovacao do dono do repositorio
+
+* @scopric
+*.html @scopric
+*.css @scopric
+*.js @scopric
