@@ -148,6 +148,8 @@ function isSpam(t) { if (t === lastMsg) return true; lastMsg = t; return false; 
         if (!consent) { showPreErr('É necessário aceitar a Política de Privacidade.'); return; }
 
         window._chatUserData = { name, email, phone };
+        // Salva lead no Firestore
+        if (typeof JDB !== 'undefined') JDB.saveLead({ name, email, phone, source: 'ai-chat' }).catch(() => { });
         modal.classList.remove('open');
 
         // Focus chat input

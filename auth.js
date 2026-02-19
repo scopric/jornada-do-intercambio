@@ -71,6 +71,8 @@ const JAuth = (() => {
 
         saveUsers(users);
         _startSession(users[key]);
+        // Persiste no Firestore (se firebase-config.js + db.js carregados)
+        if (typeof JDB !== 'undefined') JDB.saveUser(users[key]).catch(() => { });
         return { ok: true, user: _safeUser(users[key]) };
     }
 
@@ -86,6 +88,8 @@ const JAuth = (() => {
         if (hash !== user.passwordHash) return { ok: false, error: 'Senha incorreta.' };
 
         _startSession(user);
+        // Atualiza no Firestore
+        if (typeof JDB !== 'undefined') JDB.saveUser(user).catch(() => { });
         return { ok: true, user: _safeUser(user) };
     }
 

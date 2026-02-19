@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin — Jornada do Intercâmbio</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --surface: #111111;
+            --border: #1e1e1e;
+            --text: #f0f0f0;
+            --muted: #6b6b6b;
+            --green: #00e676;
+            --red: #ff4d6d;
+            --yellow: #ffd600;
+            --blue: #4fc3f7;
+            --radius: 10px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ── LOGIN ── */
+        #loginScreen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .login-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .login-box h1 {
+            font-size: 1.4rem;
+            margin-bottom: 6px;
+        }
+
+        .login-box p {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-bottom: 28px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
+
+        .login-box input:focus {
+            outline: none;
+            border-color: var(--green);
+        }
+
+        .btn-admin {
+            width: 100%;
+            padding: 13px;
+            background: var(--green);
+            color: #000;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-admin:hover {
+            background: #00c853;
+        }
+
+        .login-err {
+            color: var(--red);
+            font-size: 0.82rem;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* ── DASHBOARD ── */
+        #dashboard {
+            display: none;
+        }
+
+        .adm-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 28px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .adm-nav .logo {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .adm-nav .logo span {
+            color: var(--green);
+        }
+
+        .adm-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .adm-user {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .btn-logout {
+            padding: 7px 16px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.82rem;
+        }
+
+        .btn-logout:hover {
+            border-color: var(--red);
+            color: var(--red);
+        }
+
+        .adm-main {
+            padding: 32px 28px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .adm-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .adm-sub {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-bottom: 28px;
+        }
+
+        /* ── CARDS ── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 36px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px 22px;
+        }
+
+        .stat-card .sc-label {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .sc-value {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .stat-card .sc-value.green {
+            color: var(--green);
+        }
+
+        .stat-card .sc-value.yellow {
+            color: var(--yellow);
+        }
+
+        .stat-card .sc-value.blue {
+            color: var(--blue);
+        }
+
+        .stat-card .sc-value.red {
+            color: var(--red);
+        }
+
+        /* ── ABAS ── */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--muted);
+            border-bottom: 2px solid transparent;
+            transition: all .2s;
+        }
+
+        .tab.active {
+            color: var(--text);
+            border-bottom-color: var(--green);
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* ── BARRA DE TOOLS ── */
+        .table-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            padding: 9px 14px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 0.87rem;
+            width: 260px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--green);
+        }
+
+        .btn-csv {
+            padding: 9px 18px;
+            background: transparent;
+            border: 1px solid var(--green);
+            color: var(--green);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-csv:hover {
+            background: rgba(0, 230, 118, 0.08);
+        }
+
+        .table-count {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        /* ── TABELA ── */
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.83rem;
+        }
+
+        thead th {
+            background: #161616;
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--muted);
+            white-space: nowrap;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        thead th:hover {
+            color: var(--text);
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background .15s;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        tbody td {
+            padding: 11px 14px;
+            vertical-align: top;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 9px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-trial {
+            background: rgba(255, 214, 0, .15);
+            color: var(--yellow);
+        }
+
+        .badge-premium {
+            background: rgba(0, 230, 118, .15);
+            color: var(--green);
+        }
+
+        .badge-plus {
+            background: rgba(79, 195, 247, .15);
+            color: var(--blue);
+        }
+
+        .badge-expired {
+            background: rgba(255, 77, 109, .15);
+            color: var(--red);
+        }
+
+        /* empty state */
+        .empty-state {
+            padding: 60px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .empty-state .ei {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        /* loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border);
+            border-top-color: var(--green);
+            border-radius: 50%;
+            animation: spin .6s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-row {
+            padding: 40px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        /* Paginação */
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            justify-content: flex-end;
+        }
+
+        .pg-btn {
+            padding: 6px 14px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.82rem;
+        }
+
+        .pg-btn:hover:not(:disabled) {
+            border-color: var(--green);
+        }
+
+        .pg-btn:disabled {
+            opacity: .35;
+            cursor: default;
+        }
+
+        .pg-info {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        /* Refresh */
+        .btn-refresh {
+            padding: 9px 14px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .btn-refresh:hover {
+            border-color: var(--text);
+            color: var(--text);
+        }
+
+        @media (max-width: 600px) {
+            .adm-main {
+                padding: 20px 14px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ═══════════ LOGIN SCREEN ═══════════ -->
+    <div id="loginScreen">
+        <div class="login-box">
+            <h1>🔐 Admin</h1>
+            <p>Área restrita — Jornada do Intercâmbio</p>
+            <input type="password" id="adminPwd" placeholder="Senha de administrador" autocomplete="current-password" />
+            <button class="btn-admin" onclick="adminLogin()">Entrar no painel</button>
+            <div class="login-err" id="loginErr">Senha incorreta.</div>
+        </div>
+    </div>
+
+    <!-- ═══════════ DASHBOARD ═══════════ -->
+    <div id="dashboard">
+
+        <!-- NAV -->
+        <nav class="adm-nav">
+            <div class="logo">Jornada <span>Admin</span></div>
+            <div class="adm-nav-right">
+                <span class="adm-user" id="adm-time"></span>
+                <button class="btn-refresh" onclick="loadAll()" title="Atualizar dados">↻ Atualizar</button>
+                <button class="btn-logout" onclick="adminLogout()">Sair</button>
+            </div>
+        </nav>
+
+        <div class="adm-main">
+            <div class="adm-title">Painel de Controle</div>
+            <div class="adm-sub" id="adm-sub">Carregando dados…</div>
+
+            <!-- STATS -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="sc-label">Total usuários</div>
+                    <div class="sc-value" id="st-total">—</div>
+                </div>
+                <div class="stat-card">
+                    <div class="sc-label">Em trial</div>
+                    <div class="sc-value yellow" id="st-trial">—</div>
+                </div>
+                <div class="stat-card">
+                    <div class="sc-label">Premium</div>
+                    <div class="sc-value green" id="st-premium">—</div>
+                </div>
+                <div class="stat-card">
+                    <div class="sc-label">Leads (chat)</div>
+                    <div class="sc-value blue" id="st-leads">—</div>
+                </div>
+                <div class="stat-card">
+                    <div class="sc-label">Novos hoje</div>
+                    <div class="sc-value" id="st-today">—</div>
+                </div>
+            </div>
+
+            <!-- ABAS -->
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('users',this)">👤 Usuários</div>
+                <div class="tab" onclick="switchTab('leads',this)">🤖 Leads (Chat)</div>
+            </div>
+
+            <!-- USERS -->
+            <div class="tab-panel active" id="panel-users">
+                <div class="table-toolbar">
+                    <input class="search-input" id="searchUsers" placeholder="🔍 Buscar por nome, e-mail, país…"
+                        oninput="filterUsers()" />
+                    <div style="display:flex;gap:8px;align-items:center">
+                        <span class="table-count" id="usersCount"></span>
+                        <button class="btn-csv" onclick="exportCSV('users')">⬇ Exportar CSV</button>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable('users','name')">Nome ↕</th>
+                                <th onclick="sortTable('users','email')">E-mail ↕</th>
+                                <th>Telefone</th>
+                                <th onclick="sortTable('users','plan')">Plano ↕</th>
+                                <th>País</th>
+                                <th>Escola</th>
+                                <th>Fase</th>
+                                <th>Visto</th>
+                                <th>Desafio</th>
+                                <th>Como conheceu</th>
+                                <th onclick="sortTable('users','createdAt')">Cadastro ↕</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersBody">
+                            <tr>
+                                <td colspan="11" class="loading-row"><span class="spinner"></span> Carregando…</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="usersPagination"></div>
+            </div>
+
+            <!-- LEADS -->
+            <div class="tab-panel" id="panel-leads">
+                <div class="table-toolbar">
+                    <input class="search-input" id="searchLeads" placeholder="🔍 Buscar por nome ou e-mail…"
+                        oninput="filterLeads()" />
+                    <div style="display:flex;gap:8px;align-items:center">
+                        <span class="table-count" id="leadsCount"></span>
+                        <button class="btn-csv" onclick="exportCSV('leads')">⬇ Exportar CSV</button>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable('leads','name')">Nome ↕</th>
+                                <th onclick="sortTable('leads','email')">E-mail ↕</th>
+                                <th>Telefone</th>
+                                <th>Origem</th>
+                                <th onclick="sortTable('leads','createdAt')">Data ↕</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leadsBody">
+                            <tr>
+                                <td colspan="5" class="loading-row"><span class="spinner"></span> Carregando…</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="leadsPagination"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ═══════════ SCRIPTS ═══════════ -->
+    <script type="module">
+        // ── Importa Firebase e db wrapper ────────────────────────────
+        import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy }
+            from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // ── SENHA DO ADMIN ────────────────────────────────────────────
+        // Altere para a senha que quiser usar
+        const ADMIN_PWD = "jornada@admin2025";
+
+        // ── Firebase config — copie do firebase-config.js ────────────
+        // Se já configurou o firebase-config.js fora deste módulo, ele
+        // pode já ter inicializado. Tentamos reutilizar:
+        let db;
+        function initDB() {
+            try {
+                const apps = getApps();
+                const app = apps.length ? apps[0] : initializeApp(window.__FIREBASE_CONFIG__ || {});
+                db = getFirestore(app);
+            } catch (e) {
+                console.warn('Firebase não configurado:', e.message);
+            }
+        }
+
+        // ── Estado Global ─────────────────────────────────────────────
+        let allUsers = [], allLeads = [];
+        let filteredUsers = [], filteredLeads = [];
+        let userPage = 1, leadPage = 1;
+        const PAGE_SIZE = 20;
+        let sortState = {};
+
+        // ── AUTH ──────────────────────────────────────────────────────
+        window.adminLogin = function () {
+            const val = document.getElementById('adminPwd').value;
+            const err = document.getElementById('loginErr');
+            if (val === ADMIN_PWD) {
+                sessionStorage.setItem('jdi_admin', '1');
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                initDB();
+                loadAll();
+                updateClock();
+            } else {
+                err.style.display = 'block';
+                setTimeout(() => err.style.display = 'none', 3000);
+            }
+        };
+
+        window.adminLogout = function () {
+            sessionStorage.removeItem('jdi_admin');
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('adminPwd').value = '';
+        };
+
+        document.getElementById('adminPwd').addEventListener('keydown', e => {
+            if (e.key === 'Enter') window.adminLogin();
+        });
+
+        // Auto-login se sessão ativa
+        if (sessionStorage.getItem('jdi_admin') === '1') {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            initDB();
+            loadAll();
+            updateClock();
+        }
+
+        // ── CARREGAR DADOS ────────────────────────────────────────────
+        window.loadAll = async function () {
+            document.getElementById('adm-sub').textContent = 'Atualizando…';
+            [allUsers, allLeads] = await Promise.all([fetchCollection('users'), fetchCollection('leads')]);
+            filteredUsers = [...allUsers];
+            filteredLeads = [...allLeads];
+            userPage = 1; leadPage = 1;
+            renderStats();
+            renderUsers();
+            renderLeads();
+            const now = new Date();
+            document.getElementById('adm-sub').textContent =
+                `Última atualização: ${now.toLocaleTimeString('pt-BR')} · ${allUsers.length} usuários · ${allLeads.length} leads`;
+        };
+
+        async function fetchCollection(col) {
+            if (!db) return fetchLocalStorage(col);
+            try {
+                const snap = await getDocs(query(collection(db, col), orderBy('createdAt', 'desc')));
+                return snap.docs.map(d => {
+                    const data = d.data();
+                    // Converte Timestamp para Date
+                    if (data.createdAt?.toDate) data.createdAt = data.createdAt.toDate();
+                    if (data.trialEnd?.toDate) data.trialEnd = data.trialEnd.toDate();
+                    return { id: d.id, ...data };
+                });
+            } catch (e) {
+                console.error(`Erro ao buscar ${col}:`, e);
+                return fetchLocalStorage(col);
+            }
+        }
+
+        // Fallback: lê dados do localStorage quando Firebase não está configurado
+        function fetchLocalStorage(col) {
+            if (col === 'users') {
+                try {
+                    const raw = JSON.parse(localStorage.getItem('jdi_users') || '{}');
+                    return Object.values(raw).map(u => {
+                        const { passwordHash, ...safe } = u;
+                        safe.createdAt = new Date(safe.createdAt || Date.now());
+                        if (safe.trialEnd) safe.trialEnd = new Date(safe.trialEnd);
+                        return safe;
+                    });
+                } catch { return []; }
+            }
+            return [];
+        }
+
+        // ── STATS ─────────────────────────────────────────────────────
+        function renderStats() {
+            const now = Date.now();
+            const trial = allUsers.filter(u => u.plan === 'trial' && new Date(u.trialEnd) > now).length;
+            const premium = allUsers.filter(u => u.plan === 'premium' || u.plan === 'plus').length;
+            const today = allUsers.filter(u => (new Date(u.createdAt) > (now - 86400000))).length;
+            document.getElementById('st-total').textContent = allUsers.length;
+            document.getElementById('st-trial').textContent = trial;
+            document.getElementById('st-premium').textContent = premium;
+            document.getElementById('st-leads').textContent = allLeads.length;
+            document.getElementById('st-today').textContent = today;
+        }
+
+        // ── TABS ──────────────────────────────────────────────────────
+        window.switchTab = function (tab, el) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('panel-' + tab).classList.add('active');
+        };
+
+        // ── RENDER USERS ──────────────────────────────────────────────
+        function renderUsers() {
+            const body = document.getElementById('usersBody');
+            const start = (userPage - 1) * PAGE_SIZE;
+            const page = filteredUsers.slice(start, start + PAGE_SIZE);
+            document.getElementById('usersCount').textContent = `${filteredUsers.length} registro${filteredUsers.length !== 1 ? 's' : ''}`;
+
+            if (!filteredUsers.length) {
+                body.innerHTML = `<tr><td colspan="11"><div class="empty-state"><div class="ei">🔍</div>Nenhum usuário encontrado.</div></td></tr>`;
+                document.getElementById('usersPagination').innerHTML = '';
+                return;
+            }
+
+            body.innerHTML = page.map(u => {
+                const plan = u.plan || 'trial';
+                const badge = plan === 'premium' ? 'badge-premium' : plan === 'plus' ? 'badge-plus' : 'badge-trial';
+                const date = u.createdAt ? new Date(u.createdAt).toLocaleDateString('pt-BR') : '—';
+                return `<tr>
+        <td>${esc(u.name)}</td>
+        <td>${esc(u.email)}</td>
+        <td>${esc(u.phone)}</td>
+        <td><span class="badge ${badge}">${plan}</span></td>
+        <td>${esc(u.country || u.onboarding?.country)}</td>
+        <td>${esc(u.school || u.onboarding?.school)}</td>
+        <td>${esc(u.phase || u.onboarding?.phase)}</td>
+        <td>${esc(u.visa || u.onboarding?.visa)}</td>
+        <td style="max-width:160px;white-space:normal">${esc(u.mainChallenge || u.onboarding?.mainChallenge)}</td>
+        <td>${esc(u.howFound || u.onboarding?.howFound)}</td>
+        <td>${date}</td>
+      </tr>`;
+            }).join('');
+
+            renderPagination('usersPagination', filteredUsers.length, userPage, p => { userPage = p; renderUsers(); });
+        }
+
+        // ── RENDER LEADS ──────────────────────────────────────────────
+        function renderLeads() {
+            const body = document.getElementById('leadsBody');
+            const start = (leadPage - 1) * PAGE_SIZE;
+            const page = filteredLeads.slice(start, start + PAGE_SIZE);
+            document.getElementById('leadsCount').textContent = `${filteredLeads.length} lead${filteredLeads.length !== 1 ? 's' : ''}`;
+
+            if (!filteredLeads.length) {
+                body.innerHTML = `<tr><td colspan="5"><div class="empty-state"><div class="ei">📭</div>Nenhum lead ainda.</div></td></tr>`;
+                document.getElementById('leadsPagination').innerHTML = '';
+                return;
+            }
+
+            body.innerHTML = page.map(l => {
+                const date = l.createdAt ? new Date(l.createdAt).toLocaleString('pt-BR') : '—';
+                return `<tr>
+        <td>${esc(l.name)}</td>
+        <td>${esc(l.email)}</td>
+        <td>${esc(l.phone)}</td>
+        <td>${esc(l.source || 'ai-chat')}</td>
+        <td>${date}</td>
+      </tr>`;
+            }).join('');
+
+            renderPagination('leadsPagination', filteredLeads.length, leadPage, p => { leadPage = p; renderLeads(); });
+        }
+
+        // ── PAGINAÇÃO ─────────────────────────────────────────────────
+        function renderPagination(elId, total, currentPage, onPage) {
+            const pages = Math.ceil(total / PAGE_SIZE);
+            const el = document.getElementById(elId);
+            if (pages <= 1) { el.innerHTML = ''; return; }
+            el.innerHTML = `
+      <button class="pg-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="(${onPage})(${currentPage - 1})">‹ Anterior</button>
+      <span class="pg-info">Página ${currentPage} de ${pages}</span>
+      <button class="pg-btn" ${currentPage === pages ? 'disabled' : ''} onclick="(${onPage})(${currentPage + 1})">Próxima ›</button>`;
+        }
+
+        // ── BUSCA ─────────────────────────────────────────────────────
+        window.filterUsers = function () {
+            const q = document.getElementById('searchUsers').value.toLowerCase();
+            filteredUsers = allUsers.filter(u =>
+                (u.name || '').toLowerCase().includes(q) ||
+                (u.email || '').toLowerCase().includes(q) ||
+                (u.phone || '').includes(q) ||
+                (u.country || u.onboarding?.country || '').toLowerCase().includes(q) ||
+                (u.school || u.onboarding?.school || '').toLowerCase().includes(q)
+            );
+            userPage = 1; renderUsers();
+        };
+
+        window.filterLeads = function () {
+            const q = document.getElementById('searchLeads').value.toLowerCase();
+            filteredLeads = allLeads.filter(l =>
+                (l.name || '').toLowerCase().includes(q) ||
+                (l.email || '').toLowerCase().includes(q) ||
+                (l.phone || '').includes(q)
+            );
+            leadPage = 1; renderLeads();
+        };
+
+        // ── ORDENAÇÃO ─────────────────────────────────────────────────
+        window.sortTable = function (table, field) {
+            const key = table + field;
+            const asc = sortState[key] = !sortState[key];
+            if (table === 'users') {
+                filteredUsers.sort((a, b) => {
+                    const va = a[field] || a.onboarding?.[field] || '';
+                    const vb = b[field] || b.onboarding?.[field] || '';
+                    return asc ? String(va).localeCompare(String(vb)) : String(vb).localeCompare(String(va));
+                });
+                userPage = 1; renderUsers();
+            } else {
+                filteredLeads.sort((a, b) => {
+                    const va = a[field] || ''; const vb = b[field] || '';
+                    return asc ? String(va).localeCompare(String(vb)) : String(vb).localeCompare(String(va));
+                });
+                leadPage = 1; renderLeads();
+            }
+        };
+
+        // ── EXPORTAR CSV ──────────────────────────────────────────────
+        window.exportCSV = function (type) {
+            let rows, headers;
+            if (type === 'users') {
+                headers = ['Nome', 'E-mail', 'Telefone', 'Plano', 'País', 'Escola', 'Fase', 'Visto', 'Desafio', 'Como conheceu', 'Cadastro'];
+                rows = filteredUsers.map(u => [
+                    u.name, u.email, u.phone, u.plan,
+                    u.country || u.onboarding?.country || '',
+                    u.school || u.onboarding?.school || '',
+                    u.phase || u.onboarding?.phase || '',
+                    u.visa || u.onboarding?.visa || '',
+                    u.mainChallenge || u.onboarding?.mainChallenge || '',
+                    u.howFound || u.onboarding?.howFound || '',
+                    u.createdAt ? new Date(u.createdAt).toLocaleDateString('pt-BR') : ''
+                ]);
+            } else {
+                headers = ['Nome', 'E-mail', 'Telefone', 'Origem', 'Data'];
+                rows = filteredLeads.map(l => [
+                    l.name, l.email, l.phone, l.source || 'ai-chat',
+                    l.createdAt ? new Date(l.createdAt).toLocaleString('pt-BR') : ''
+                ]);
+            }
+
+            const BOM = '\uFEFF';
+            const csv = BOM + [headers, ...rows].map(r =>
+                r.map(v => `"${String(v || '').replace(/"/g, '""')}"`).join(',')
+            ).join('\r\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `jdi-${type}-${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+
+        // ── UTILITÁRIOS ───────────────────────────────────────────────
+        function esc(v) {
+            if (!v) return '<span style="color:var(--muted)">—</span>';
+            return String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function updateClock() {
+            const el = document.getElementById('adm-time');
+            if (el) el.textContent = new Date().toLocaleString('pt-BR');
+            setTimeout(updateClock, 60000);
+        }
+    </script>
+
+</body>
+
+</html>
