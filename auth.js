@@ -7,6 +7,37 @@ const JAuth = (() => {
     const SESSION_KEY = 'jdi_session';
     const TRIAL_DAYS = 3;
 
+    // ── Global Seed Users (Hardcoded for Access Anywhere) ──
+    const SEED_USERS = {
+        'ct.felippe@gmail.com': {
+            id: 'seed-admin-001',
+            name: 'Felippe Cardoso',
+            email: 'ct.felippe@gmail.com',
+            phone: '+55 11 99999-9999',
+            passwordHash: 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', // 12345678
+            plan: 'premium',
+            trialStart: 1709251200000, // Fixed past date
+            trialEnd: 4102444800000,   // Far future (2100)
+            createdAt: 1709251200000,
+            onboarding: {
+                country: 'BR',
+                interests: ['work', 'english', 'culture'],
+                school: 'Seda College',
+                arrivalDate: '2024-06-01',
+                mainChallenge: 'housing',
+                howFound: 'other',
+                acceptsComms: true,
+                phase: 'planning',
+                visa: 'stamp2',
+                housing: 'looking',
+                notes: 'Admin Access',
+                nickname: 'Felippe',
+                birthdate: '1990-01-01',
+                location: 'BR_capital'
+            }
+        }
+    };
+
     // ── Utilitários ──────────────────────────────────────
     async function hashPassword(pwd) {
         const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pwd));
@@ -14,12 +45,20 @@ const JAuth = (() => {
     }
 
     function getUsers() {
-        try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; }
-        catch { return {}; }
+        try {
+            const localUsers = JSON.parse(localStorage.getItem(USERS_KEY)) || {};
+            return { ...localUsers, ...SEED_USERS };
+        }
+        catch { return { ...SEED_USERS }; }
     }
 
     function saveUsers(users) {
-        localStorage.setItem(USERS_KEY, JSON.stringify(users));
+        // Filter out seed users to avoid saving them to localStorage unnecessarily
+        const toSave = {};
+        for (const k in users) {
+            if (!SEED_USERS[k]) toSave[k] = users[k];
+        }
+        localStorage.setItem(USERS_KEY, JSON.stringify(toSave));
     }
 
     function getSession() {
@@ -66,6 +105,14 @@ const JAuth = (() => {
                 mainChallenge: data.mainChallenge || '',
                 howFound: data.howFound || '',
                 acceptsComms: data.acceptsComms || false,
+                // New fields for personalization
+                phase: data.phase || '',
+                visa: data.visa || '',
+                housing: data.housing || '',
+                notes: data.notes || '',
+                nickname: data.nickname || '',
+                birthdate: data.birthdate || '',
+                location: data.location || ''
             }
         };
 
@@ -95,7 +142,14 @@ const JAuth = (() => {
 
     // ── Sessão ───────────────────────────────────────────
     function _startSession(user) {
-        saveSession({ email: user.email, name: user.name, plan: user.plan, trialEnd: user.trialEnd, loginAt: Date.now() });
+        saveSession({
+            email: user.email,
+            name: user.name,
+            plan: user.plan,
+            trialEnd: user.trialEnd,
+            onboarding: user.onboarding, // Persist onboarding data for AI personalization
+            loginAt: Date.now()
+        });
     }
 
     function logout() {
@@ -160,7 +214,9 @@ const JAuth = (() => {
         trialDaysLeft: getTrialDaysLeft,
         getTrialDaysLeft,
         getPlanLabel,
-        requireAuth
+        getPlanLabel,
+        requireAuth,
+        getAllUsers: getUsers // Expose all users for admin dashboard
     };
 })();
 

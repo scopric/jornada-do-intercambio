@@ -255,10 +255,21 @@ const irelandContext = {
 };
 
 // Motor de interpretação — busca por múltiplos padrões
-function getAIResponse(raw) {
+function getAIResponse(raw, user) {
     const t = raw.toLowerCase()
         .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove acentos para comparação
         .replace(/[^a-z0-9\s]/g, ' ');
+
+    // Personalization helpers
+    const name = user ? (user.name.split(' ')[0] || 'Viajante') : '';
+    const school = user?.onboarding?.school;
+    const visa = user?.onboarding?.visa;
+    const arrival = user?.onboarding?.arrivalDate;
+
+    // Greeting
+    if (/\boi\b|\bolá\b|\bhello\b|\btudo.?bem\b/.test(t)) {
+        return `Olá${name ? ', ' + name : ''}! 👋 Como posso ajudar na sua jornada para a Irlanda hoje?`;
+    }
 
     // Saúde
     if (/\bgp\b|medico|doctor|clinica|consulta|medical.?card|cartao.?medico/.test(t)) return irelandContext.gp;
@@ -267,7 +278,15 @@ function getAIResponse(raw) {
     if (/farmacia|remedio|medicamento|receita|chemist/.test(t)) return irelandContext.farmacia;
 
     // Documentos
-    if (/\bpps\b|numero.?pps|personal.?public/.test(t)) return irelandContext.pps;
+    if (/\bpps\b|numero.?pps|personal.?public/.test(t)) {
+        let msg = irelandContext.pps;
+        if (arrival) {
+            const arrDate = new Date(arrival);
+            const today = new Date();
+            if (arrDate > today) msg += ` <br><br>💡 Como você chega em <strong>${arrDate.toLocaleDateString('pt-BR')}</strong>, lembre-se de agendar seu PPS logo após ter um comprovante de endereço!`;
+        }
+        return msg;
+    }
     if (/\birp\b|cartao.?visto|visto.?cartao|residence.?permit/.test(t)) return irelandContext.irp;
     if (/stamp.?2|visto.?estudante|estudante.?visto/.test(t)) return irelandContext.stamp2;
     if (/eircode|cep|codigo.?postal|codigo.?postl/.test(t)) return irelandContext.eircode;
@@ -293,11 +312,22 @@ function getAIResponse(raw) {
     if (/transport|como.?andar|como.?ir|metro|tram/.test(t)) return irelandContext.bus;
 
     // Trabalho / CV
-    if (/trabalh|emprego|vaga|job|linkedin|indeed|part.?time/.test(t)) return irelandContext.trabalho;
+    if (/trabalh|emprego|vaga|job|linkedin|indeed|part.?time/.test(t)) {
+        let msg = irelandContext.trabalho;
+        if (visa === 'stamp2') {
+            msg += ` <br><br>📌 Como estudante (Stamp 2), lembre-se do limite de <strong>20h semanais</strong> durante as aulas!`;
+        }
+        return msg;
+    }
     if (/\bcv\b|curriculo|resume/.test(t)) return irelandContext.cv;
 
     // Escola
     if (/\bseda\b|seda.?college/.test(t)) return irelandContext.seda;
+    if (/escola|estudar|curso|ingles|english|aula/.test(t)) {
+        if (school === 'seda') return `🎓 Você vai estudar na <strong>Seda College</strong>? Ótima escolha! Ela é super bem localizada em Dublin 1 e tem ótimos professores. Aproveite as atividades extras e o clube de conversação!`;
+        return irelandContext.seda; // Default response about schools
+    }
+
     if (/\bcao\b|universidade|college|graduacao|pos.?graduacao/.test(t)) return irelandContext.cao;
     if (/\bsusi\b|bolsa|scholarship/.test(t)) return irelandContext.susi;
 
@@ -351,7 +381,8 @@ function sendDemo() {
     addMsg(chatMsgs, sanitizeInput(raw), true);
     chatInput.value = '';
     const t = addTyping(chatMsgs);
-    setTimeout(() => { t.remove(); addMsg(chatMsgs, getAIResponse(raw), false); }, 800);
+    const user = typeof JAuth !== 'undefined' ? JAuth.getCurrentUser() : null;
+    setTimeout(() => { t.remove(); addMsg(chatMsgs, getAIResponse(raw, user), false); }, 800);
 }
 chatSend?.addEventListener('click', sendDemo);
 chatInput?.addEventListener('keydown', e => { if (e.key === 'Enter') sendDemo(); });
@@ -383,7 +414,8 @@ function sendPanel() {
     addMsg(panelMsgs, sanitizeInput(raw), true);
     panelInput.value = '';
     const t = addTyping(panelMsgs);
-    setTimeout(() => { t.remove(); addMsg(panelMsgs, getAIResponse(raw), false); }, 800);
+    const user = typeof JAuth !== 'undefined' ? JAuth.getCurrentUser() : null;
+    setTimeout(() => { t.remove(); addMsg(panelMsgs, getAIResponse(raw, user), false); }, 800);
 }
 panelSend?.addEventListener('click', sendPanel);
 panelInput?.addEventListener('keydown', e => { if (e.key === 'Enter') sendPanel(); });
