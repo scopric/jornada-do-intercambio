@@ -452,9 +452,7 @@ h5 {
 .hero-bg-img {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(135deg, rgba(10, 14, 26, 0.97) 40%, rgba(10, 14, 26, 0.7) 100%),
-    url('https://images.unsplash.com/photo-1548438294-1ad5d5f4f063?w=1600&q=80') center/cover no-repeat;
+  background: #0A0E1A;
   z-index: 0;
 }
 
