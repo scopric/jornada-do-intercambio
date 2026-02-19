@@ -487,16 +487,16 @@ h5 {
   overflow: hidden;
   /* mask-image cria transparência REAL nos 4 lados — sem borda, sem corte */
   -webkit-mask-image:
-    linear-gradient(to right, transparent 0%, black 22%, black 100%),
-    linear-gradient(to top, transparent 0%, black 14%, black 100%),
-    linear-gradient(to bottom, transparent 0%, black 6%, black 100%),
-    linear-gradient(to left, transparent 0%, black 10%, black 100%);
+    linear-gradient(to right, transparent 0%, black 28%, black 100%),
+    linear-gradient(to top, transparent 0%, black 18%, black 100%),
+    linear-gradient(to bottom, transparent 0%, black 8%, black 100%),
+    linear-gradient(to left, transparent 0%, black 12%, black 100%);
   -webkit-mask-composite: source-in, source-over, source-over;
   mask-image:
-    linear-gradient(to right, transparent 0%, black 22%, black 100%),
-    linear-gradient(to top, transparent 0%, black 14%, black 100%),
-    linear-gradient(to bottom, transparent 0%, black 6%, black 100%),
-    linear-gradient(to left, transparent 0%, black 10%, black 100%);
+    linear-gradient(to right, transparent 0%, black 28%, black 100%),
+    linear-gradient(to top, transparent 0%, black 18%, black 100%),
+    linear-gradient(to bottom, transparent 0%, black 8%, black 100%),
+    linear-gradient(to left, transparent 0%, black 12%, black 100%);
   mask-composite: intersect, intersect, intersect;
 }
 
@@ -515,7 +515,7 @@ h5 {
   object-fit: cover;
   object-position: top center;
   /* Harmonize com paleta dark: darkening + leve desaturação + hue shift sutil */
-  filter: brightness(0.92) saturate(0.85) hue-rotate(-8deg) contrast(1.05);
+  filter: brightness(1.08) saturate(0.90) hue-rotate(-8deg) contrast(1.04);
   opacity: 1.0;
   display: block;
 }
