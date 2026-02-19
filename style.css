@@ -485,6 +485,7 @@ h5 {
   min-height: 500px;
   max-height: 780px;
   overflow: hidden;
+  border-radius: 28px 28px 0 0;
   /* mask-image cria transparência REAL nos 4 lados — sem borda, sem corte */
   -webkit-mask-image:
     linear-gradient(to right, transparent 0%, black 28%, black 100%),
