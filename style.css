@@ -483,7 +483,7 @@ h5 {
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 100%;
   min-height: 100vh;
   gap: 40px;
@@ -495,33 +495,33 @@ h5 {
   flex-direction: column;
   justify-content: flex-end;
   padding-bottom: 0;
+  position: relative;
+  z-index: 3;
 }
 
 .hero-right {
-  flex: 1;
-  position: relative;
-  align-self: flex-end;
-  height: 90vh;
-  min-height: 500px;
-  max-height: 780px;
+  position: absolute;
+  top: 0;
+  right: calc(-1 * ((100vw - 1200px) / 2 + 40px));
+  width: calc(55vw);
+  height: 100%;
   overflow: hidden;
+  z-index: 1;
 }
 
-/* Overlay com cor exata do fundo — funde a imagem em todas as bordas */
+/* Overlay com degradê — funde suavemente do preto para a imagem */
 .hero-img-overlay {
   position: absolute;
   inset: 0;
   z-index: 2;
   pointer-events: none;
   background:
-    /* Esquerda — funde suavemente com o fundo navy da imagem */
-    linear-gradient(to right, #0A0E1A 0%, rgba(10, 14, 26, 0.70) 15%, rgba(10, 14, 26, 0.15) 35%, transparent 55%),
-    /* Topo */
-    linear-gradient(to bottom, #0A0E1A 0%, rgba(10, 14, 26, 0.60) 8%, rgba(10, 14, 26, 0.10) 20%, transparent 38%),
-    /* Base */
-    linear-gradient(to top, #0A0E1A 0%, rgba(10, 14, 26, 0.60) 10%, rgba(10, 14, 26, 0.10) 22%, transparent 40%),
-    /* Direita — verde da imagem funde ao fundo */
-    linear-gradient(to left, rgba(0, 20, 10, 0.7) 0%, rgba(0, 20, 10, 0.30) 8%, transparent 25%);
+    /* Esquerda — degradê largo do preto para a imagem, look moderno */
+    linear-gradient(to right, #0A0E1A 0%, rgba(10, 14, 26, 0.95) 8%, rgba(10, 14, 26, 0.7) 18%, rgba(10, 14, 26, 0.35) 32%, rgba(10, 14, 26, 0.1) 48%, transparent 65%),
+    /* Topo — sutil */
+    linear-gradient(to bottom, rgba(10, 14, 26, 0.5) 0%, transparent 25%),
+    /* Base — sutil */
+    linear-gradient(to top, rgba(10, 14, 26, 0.4) 0%, transparent 20%);
 }
 
 /* Glow verde — expande a cor da imagem para fundir ao fundo */
@@ -529,10 +529,10 @@ h5 {
   content: '';
   position: absolute;
   top: 10%;
-  right: -80px;
+  right: 0;
   width: 200px;
   height: 80%;
-  background: radial-gradient(ellipse at center, rgba(0, 180, 100, 0.14) 0%, rgba(0, 150, 80, 0.07) 50%, transparent 80%);
+  background: radial-gradient(ellipse at center, rgba(0, 180, 100, 0.10) 0%, rgba(0, 150, 80, 0.05) 50%, transparent 80%);
   pointer-events: none;
   z-index: 0;
 }
@@ -541,8 +541,7 @@ h5 {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: top center;
-  /* Nova imagem já tem fundo dark — brightness quase natural */
+  object-position: center center;
   filter: brightness(1.05) saturate(1.0) contrast(1.02);
   opacity: 1.0;
   display: block;
@@ -1785,6 +1784,11 @@ h5 {
   .footer-inner {
     grid-template-columns: 1fr 1fr;
     gap: 32px
+  }
+
+  .hero-right {
+    right: calc(-1 * ((100vw - 100%) / 2));
+    width: 55vw;
   }
 }
 
