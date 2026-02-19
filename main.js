@@ -191,7 +191,8 @@ document.querySelectorAll('.row-arrow').forEach(btn => {
     btn.addEventListener('click', () => {
         const track = document.getElementById(btn.dataset.row);
         if (!track) return;
-        track.scrollBy({ left: btn.classList.contains('left') ? -(track.clientWidth * 0.75) : track.clientWidth * 0.75, behavior: 'smooth' });
+        const isLeft = btn.classList.contains('left');
+        track.scrollBy({ left: isLeft ? -track.clientWidth : track.clientWidth, behavior: 'smooth' });
     });
 });
 

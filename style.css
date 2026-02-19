@@ -622,6 +622,8 @@ h5 {
 .row-track {
   display: flex;
   gap: 16px;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
   padding: 6px 40px 14px;
   scrollbar-width: none;
 }
@@ -630,19 +632,52 @@ h5 {
   display: none
 }
 
-/* Oculta setas quando não há scroll */
+/* ── Setas de navegação ─────────────────────────────── */
 .row-arrow {
-  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(10, 14, 26, 0.9);
+  color: var(--white);
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: var(--t);
+  border: 1px solid var(--border2);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  line-height: 1;
 }
 
-.row-arrow {
-  display: none;
+.row-arrow:hover {
+  background: var(--green);
+  color: #0A0E1A;
+  border-color: var(--green);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.row-arrow.left {
+  left: 6px
+}
+
+.row-arrow.right {
+  right: 6px
+}
+
+.row-arrow:disabled {
+  opacity: 0.25;
+  pointer-events: none;
 }
 
 
 /* ── CONTENT CARDS ───────────────────────────────────────── */
 .c-card {
-  flex: 1;
+  flex: 0 0 calc(25% - 12px);
   min-width: 0;
   border-radius: var(--r2);
   overflow: hidden;
