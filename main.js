@@ -193,11 +193,8 @@ const carouselState = {};
 document.querySelectorAll('.row-track').forEach(track => {
     const pages = track.querySelectorAll('.carousel-page').length;
     carouselState[track.id] = { page: 0, total: pages };
-    // Disable left arrow initially (starts at page 0)
-    const wrap = track.closest('.row-track-wrap');
-    const leftBtn = wrap && wrap.querySelector('.row-arrow.left');
-    if (leftBtn) leftBtn.disabled = true;
 });
+
 
 function goToPage(trackId, page) {
     const track = document.getElementById(trackId);
@@ -205,21 +202,18 @@ function goToPage(trackId, page) {
     const state = carouselState[trackId];
     if (!state) return;
 
-    state.page = Math.max(0, Math.min(state.total - 1, page));
+    // Infinite loop: wrap around using modulo
+    state.page = ((page % state.total) + state.total) % state.total;
     track.style.transform = `translateX(-${state.page * 100}%)`;
 
     const wrap = track.closest('.row-track-wrap');
     if (!wrap) return;
 
-    const leftBtn = wrap.querySelector('.row-arrow.left');
-    const rightBtn = wrap.querySelector('.row-arrow.right');
-    if (leftBtn) leftBtn.disabled = state.page === 0;
-    if (rightBtn) rightBtn.disabled = state.page === state.total - 1;
-
     wrap.querySelectorAll('.carousel-dot').forEach((dot, i) => {
         dot.classList.toggle('active', i === state.page);
     });
 }
+
 
 document.querySelectorAll('.row-arrow').forEach(btn => {
     btn.addEventListener('click', () => {
