@@ -889,6 +889,25 @@ h5 {
   transform: scale(1.1)
 }
 
+.read-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: #0A0E1A;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s var(--ease);
+  border: none;
+  cursor: pointer;
+}
+
+.read-btn:hover {
+  transform: scale(1.1)
+}
+
 .c-eps {
   position: absolute;
   bottom: 7px;
