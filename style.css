@@ -621,60 +621,29 @@ h5 {
 
 .row-track {
   display: flex;
-  gap: 14px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
+  gap: 16px;
   padding: 6px 40px 14px;
   scrollbar-width: none;
-  cursor: grab;
-  user-select: none;
-}
-
-.row-track:active {
-  cursor: grabbing
 }
 
 .row-track::-webkit-scrollbar {
   display: none
 }
 
+/* Oculta setas quando não há scroll */
 .row-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(10, 14, 26, 0.92);
-  color: var(--white);
-  font-size: 1.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  transition: var(--t);
-  border: 1px solid var(--border2);
-  backdrop-filter: blur(10px);
+  display: none;
 }
 
-.row-arrow:hover {
-  background: var(--green);
-  color: #0A0E1A;
-  border-color: var(--green)
+.row-arrow {
+  display: none;
 }
 
-.row-arrow.left {
-  left: 6px
-}
-
-.row-arrow.right {
-  right: 6px
-}
 
 /* ── CONTENT CARDS ───────────────────────────────────────── */
 .c-card {
-  flex-shrink: 0;
-  width: 210px;
+  flex: 1;
+  min-width: 0;
   border-radius: var(--r2);
   overflow: hidden;
   background: var(--bg2);
@@ -690,7 +659,7 @@ h5 {
 
 .c-thumb {
   position: relative;
-  height: 130px;
+  height: 180px;
   overflow: hidden;
   display: flex;
   align-items: center;
