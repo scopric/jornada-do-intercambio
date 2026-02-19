@@ -485,21 +485,24 @@ h5 {
   min-height: 500px;
   max-height: 780px;
   overflow: hidden;
-  border-radius: 20px 20px 0 0;
-  /* Subtle glow accent matching the green theme */
-  box-shadow: -20px 0 60px rgba(0, 200, 150, 0.06), 0 0 0 1px rgba(0, 200, 150, 0.06);
+  /* sem bordas — imagem funde-se ao fundo */
 }
 
-/* Dark translucent overlay — left fade + bottom fade */
+/* Overlay que dissolve todas as bordas da imagem no fundo */
 .hero-img-overlay {
   position: absolute;
   inset: 0;
   z-index: 2;
   pointer-events: none;
   background:
-    linear-gradient(to right, #0A0E1A 0%, rgba(10, 14, 26, 0.55) 35%, rgba(10, 14, 26, 0) 70%),
-    linear-gradient(to top, #0A0E1A 0%, rgba(10, 14, 26, 0.45) 20%, rgba(10, 14, 26, 0) 50%),
-    linear-gradient(to bottom, rgba(10, 14, 26, 0.4) 0%, transparent 15%);
+    /* Esquerda — fusão total com o fundo */
+    linear-gradient(to right, #0A0E1A 0%, rgba(10, 14, 26, 0.80) 25%, rgba(10, 14, 26, 0.20) 55%, transparent 80%),
+    /* Baixo */
+    linear-gradient(to top, #0A0E1A 0%, rgba(10, 14, 26, 0.70) 18%, transparent 45%),
+    /* Cima */
+    linear-gradient(to bottom, #0A0E1A 0%, rgba(10, 14, 26, 0.60) 12%, transparent 35%),
+    /* Direita — fade suave */
+    linear-gradient(to left, #0A0E1A 0%, rgba(10, 14, 26, 0.55) 10%, transparent 35%);
 }
 
 .hero-img {
