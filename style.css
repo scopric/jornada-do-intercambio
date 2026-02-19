@@ -356,29 +356,38 @@ h5 {
 }
 
 .logo-mark {
-  width: 34px;
-  height: 34px;
-  background: var(--green);
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--green), #00b894);
   color: #0A0E1A;
-  border-radius: 7px;
+  border-radius: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Outfit', sans-serif;
   font-weight: 900;
-  font-size: 1rem;
+  font-size: 1.05rem;
   flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(0, 200, 150, 0.35);
+  letter-spacing: -0.02em;
 }
 
 .logo-text {
   font-family: 'Outfit', sans-serif;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.97rem;
   line-height: 1.2
 }
 
 .logo-green {
   color: var(--green)
+}
+
+.logo-sub {
+  font-size: 0.65rem;
+  color: var(--muted);
+  font-weight: 400;
+  margin-top: 1px;
 }
 
 .nav-links {
