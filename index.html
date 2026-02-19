@@ -1271,7 +1271,12 @@
 
     <!-- AI PRE-FORM MODAL -->
     <div class="modal-overlay" id="aiPreModal" role="dialog" aria-label="Identificação para chat">
-        <div class="modal-box">
+        <div class="modal-box" style="position:relative">
+            <button id="pf-close" aria-label="Fechar"
+                onclick="document.getElementById('aiPreModal').classList.remove('open')"
+                style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:#aaa;border-radius:50%;width:32px;height:32px;font-size:1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s"
+                onmouseover="this.style.background='rgba(255,255,255,0.16)'"
+                onmouseout="this.style.background='rgba(255,255,255,0.08)'">✕</button>
             <div class="modal-icon">🤖</div>
             <h3>Antes de começar</h3>
             <p class="sub">Precisamos de alguns dados para personalizar a conversa e registrar sua dúvida. Suas

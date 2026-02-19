@@ -162,6 +162,16 @@ function isSpam(t) { if (t === lastMsg) return true; lastMsg = t; return false; 
     // Enter key on last field
     document.getElementById('pf-phone')?.addEventListener('keydown', e => { if (e.key === 'Enter') submitBtn.click(); });
 
+    // Fechar ao clicar fora do modal (no overlay)
+    modal.addEventListener('click', e => {
+        if (e.target === modal) modal.classList.remove('open');
+    });
+
+    // Fechar com tecla Escape
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && modal.classList.contains('open')) modal.classList.remove('open');
+    });
+
     function showPreErr(msg) {
         if (!errEl) return;
         errEl.textContent = msg;
