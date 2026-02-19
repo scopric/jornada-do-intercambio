@@ -485,24 +485,28 @@ h5 {
   min-height: 500px;
   max-height: 780px;
   overflow: hidden;
-  /* sem bordas — imagem funde-se ao fundo */
+  /* mask-image cria transparência REAL nos 4 lados — sem borda, sem corte */
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0%, black 22%, black 100%),
+    linear-gradient(to top, transparent 0%, black 14%, black 100%),
+    linear-gradient(to bottom, transparent 0%, black 6%, black 100%),
+    linear-gradient(to left, transparent 0%, black 10%, black 100%);
+  -webkit-mask-composite: source-in, source-over, source-over;
+  mask-image:
+    linear-gradient(to right, transparent 0%, black 22%, black 100%),
+    linear-gradient(to top, transparent 0%, black 14%, black 100%),
+    linear-gradient(to bottom, transparent 0%, black 6%, black 100%),
+    linear-gradient(to left, transparent 0%, black 10%, black 100%);
+  mask-composite: intersect, intersect, intersect;
 }
 
-/* Overlay que dissolve todas as bordas da imagem no fundo */
+/* Overlay interno — apenas escurecimento sutil */
 .hero-img-overlay {
   position: absolute;
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  background:
-    /* Esquerda — fusão total com o fundo */
-    linear-gradient(to right, #0A0E1A 0%, rgba(10, 14, 26, 0.80) 25%, rgba(10, 14, 26, 0.20) 55%, transparent 80%),
-    /* Baixo */
-    linear-gradient(to top, #0A0E1A 0%, rgba(10, 14, 26, 0.70) 18%, transparent 45%),
-    /* Cima */
-    linear-gradient(to bottom, #0A0E1A 0%, rgba(10, 14, 26, 0.60) 12%, transparent 35%),
-    /* Direita — fade suave */
-    linear-gradient(to left, #0A0E1A 0%, rgba(10, 14, 26, 0.55) 10%, transparent 35%);
+  background: rgba(10, 14, 26, 0.18);
 }
 
 .hero-img {
