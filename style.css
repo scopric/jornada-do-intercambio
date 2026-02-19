@@ -485,20 +485,15 @@ h5 {
   min-height: 500px;
   max-height: 780px;
   overflow: hidden;
-  border-radius: 28px 28px 0 0;
-  /* mask-image cria transparência REAL nos 4 lados — sem borda, sem corte */
-  -webkit-mask-image:
-    linear-gradient(to right, transparent 0%, black 28%, black 100%),
-    linear-gradient(to top, transparent 0%, black 18%, black 100%),
-    linear-gradient(to bottom, transparent 0%, black 8%, black 100%),
-    linear-gradient(to left, transparent 0%, black 12%, black 100%);
-  -webkit-mask-composite: source-in, source-over, source-over;
-  mask-image:
-    linear-gradient(to right, transparent 0%, black 28%, black 100%),
-    linear-gradient(to top, transparent 0%, black 18%, black 100%),
-    linear-gradient(to bottom, transparent 0%, black 8%, black 100%),
-    linear-gradient(to left, transparent 0%, black 12%, black 100%);
-  mask-composite: intersect, intersect, intersect;
+  /* Fade oval — centro nítido, bordas dissolvidas em elipse */
+  -webkit-mask-image: radial-gradient(ellipse 82% 88% at 55% 50%,
+      black 30%,
+      rgba(0, 0, 0, 0.7) 55%,
+      transparent 80%);
+  mask-image: radial-gradient(ellipse 82% 88% at 55% 50%,
+      black 30%,
+      rgba(0, 0, 0, 0.7) 55%,
+      transparent 80%);
 }
 
 /* Overlay interno — apenas escurecimento sutil */
