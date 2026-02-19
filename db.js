@@ -140,5 +140,72 @@ const JDB = (() => {
         };
     }
 
-    return { init, saveUser, saveLead, getAllUsers, getAllLeads, getStats };
+    // ── FEEDBACK — salva feedback do usuário ─────────────────────
+    async function saveFeedback(data) {
+        const db = await init();
+        if (!db) return false;
+        const { addDoc, collection, serverTimestamp } = window._fsOps;
+        try {
+            await addDoc(collection(db, 'feedback'), {
+                name: data.name || '',
+                email: data.email || '',
+                rating: data.rating || 0,
+                category: data.category || 'geral',
+                message: data.message || '',
+                page: window.location.pathname,
+                createdAt: serverTimestamp(),
+            });
+            return true;
+        } catch (e) { console.error('[JDB] saveFeedback:', e); return false; }
+    }
+
+    // ── ANALYTICS — rastreia eventos de conteúdo ─────────────────
+    async function trackEvent(type, label, extra = {}) {
+        const db = await init();
+        if (!db) return;
+        const { addDoc, collection, serverTimestamp } = window._fsOps;
+        try {
+            await addDoc(collection(db, 'events'), {
+                type, label,
+                page: window.location.pathname,
+                userEmail: window?._currentUser?.email || '',
+                ...extra,
+                createdAt: serverTimestamp(),
+            });
+        } catch (e) { /* silencioso */ }
+    }
+
+    // ── ADMIN: actualiza dados de um usuário ─────────────────────
+    async function updateUser(email, updates) {
+        const db = await init();
+        if (!db) return false;
+        const { doc, updateDoc, serverTimestamp } = window._fsOps;
+        try {
+            const key = email.toLowerCase().replace(/[.#$[\]]/g, '_');
+            await updateDoc(doc(db, 'users', key), { ...updates, updatedAt: serverTimestamp() });
+            return true;
+        } catch (e) { console.error('[JDB] updateUser:', e); return false; }
+    }
+
+    // ── ADMIN: estende trial ──────────────────────────────────────
+    async function extendTrial(email, days) {
+        const db = await init();
+        if (!db) return false;
+        const { doc, updateDoc, serverTimestamp } = window._fsOps;
+        try {
+            const key = email.toLowerCase().replace(/[.#$[\]]/g, '_');
+            const newEnd = new Date(Date.now() + days * 86400000);
+            await updateDoc(doc(db, 'users', key), { trialEnd: newEnd, plan: 'trial', updatedAt: serverTimestamp() });
+            return true;
+        } catch (e) { console.error('[JDB] extendTrial:', e); return false; }
+    }
+
+    // ── ADMIN: cancela / reativa usuário ─────────────────────────
+    async function cancelUser(email) { return updateUser(email, { plan: 'cancelled' }); }
+    async function reactivateUser(email) { return updateUser(email, { plan: 'trial' }); }
+
+    return {
+        init, saveUser, saveLead, getAllUsers, getAllLeads, getStats,
+        saveFeedback, trackEvent, updateUser, extendTrial, cancelUser, reactivateUser
+    };
 })();

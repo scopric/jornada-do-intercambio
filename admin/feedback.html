@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Feedbacks — Jornada Admin</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="admin.css" />
+</head>
+
+<body>
+
+    <div id="loginScreen" style="display:none">
+        <div class="login-box">
+            <h1>🔐 Admin</h1>
+            <p>Jornada do Intercâmbio</p>
+            <input type="password" id="adminPwd" placeholder="Senha" />
+            <button class="btn-login" onclick="adminLogin()">Entrar</button>
+            <div class="login-err" id="loginErr">Senha incorreta.</div>
+        </div>
+    </div>
+
+    <div id="app">
+        <div class="adm-layout">
+            <div id="sidebar"></div>
+            <main class="adm-main">
+                <div class="topbar">
+                    <div class="page-header">
+                        <div class="page-title">💬 Feedbacks</div>
+                        <div class="page-sub" id="fbSubtitle">Carregando…</div>
+                    </div>
+                    <div class="topbar-right">
+                        <button class="btn-icon" onclick="loadFeedback()">↻ Atualizar</button>
+                        <button class="btn-csv" onclick="exportCSV()">⬇ CSV</button>
+                    </div>
+                </div>
+
+                <!-- STATS -->
+                <div class="stats-grid" style="grid-template-columns:repeat(auto-fill,minmax(140px,1fr))">
+                    <div class="stat-card">
+                        <div class="sc-label">Total</div>
+                        <div class="sc-value" id="fb-total">—</div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="sc-label">⭐ Média</div>
+                        <div class="sc-value" id="fb-avg">—</div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="sc-label">5 estrelas</div>
+                        <div class="sc-value" id="fb-5">—</div>
+                    </div>
+                    <div class="stat-card yellow">
+                        <div class="sc-label">3-4 estrelas</div>
+                        <div class="sc-value" id="fb-3">—</div>
+                    </div>
+                    <div class="stat-card red">
+                        <div class="sc-label">1-2 estrelas</div>
+                        <div class="sc-value" id="fb-1">—</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="sc-label">Esta semana</div>
+                        <div class="sc-value" id="fb-week">—</div>
+                    </div>
+                </div>
+
+                <!-- FILTROS -->
+                <div class="table-toolbar">
+                    <input class="search-input" id="searchFb" placeholder="🔍 Buscar por nome, mensagem…"
+                        oninput="applyFilter()" />
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                        <select id="filterRating" onchange="applyFilter()"
+                            style="padding:9px 12px;background:var(--s2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.84rem">
+                            <option value="">Todas avaliações</option>
+                            <option value="5">⭐⭐⭐⭐⭐ 5</option>
+                            <option value="4">⭐⭐⭐⭐ 4</option>
+                            <option value="3">⭐⭐⭐ 3</option>
+                            <option value="2">⭐⭐ 2</option>
+                            <option value="1">⭐ 1</option>
+                        </select>
+                        <select id="filterCat" onchange="applyFilter()"
+                            style="padding:9px 12px;background:var(--s2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.84rem">
+                            <option value="">Todas categorias</option>
+                            <option value="geral">Geral</option>
+                            <option value="conteudo">Conteúdo</option>
+                            <option value="ia">IA / Chat</option>
+                            <option value="ux">Experiência</option>
+                            <option value="sugestao">Sugestão</option>
+                        </select>
+                        <span id="fbCount" style="font-size:.8rem;color:var(--muted)"></span>
+                    </div>
+                </div>
+
+                <!-- CARDS DE FEEDBACK -->
+                <div id="fbCards"></div>
+                <div class="pagination" id="pagination"></div>
+            </main>
+        </div>
+    </div>
+
+    <div id="globalToast" class="toast"></div>
+
+    <script type="module">
+        import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy, deleteDoc, doc }
+            from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const ADMIN_PWD = "jornada@admin2025";
+        const cfg = {
+            apiKey: "AIzaSyAuSaL0-SCYBbcha4Mhu-9bY_2adIfdudM",
+            authDomain: "jornada-intercambio.firebaseapp.com",
+            projectId: "jornada-intercambio",
+            storageBucket: "jornada-intercambio.firebasestorage.app",
+            messagingSenderId: "295607221175",
+            appId: "1:295607221175:web:a7742d1ebeb9ca97120632"
+        };
+        let db, allFb = [], filtered = [], page = 1;
+        const PAGE_SIZE = 12;
+
+        window.adminLogin = function () {
+            const v = document.getElementById('adminPwd').value;
+            if (v === ADMIN_PWD) { sessionStorage.setItem('jdi_admin', '1'); boot(); }
+            else { document.getElementById('loginErr').style.display = 'block'; setTimeout(() => document.getElementById('loginErr').style.display = 'none', 3000); }
+        };
+        window.adminLogout = () => { sessionStorage.removeItem('jdi_admin'); window.location.reload(); };
+
+        async function boot() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            injectSidebar();
+            try { const apps = getApps(); const app = apps.length ? apps[0] : initializeApp(cfg); db = getFirestore(app); } catch (e) { console.warn(e); }
+            await loadFeedback();
+        }
+        if (sessionStorage.getItem('jdi_admin') === '1') boot();
+        else document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('adminPwd')?.addEventListener('keydown', e => { if (e.key === 'Enter') window.adminLogin(); });
+
+        function injectSidebar() {
+            const el = document.getElementById('sidebar'); if (!el) return;
+            el.outerHTML = `<div class="sidebar">
+    <div class="sb-logo"><div class="logo-text">Jornada <span>Admin</span></div><div class="logo-sub">Feedbacks</div></div>
+    <nav class="sb-nav">
+      <div class="sb-section">Principal</div>
+      <a href="index.html" class="sb-link"><span class="icon">📊</span> Dashboard</a>
+      <a href="users.html" class="sb-link"><span class="icon">👥</span> Usuários</a>
+      <div class="sb-section">Analytics</div>
+      <a href="analytics.html" class="sb-link"><span class="icon">📈</span> Conteúdo</a>
+      <a href="feedback.html" class="sb-link active"><span class="icon">💬</span> Feedbacks</a>
+      <div class="sb-section">Site</div>
+      <a href="../index.html" class="sb-link" target="_blank"><span class="icon">🌐</span> Ver site</a>
+    </nav>
+    <div class="sb-bottom">
+      <div class="sb-user">${new Date().toLocaleString('pt-BR')}</div>
+      <button class="btn-logout" onclick="adminLogout()">↩ Sair</button>
+    </div>
+  </div>`;
+        }
+
+        window.loadFeedback = async function () {
+            document.getElementById('fbCards').innerHTML = '<div style="padding:40px;text-align:center"><span class="spinner"></span></div>';
+            if (!db) { allFb = []; renderAll(); return; }
+            try {
+                const snap = await getDocs(query(collection(db, 'feedback'), orderBy('createdAt', 'desc')));
+                allFb = snap.docs.map(d => { const dt = d.data(); if (dt.createdAt?.toDate) dt.createdAt = dt.createdAt.toDate(); return { id: d.id, ...dt }; });
+            } catch (e) { console.warn(e); allFb = []; }
+            renderAll();
+            document.getElementById('fbSubtitle').textContent = `${allFb.length} feedbacks · atualizado ${new Date().toLocaleTimeString('pt-BR')}`;
+        };
+
+        function renderAll() { renderStats(); applyFilter(); }
+
+        function renderStats() {
+            const now = Date.now();
+            const ratings = allFb.map(f => f.rating || 0).filter(r => r > 0);
+            const avg = ratings.length ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1) : '—';
+            document.getElementById('fb-total').textContent = allFb.length;
+            document.getElementById('fb-avg').textContent = avg ? `${avg}⭐` : '—';
+            document.getElementById('fb-5').textContent = allFb.filter(f => f.rating === 5).length;
+            document.getElementById('fb-3').textContent = allFb.filter(f => f.rating >= 3 && f.rating < 5).length;
+            document.getElementById('fb-1').textContent = allFb.filter(f => f.rating <= 2 && f.rating > 0).length;
+            document.getElementById('fb-week').textContent = allFb.filter(f => (now - new Date(f.createdAt)) < 604800000).length;
+        }
+
+        window.applyFilter = function () {
+            const q = document.getElementById('searchFb').value.toLowerCase();
+            const r = document.getElementById('filterRating').value;
+            const c = document.getElementById('filterCat').value;
+            filtered = allFb.filter(f =>
+                (!r || String(f.rating) === r) &&
+                (!c || f.category === c) &&
+                (!q || [f.name, f.email, f.message].some(v => (v || '').toLowerCase().includes(q)))
+            );
+            page = 1;
+            document.getElementById('fbCount').textContent = `${filtered.length} resultado${filtered.length !== 1 ? 's' : ''}`;
+            renderCards();
+        };
+
+        function renderCards() {
+            const start = (page - 1) * PAGE_SIZE, slice = filtered.slice(start, start + PAGE_SIZE);
+            if (!filtered.length) { document.getElementById('fbCards').innerHTML = '<div class="empty-state"><div class="ei">💬</div>Nenhum feedback ainda. Aparece aqui quando os usuários enviarem.</div>'; document.getElementById('pagination').innerHTML = ''; return; }
+            const catColors = { geral: 'var(--muted)', conteudo: 'var(--blue)', ia: 'var(--green)', ux: 'var(--purple)', sugestao: 'var(--yellow)' };
+            document.getElementById('fbCards').innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-bottom:8px">${slice.map(f => {
+                const stars = '⭐'.repeat(f.rating || 0) + '☆'.repeat(5 - (f.rating || 0));
+                const cat = f.category || 'geral';
+                return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px">
+      <div style="display:flex;align-items:start;justify-content:space-between;margin-bottom:10px">
+        <div>
+          <div style="font-weight:600;font-size:.9rem">${esc(f.name || 'Anônimo')}</div>
+          <div style="font-size:.75rem;color:var(--muted)">${esc(f.email || '')}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:1rem">${stars}</div>
+          <div style="font-size:.72rem;color:var(--muted)">${relTime(f.createdAt)}</div>
+        </div>
+      </div>
+      <div style="font-size:.82rem;color:var(--muted);margin-bottom:4px"><span style="color:${catColors[cat] || 'var(--muted)'}">#${cat}</span></div>
+      <p style="font-size:.88rem;line-height:1.5;margin-bottom:14px">${esc(f.message)}</p>
+      <div style="display:flex;gap:8px">
+        ${f.email ? `<a href="mailto:${esc(f.email)}?subject=Seu feedback — Jornada do Intercâmbio&body=Olá ${esc(f.name || '')}," class="btn btn-sm btn-outline" style="text-decoration:none">✉ Responder</a>` : ''}
+        <button class="btn btn-sm btn-danger" onclick="deleteFeedback('${f.id}')">🗑</button>
+      </div>
+    </div>`;
+            }).join('')}</div>`;
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const pages = Math.ceil(filtered.length / PAGE_SIZE);
+            const el = document.getElementById('pagination');
+            if (pages <= 1) { el.innerHTML = ''; return; }
+            el.innerHTML = `<button class="pg-btn" ${page === 1 ? 'disabled' : ''} onclick="gotoPage(${page - 1})">‹</button><span class="pg-info">Página ${page} de ${pages}</span><button class="pg-btn" ${page === pages ? 'disabled' : ''} onclick="gotoPage(${page + 1})">›</button>`;
+        }
+        window.gotoPage = p => { page = p; renderCards(); };
+
+        window.deleteFeedback = async function (id) {
+            if (!confirm('Excluir este feedback?')) return;
+            try {
+                if (db) await deleteDoc(doc(db, 'feedback', id));
+                allFb = allFb.filter(f => f.id !== id);
+                renderAll();
+                showToast('🗑 Feedback excluído');
+            } catch (e) { console.error(e); showToast('Erro ao excluir'); }
+        };
+
+        window.exportCSV = function () {
+            const h = ['Nome', 'E-mail', 'Avaliação', 'Categoria', 'Mensagem', 'Data'];
+            const rows = filtered.map(f => [f.name, f.email, f.rating, f.category, f.message, f.createdAt ? new Date(f.createdAt).toLocaleString('pt-BR') : '']);
+            const csv = '\uFEFF' + [h, ...rows].map(r => r.map(v => `"${String(v || '').replace(/"/g, '""')}"`).join(',')).join('\r\n');
+            const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })); a.download = `jdi-feedbacks-${new Date().toISOString().slice(0, 10)}.csv`; a.click();
+        };
+
+        window.showToast = function (msg) { const t = document.getElementById('globalToast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); };
+        function esc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        function relTime(d) { if (!d) return '—'; const s = (Date.now() - new Date(d)) / 1000; if (s < 60) return 'agora'; if (s < 3600) return `${Math.floor(s / 60)}min atrás`; if (s < 86400) return `${Math.floor(s / 3600)}h atrás`; return `${Math.floor(s / 86400)}d atrás`; }
+    </script>
+</body>
+
+</html>

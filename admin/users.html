@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Usuários — Jornada Admin</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="admin.css" />
+</head>
+
+<body>
+
+    <div id="loginScreen" style="display:none">
+        <div class="login-box">
+            <h1>🔐 Admin</h1>
+            <p>Jornada do Intercâmbio</p>
+            <input type="password" id="adminPwd" placeholder="Senha" />
+            <button class="btn-login" onclick="adminLogin()">Entrar</button>
+            <div class="login-err" id="loginErr">Senha incorreta.</div>
+        </div>
+    </div>
+
+    <div id="app">
+        <div class="adm-layout">
+            <div id="sidebar"></div>
+            <main class="adm-main">
+                <div class="topbar">
+                    <div class="page-header">
+                        <div class="page-title">👥 Usuários</div>
+                        <div class="page-sub" id="pageSubtitle">Carregando…</div>
+                    </div>
+                    <div class="topbar-right">
+                        <button class="btn-icon" onclick="loadUsers()">↻ Atualizar</button>
+                        <button class="btn-csv" onclick="exportCSV()">⬇ CSV</button>
+                    </div>
+                </div>
+
+                <!-- FILTROS -->
+                <div class="table-toolbar">
+                    <input class="search-input" id="searchInput" placeholder="🔍 Nome, e-mail, país, plano…"
+                        oninput="applyFilter()" />
+                    <div style="display:flex;gap:8px;flex-wrap:wrap">
+                        <select id="filterPlan" onchange="applyFilter()"
+                            style="padding:9px 12px;background:var(--s2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.84rem">
+                            <option value="">Todos os planos</option>
+                            <option value="trial">Trial</option>
+                            <option value="premium">Premium</option>
+                            <option value="plus">Plus</option>
+                            <option value="cancelled">Cancelado</option>
+                        </select>
+                        <span class="table-count" id="usersCount"
+                            style="line-height:36px;font-size:.8rem;color:var(--muted)"></span>
+                    </div>
+                </div>
+
+                <!-- TABELA -->
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="sortBy('name')">Nome ↕</th>
+                                <th onclick="sortBy('email')">E-mail ↕</th>
+                                <th>Telefone</th>
+                                <th onclick="sortBy('plan')">Plano ↕</th>
+                                <th>Trial expira</th>
+                                <th onclick="sortBy('country')">País</th>
+                                <th>Escola</th>
+                                <th onclick="sortBy('createdAt')">Cadastro ↕</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersBody">
+                            <tr>
+                                <td colspan="9" style="padding:40px;text-align:center"><span class="spinner"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="pagination"></div>
+            </main>
+        </div>
+    </div>
+
+    <!-- MODAL ESTENDER TRIAL -->
+    <div class="modal-bg" id="modalTrial">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div class="modal-title">⏳ Estender período trial</div>
+                <button class="modal-close" onclick="closeModal('modalTrial')">✕</button>
+            </div>
+            <p style="color:var(--muted);font-size:.85rem;margin-bottom:20px">Usuário: <strong
+                    id="trialUserName"></strong></p>
+            <div class="form-group">
+                <label>Dias a adicionar</label>
+                <input type="number" id="trialDays" value="7" min="1" max="365" />
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeModal('modalTrial')">Cancelar</button>
+                <button class="btn btn-green" onclick="confirmExtendTrial()">✅ Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR USUÁRIO -->
+    <div class="modal-bg" id="modalEdit">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div class="modal-title">✏️ Editar usuário</div>
+                <button class="modal-close" onclick="closeModal('modalEdit')">✕</button>
+            </div>
+            <input type="hidden" id="editEmail" />
+            <div class="form-row">
+                <div class="form-group"><label>Nome</label><input type="text" id="editName" /></div>
+                <div class="form-group"><label>Telefone</label><input type="tel" id="editPhone" /></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Plano</label>
+                    <select id="editPlan">
+                        <option value="trial">Trial</option>
+                        <option value="premium">Premium</option>
+                        <option value="plus">Plus</option>
+                        <option value="cancelled">Cancelado</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>País</label><input type="text" id="editCountry" /></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Escola</label><input type="text" id="editSchool" /></div>
+                <div class="form-group"><label>Fase</label><input type="text" id="editPhase" /></div>
+            </div>
+            <div class="form-group"><label>Notas internas</label><textarea id="editNotes" rows="3"></textarea></div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeModal('modalEdit')">Cancelar</button>
+                <button class="btn btn-green" onclick="confirmEdit()">💾 Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="globalToast" class="toast"></div>
+
+    <script type="module">
+        import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy, doc, updateDoc, setDoc, serverTimestamp }
+            from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const ADMIN_PWD = "jornada@admin2025";
+        const cfg = {
+            apiKey: "AIzaSyAuSaL0-SCYBbcha4Mhu-9bY_2adIfdudM",
+            authDomain: "jornada-intercambio.firebaseapp.com",
+            projectId: "jornada-intercambio",
+            storageBucket: "jornada-intercambio.firebasestorage.app",
+            messagingSenderId: "295607221175",
+            appId: "1:295607221175:web:a7742d1ebeb9ca97120632"
+        };
+
+        let db, allUsers = [], filtered = [], sortState = {}, page = 1;
+        const PAGE_SIZE = 25;
+        let _currentTrialEmail = '', _currentEditEmail = '';
+
+        // ── Auth ──────────────────────────────────────────────────────
+        window.adminLogin = function () {
+            const v = document.getElementById('adminPwd').value;
+            if (v === ADMIN_PWD) { sessionStorage.setItem('jdi_admin', '1'); boot(); }
+            else { document.getElementById('loginErr').style.display = 'block'; setTimeout(() => document.getElementById('loginErr').style.display = 'none', 3000); }
+        };
+        window.adminLogout = function () { sessionStorage.removeItem('jdi_admin'); window.location.reload(); };
+
+        async function boot() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            injectSidebar();
+            try {
+                const apps = getApps(); const app = apps.length ? apps[0] : initializeApp(cfg);
+                db = getFirestore(app);
+            } catch (e) { console.warn(e); }
+            await loadUsers();
+        }
+
+        if (sessionStorage.getItem('jdi_admin') === '1') boot();
+        else { document.getElementById('loginScreen').style.display = 'flex'; }
+        document.getElementById('adminPwd')?.addEventListener('keydown', e => { if (e.key === 'Enter') window.adminLogin(); });
+
+        // ── Sidebar ───────────────────────────────────────────────────
+        function injectSidebar() {
+            const el = document.getElementById('sidebar');
+            if (!el) return;
+            el.outerHTML = `<div class="sidebar">
+    <div class="sb-logo"><div class="logo-text">Jornada <span>Admin</span></div><div class="logo-sub">Usuários</div></div>
+    <nav class="sb-nav">
+      <div class="sb-section">Principal</div>
+      <a href="index.html" class="sb-link"><span class="icon">📊</span> Dashboard</a>
+      <a href="users.html" class="sb-link active"><span class="icon">👥</span> Usuários</a>
+      <div class="sb-section">Analytics</div>
+      <a href="analytics.html" class="sb-link"><span class="icon">📈</span> Conteúdo</a>
+      <a href="feedback.html" class="sb-link"><span class="icon">💬</span> Feedbacks</a>
+      <div class="sb-section">Site</div>
+      <a href="../index.html" class="sb-link" target="_blank"><span class="icon">🌐</span> Ver site</a>
+    </nav>
+    <div class="sb-bottom">
+      <div class="sb-user">${new Date().toLocaleString('pt-BR')}</div>
+      <button class="btn-logout" onclick="adminLogout()">↩ Sair</button>
+    </div>
+  </div>`;
+        }
+
+        // ── Load ──────────────────────────────────────────────────────
+        window.loadUsers = async function () {
+            document.getElementById('usersBody').innerHTML = '<tr><td colspan="9" style="padding:40px;text-align:center"><span class="spinner"></span></td></tr>';
+            allUsers = await fetchUsers();
+            applyFilter();
+            document.getElementById('pageSubtitle').textContent = `${allUsers.length} usuários cadastrados · atualizado ${new Date().toLocaleTimeString('pt-BR')}`;
+        };
+
+        async function fetchUsers() {
+            if (!db) return readLS();
+            try {
+                const snap = await getDocs(query(collection(db, 'users'), orderBy('createdAt', 'desc')));
+                return snap.docs.map(d => {
+                    const data = d.data();
+                    if (data.createdAt?.toDate) data.createdAt = data.createdAt.toDate();
+                    if (data.trialEnd?.toDate) data.trialEnd = data.trialEnd.toDate();
+                    return { id: d.id, ...data };
+                });
+            } catch (e) { console.warn(e); return readLS(); }
+        }
+        function readLS() {
+            try { const r = JSON.parse(localStorage.getItem('jdi_users') || '{}'); return Object.values(r).map(u => { const { passwordHash, ...s } = u; s.createdAt = new Date(s.createdAt || Date.now()); return s; }); } catch { return []; }
+        }
+
+        // ── Filter + Sort ─────────────────────────────────────────────
+        window.applyFilter = function () {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            const plan = document.getElementById('filterPlan').value;
+            filtered = allUsers.filter(u =>
+                (!plan || u.plan === plan) &&
+                (!q || [u.name, u.email, u.phone, u.country, u.onboarding?.country, u.school, u.onboarding?.school].some(v => (v || '').toLowerCase().includes(q)))
+            );
+            page = 1;
+            document.getElementById('usersCount').textContent = `${filtered.length} resultado${filtered.length !== 1 ? 's' : ''}`;
+            renderTable();
+        };
+
+        window.sortBy = function (field) {
+            const asc = sortState[field] = !sortState[field];
+            filtered.sort((a, b) => {
+                const va = a[field] || a.onboarding?.[field] || '', vb = b[field] || b.onboarding?.[field] || '';
+                return asc ? String(va).localeCompare(String(vb)) : String(vb).localeCompare(String(va));
+            });
+            page = 1; renderTable();
+        };
+
+        // ── Render ────────────────────────────────────────────────────
+        function renderTable() {
+            const start = (page - 1) * PAGE_SIZE, slice = filtered.slice(start, start + PAGE_SIZE);
+            const body = document.getElementById('usersBody');
+            if (!filtered.length) { body.innerHTML = '<tr><td colspan="9"><div class="empty-state"><div class="ei">🔍</div>Nenhum resultado</div></td></tr>'; document.getElementById('pagination').innerHTML = ''; return; }
+            body.innerHTML = slice.map(u => {
+                const plan = u.plan || 'trial';
+                const badge = plan === 'premium' ? 'badge-premium' : plan === 'plus' ? 'badge-plus' : plan === 'cancelled' ? 'badge-cancelled' : 'badge-trial';
+                const now = Date.now();
+                const te = u.trialEnd ? new Date(u.trialEnd) : null;
+                const trialStr = te ? (te > now ? `<span style="color:var(--green);font-size:.78rem">${Math.ceil((te - now) / 86400000)}d restam</span>` : `<span style="color:var(--red);font-size:.78rem">Expirado</span>`) : '—';
+                const email = encodeURIComponent(u.email || u.id || '');
+                return `<tr>
+      <td><strong>${esc(u.name)}</strong></td>
+      <td style="color:var(--muted);font-size:.82rem">${esc(u.email)}</td>
+      <td style="color:var(--muted);font-size:.82rem">${esc(u.phone)}</td>
+      <td><span class="badge ${badge}">${plan}</span></td>
+      <td>${trialStr}</td>
+      <td>${esc(u.country || u.onboarding?.country)}</td>
+      <td>${esc(u.school || u.onboarding?.school)}</td>
+      <td style="color:var(--muted);font-size:.78rem">${fmtDate(u.createdAt)}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-sm btn-outline" onclick='openExtendTrial("${email}","${esc(u.name)}")' title="Estender trial">⏳</button>
+          <button class="btn btn-sm btn-outline" onclick='openEdit("${email}")' title="Editar">✏️</button>
+          ${plan === 'cancelled'
+                        ? `<button class="btn btn-sm" style="border:1px solid var(--green);color:var(--green)" onclick='toggleCancel("${email}",false)' title="Reativar">↩</button>`
+                        : `<button class="btn btn-sm btn-danger" onclick='toggleCancel("${email}",true)' title="Cancelar">✕</button>`}
+        </div>
+      </td>
+    </tr>`;
+            }).join('');
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const pages = Math.ceil(filtered.length / PAGE_SIZE);
+            const el = document.getElementById('pagination');
+            if (pages <= 1) { el.innerHTML = ''; return; }
+            el.innerHTML = `<button class="pg-btn" ${page === 1 ? 'disabled' : ''} onclick="gotoPage(${page - 1})">‹</button>
+    <span class="pg-info">Página ${page} de ${pages}</span>
+    <button class="pg-btn" ${page === pages ? 'disabled' : ''} onclick="gotoPage(${page + 1})">›</button>`;
+        }
+        window.gotoPage = p => { page = p; renderTable(); };
+
+        // ── EXTEND TRIAL ──────────────────────────────────────────────
+        window.openExtendTrial = function (emailEnc, name) {
+            _currentTrialEmail = decodeURIComponent(emailEnc);
+            document.getElementById('trialUserName').textContent = name;
+            document.getElementById('trialDays').value = 7;
+            document.getElementById('modalTrial').classList.add('open');
+        };
+
+        window.confirmExtendTrial = async function () {
+            const days = parseInt(document.getElementById('trialDays').value) || 7;
+            const email = _currentTrialEmail;
+            const user = allUsers.find(u => (u.email || u.id) === email);
+            if (!user) { showToast('Usuário não encontrado'); return; }
+            const currentEnd = user.trialEnd ? new Date(user.trialEnd) : new Date();
+            const newEnd = new Date(Math.max(Date.now(), currentEnd.getTime()) + days * 86400000);
+            try {
+                if (db) {
+                    const key = email.replace(/[.#$[\]]/g, '_');
+                    await updateDoc(doc(db, 'users', key), { trialEnd: newEnd, plan: 'trial', updatedAt: serverTimestamp() });
+                }
+                // Atualiza localStorage
+                const ls = JSON.parse(localStorage.getItem('jdi_users') || '{}');
+                const lsKey = Object.keys(ls).find(k => ls[k].email === email);
+                if (lsKey) { ls[lsKey].trialEnd = newEnd.toISOString(); ls[lsKey].plan = 'trial'; localStorage.setItem('jdi_users', JSON.stringify(ls)); }
+                user.trialEnd = newEnd; user.plan = 'trial';
+                closeModal('modalTrial');
+                renderTable();
+                showToast(`✅ Trial de ${days} dias adicionado para ${user.name || email}`);
+            } catch (e) { console.error(e); showToast('❌ Erro ao atualizar trial'); }
+        };
+
+        // ── EDIT USER ─────────────────────────────────────────────────
+        window.openEdit = function (emailEnc) {
+            _currentEditEmail = decodeURIComponent(emailEnc);
+            const user = allUsers.find(u => (u.email || u.id) === _currentEditEmail) || {};
+            document.getElementById('editEmail').value = _currentEditEmail;
+            document.getElementById('editName').value = user.name || '';
+            document.getElementById('editPhone').value = user.phone || '';
+            document.getElementById('editPlan').value = user.plan || 'trial';
+            document.getElementById('editCountry').value = user.country || user.onboarding?.country || '';
+            document.getElementById('editSchool').value = user.school || user.onboarding?.school || '';
+            document.getElementById('editPhase').value = user.phase || user.onboarding?.phase || '';
+            document.getElementById('editNotes').value = user.notes || '';
+            document.getElementById('modalEdit').classList.add('open');
+        };
+
+        window.confirmEdit = async function () {
+            const email = _currentEditEmail;
+            const updates = {
+                name: document.getElementById('editName').value,
+                phone: document.getElementById('editPhone').value,
+                plan: document.getElementById('editPlan').value,
+                country: document.getElementById('editCountry').value,
+                school: document.getElementById('editSchool').value,
+                phase: document.getElementById('editPhase').value,
+                notes: document.getElementById('editNotes').value,
+            };
+            try {
+                if (db) {
+                    const key = email.replace(/[.#$[\]]/g, '_');
+                    await updateDoc(doc(db, 'users', key), { ...updates, updatedAt: serverTimestamp() });
+                }
+                const ls = JSON.parse(localStorage.getItem('jdi_users') || '{}');
+                const lsKey = Object.keys(ls).find(k => ls[k].email === email);
+                if (lsKey) { Object.assign(ls[lsKey], updates); localStorage.setItem('jdi_users', JSON.stringify(ls)); }
+                const idx = allUsers.findIndex(u => (u.email || u.id) === email);
+                if (idx >= 0) Object.assign(allUsers[idx], updates);
+                applyFilter();
+                closeModal('modalEdit');
+                showToast('✅ Usuário atualizado!');
+            } catch (e) { console.error(e); showToast('❌ Erro ao salvar'); }
+        };
+
+        // ── CANCEL / REACTIVATE ───────────────────────────────────────
+        window.toggleCancel = async function (emailEnc, cancel) {
+            const email = decodeURIComponent(emailEnc);
+            const plan = cancel ? 'cancelled' : 'trial';
+            if (!confirm(`${cancel ? 'Cancelar acesso' : 'Reativar'} do usuário ${email}?`)) return;
+            try {
+                if (db) {
+                    const key = email.replace(/[.#$[\]]/g, '_');
+                    await updateDoc(doc(db, 'users', key), { plan, updatedAt: serverTimestamp() });
+                }
+                const user = allUsers.find(u => (u.email || u.id) === email);
+                if (user) user.plan = plan;
+                applyFilter();
+                showToast(cancel ? '❌ Acesso cancelado' : '✅ Usuário reativado');
+            } catch (e) { console.error(e); showToast('Erro'); }
+        };
+
+        // ── CSV ───────────────────────────────────────────────────────
+        window.exportCSV = function () {
+            const h = ['Nome', 'E-mail', 'Telefone', 'Plano', 'Trial Expira', 'País', 'Escola', 'Fase', 'Como conheceu', 'Cadastro'];
+            const rows = filtered.map(u => [u.name, u.email, u.phone, u.plan, u.trialEnd ? new Date(u.trialEnd).toLocaleDateString('pt-BR') : '', u.country || u.onboarding?.country || '', u.school || u.onboarding?.school || '', u.phase || u.onboarding?.phase || '', u.howFound || u.onboarding?.howFound || '', u.createdAt ? new Date(u.createdAt).toLocaleDateString('pt-BR') : '']);
+            const csv = '\uFEFF' + [h, ...rows].map(r => r.map(v => `"${String(v || '').replace(/"/g, '""')}"`).join(',')).join('\r\n');
+            const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })); a.download = `jdi-usuarios-${new Date().toISOString().slice(0, 10)}.csv`; a.click();
+        };
+
+        // ── Utils ─────────────────────────────────────────────────────
+        window.closeModal = id => document.getElementById(id).classList.remove('open');
+        window.showToast = function (msg) {
+            const t = document.getElementById('globalToast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000);
+        };
+        function esc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        function fmtDate(d) { return d ? new Date(d).toLocaleDateString('pt-BR') : '—'; }
+    </script>
+</body>
+
+</html>

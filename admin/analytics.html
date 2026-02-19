@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Analytics — Jornada Admin</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="admin.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+
+    <div id="loginScreen" style="display:none">
+        <div class="login-box">
+            <h1>🔐 Admin</h1>
+            <p>Jornada do Intercâmbio</p>
+            <input type="password" id="adminPwd" placeholder="Senha" />
+            <button class="btn-login" onclick="adminLogin()">Entrar</button>
+            <div class="login-err" id="loginErr">Senha incorreta.</div>
+        </div>
+    </div>
+
+    <div id="app">
+        <div class="adm-layout">
+            <div id="sidebar"></div>
+            <main class="adm-main">
+                <div class="topbar">
+                    <div class="page-header">
+                        <div class="page-title">📈 Analytics de Conteúdo</div>
+                        <div class="page-sub">Métricas de comportamento e perfil dos usuários</div>
+                    </div>
+                    <div class="topbar-right">
+                        <button class="btn-icon" onclick="loadAll()">↻ Atualizar</button>
+                    </div>
+                </div>
+
+                <!-- TOP CONTEÚDOS -->
+                <div class="panels-grid">
+                    <div class="panel">
+                        <div class="panel-title">🔥 Seções mais acessadas <span>eventos rastreados</span></div>
+                        <div id="topSections">
+                            <div class="empty-state">
+                                <div class="ei">📡</div>
+                                <p>Os dados aparecem aqui conforme os usuários navegam pelo site.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title">🎬 Vídeos mais assistidos <span>eventos rastreados</span></div>
+                        <div id="topVideos">
+                            <div class="empty-state">
+                                <div class="ei">🎬</div>
+                                <p>Os dados aparecem aqui conforme os usuários assistem vídeos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FORM METRICS -->
+                <div class="panels-grid">
+                    <div class="panel">
+                        <div class="panel-title">😓 Principais desafios dos usuários</div>
+                        <div class="chart-wrap"><canvas id="chartChallenges"></canvas></div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title">🛂 Tipos de visto</div>
+                        <div class="chart-wrap"><canvas id="chartVisa"></canvas></div>
+                    </div>
+                </div>
+
+                <div class="panels-grid thirds">
+                    <div class="panel">
+                        <div class="panel-title">🏫 Escolas mais frequentadas</div>
+                        <div class="chart-wrap"><canvas id="chartSchools"></canvas></div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title">🏠 Situação de moradia</div>
+                        <div class="chart-wrap-sm"><canvas id="chartHousing"></canvas></div>
+                    </div>
+                </div>
+
+                <!-- AI CHAT -->
+                <div class="panel" style="margin-bottom:20px">
+                    <div class="panel-title">🤖 Uso do Chat com IA <span id="aiSubtitle"></span></div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-top:8px"
+                        id="aiStats">
+                        <div class="stat-card blue">
+                            <div class="sc-icon">💬</div>
+                            <div class="sc-label">Total de leads</div>
+                            <div class="sc-value" id="ai-leads">—</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="sc-icon">📧</div>
+                            <div class="sc-label">Com e-mail</div>
+                            <div class="sc-value" id="ai-email">—</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="sc-icon">📱</div>
+                            <div class="sc-label">Com telefone</div>
+                            <div class="sc-value" id="ai-phone">—</div>
+                        </div>
+                        <div class="stat-card green">
+                            <div class="sc-icon">📅</div>
+                            <div class="sc-label">Hoje</div>
+                            <div class="sc-value" id="ai-today">—</div>
+                        </div>
+                        <div class="stat-card yellow">
+                            <div class="sc-icon">📅</div>
+                            <div class="sc-label">Esta semana</div>
+                            <div class="sc-value" id="ai-week">—</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INTERESSES -->
+                <div class="panels-grid">
+                    <div class="panel">
+                        <div class="panel-title">❤️ Interesses declarados</div>
+                        <div id="interestsList"></div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title">🏙️ Cidades na Irlanda</div>
+                        <div id="citiesList"></div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy }
+            from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const ADMIN_PWD = "jornada@admin2025";
+        const cfg = {
+            apiKey: "AIzaSyAuSaL0-SCYBbcha4Mhu-9bY_2adIfdudM",
+            authDomain: "jornada-intercambio.firebaseapp.com",
+            projectId: "jornada-intercambio",
+            storageBucket: "jornada-intercambio.firebasestorage.app",
+            messagingSenderId: "295607221175",
+            appId: "1:295607221175:web:a7742d1ebeb9ca97120632"
+        };
+
+        let db, allUsers = [], allLeads = [], allEvents = [];
+
+        window.adminLogin = function () {
+            const v = document.getElementById('adminPwd').value;
+            if (v === ADMIN_PWD) { sessionStorage.setItem('jdi_admin', '1'); boot(); }
+            else { document.getElementById('loginErr').style.display = 'block'; setTimeout(() => document.getElementById('loginErr').style.display = 'none', 3000); }
+        };
+        window.adminLogout = () => { sessionStorage.removeItem('jdi_admin'); window.location.reload(); };
+
+        async function boot() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            injectSidebar();
+            try { const apps = getApps(); const app = apps.length ? apps[0] : initializeApp(cfg); db = getFirestore(app); } catch (e) { console.warn(e); }
+            await loadAll();
+        }
+
+        if (sessionStorage.getItem('jdi_admin') === '1') boot();
+        else document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('adminPwd')?.addEventListener('keydown', e => { if (e.key === 'Enter') window.adminLogin(); });
+
+        function injectSidebar() {
+            const el = document.getElementById('sidebar'); if (!el) return;
+            el.outerHTML = `<div class="sidebar">
+    <div class="sb-logo"><div class="logo-text">Jornada <span>Admin</span></div><div class="logo-sub">Analytics</div></div>
+    <nav class="sb-nav">
+      <div class="sb-section">Principal</div>
+      <a href="index.html" class="sb-link"><span class="icon">📊</span> Dashboard</a>
+      <a href="users.html" class="sb-link"><span class="icon">👥</span> Usuários</a>
+      <div class="sb-section">Analytics</div>
+      <a href="analytics.html" class="sb-link active"><span class="icon">📈</span> Conteúdo</a>
+      <a href="feedback.html" class="sb-link"><span class="icon">💬</span> Feedbacks</a>
+      <div class="sb-section">Site</div>
+      <a href="../index.html" class="sb-link" target="_blank"><span class="icon">🌐</span> Ver site</a>
+    </nav>
+    <div class="sb-bottom">
+      <div class="sb-user">${new Date().toLocaleString('pt-BR')}</div>
+      <button class="btn-logout" onclick="adminLogout()">↩ Sair</button>
+    </div>
+  </div>`;
+        }
+
+        window.loadAll = async function () {
+            [allUsers, allLeads, allEvents] = await Promise.all([fetchCol('users'), fetchCol('leads'), fetchCol('events')]);
+            renderFormCharts();
+            renderAIStats();
+            renderLists();
+            renderEventCharts();
+        };
+
+        async function fetchCol(col) {
+            if (!db) return col === 'users' ? readLS() : [];
+            try {
+                const snap = await getDocs(query(collection(db, col), orderBy('createdAt', 'desc')));
+                return snap.docs.map(d => { const data = d.data(); if (data.createdAt?.toDate) data.createdAt = data.createdAt.toDate(); return { id: d.id, ...data }; });
+            } catch (e) { console.warn(col, e.message); return col === 'users' ? readLS() : []; }
+        }
+        function readLS() { try { const r = JSON.parse(localStorage.getItem('jdi_users') || '{}'); return Object.values(r).map(u => { const { passwordHash, ...s } = u; s.createdAt = new Date(s.createdAt || Date.now()); return s; }); } catch { return []; } }
+
+        const CHART_OPTS = { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#aaa', boxWidth: 12 } } } };
+        const charts = {};
+        function dc(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
+
+        function renderFormCharts() {
+            // Challenges
+            const ch = count(allUsers.map(u => u.mainChallenge || u.onboarding?.mainChallenge || 'Não informado'));
+            dc('challenges');
+            charts.challenges = new Chart(document.getElementById('chartChallenges'), { type: 'bar', data: { labels: Object.keys(ch).map(k => k.slice(0, 30)), datasets: [{ label: 'Usuários', data: Object.values(ch), backgroundColor: 'rgba(255,77,109,.6)', borderColor: '#ff4d6d', borderWidth: 1 }] }, options: { ...CHART_OPTS, indexAxis: 'y', scales: { x: { ticks: { color: '#555' } }, y: { ticks: { color: '#aaa', font: { size: 11 } } } } } });
+
+            // Visa
+            const vi = count(allUsers.map(u => u.visa || u.onboarding?.visa || 'Não informado'));
+            dc('visa');
+            charts.visa = new Chart(document.getElementById('chartVisa'), { type: 'doughnut', data: { labels: Object.keys(vi), datasets: [{ data: Object.values(vi), backgroundColor: ['#00e67680', '#ffd60080', '#4fc3f780', '#ff4d6d80', '#ce93d880', '#ffb74d80'], borderWidth: 1 }] }, options: { ...CHART_OPTS } });
+
+            // Schools
+            const sc = count(allUsers.map(u => u.school || u.onboarding?.school || 'Não informado'));
+            const top = Object.entries(sc).sort((a, b) => b[1] - a[1]).slice(0, 8);
+            dc('schools');
+            charts.schools = new Chart(document.getElementById('chartSchools'), { type: 'bar', data: { labels: top.map(x => x[0].slice(0, 25)), datasets: [{ label: 'Alunos', data: top.map(x => x[1]), backgroundColor: 'rgba(0,230,118,.6)', borderColor: '#00e676', borderWidth: 1 }] }, options: { ...CHART_OPTS, indexAxis: 'y', scales: { x: { ticks: { color: '#555' } }, y: { ticks: { color: '#aaa', font: { size: 11 } } } } } });
+
+            // Housing
+            const ho = count(allUsers.map(u => u.housing || u.onboarding?.housing || 'Não informado'));
+            dc('housing');
+            charts.housing = new Chart(document.getElementById('chartHousing'), { type: 'pie', data: { labels: Object.keys(ho), datasets: [{ data: Object.values(ho), backgroundColor: ['#00e67680', '#4fc3f780', '#ffd60080', '#ff4d6d80', '#ce93d880'], borderWidth: 1 }] }, options: { ...CHART_OPTS } });
+        }
+
+        function renderEventCharts() {
+            if (!allEvents.length) return;
+            const sections = allEvents.filter(e => e.type === 'section_view');
+            const videos = allEvents.filter(e => e.type === 'video_play');
+
+            // Top sections
+            const sc = count(sections.map(e => e.label || e.section || 'desconhecido'));
+            const topSec = Object.entries(sc).sort((a, b) => b[1] - a[1]).slice(0, 8);
+            document.getElementById('topSections').innerHTML = topSec.length ? topSec.map(([l, n]) => {
+                const max = topSec[0][1];
+                return `<div class="list-item"><div class="li-label">${esc(l)}</div><div style="width:130px"><div style="display:flex;align-items:center;gap:8px"><div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:${(n / max * 100).toFixed(0)}%"></div></div><span class="li-value">${n}</span></div></div></div>`;
+            }).join('') : '<div class="empty-state"><div class="ei">📡</div>Sem eventos ainda</div>';
+
+            // Top videos
+            const vc = count(videos.map(e => e.label || e.video || 'desconhecido'));
+            const topVid = Object.entries(vc).sort((a, b) => b[1] - a[1]).slice(0, 8);
+            document.getElementById('topVideos').innerHTML = topVid.length ? topVid.map(([l, n]) => {
+                const max = topVid[0][1];
+                return `<div class="list-item"><div class="li-label" style="font-size:.83rem">🎬 ${esc(l)}</div><div style="width:130px"><div style="display:flex;align-items:center;gap:8px"><div class="progress-bar" style="flex:1"><div class="progress-fill" style="background:var(--blue);width:${(n / max * 100).toFixed(0)}%"></div></div><span style="color:var(--blue);font-weight:700">${n}</span></div></div></div>`;
+            }).join('') : '<div class="empty-state"><div class="ei">🎬</div>Sem visualizações ainda</div>';
+        }
+
+        function renderAIStats() {
+            const now = Date.now();
+            document.getElementById('ai-leads').textContent = allLeads.length;
+            document.getElementById('ai-email').textContent = allLeads.filter(l => l.email).length;
+            document.getElementById('ai-phone').textContent = allLeads.filter(l => l.phone).length;
+            document.getElementById('ai-today').textContent = allLeads.filter(l => (now - new Date(l.createdAt)) < 86400000).length;
+            document.getElementById('ai-week').textContent = allLeads.filter(l => (now - new Date(l.createdAt)) < 604800000).length;
+        }
+
+        function renderLists() {
+            // Interests
+            const raw = allUsers.flatMap(u => u.interests || u.onboarding?.interests || []);
+            const ic = count(raw.filter(Boolean));
+            const topI = Object.entries(ic).sort((a, b) => b[1] - a[1]);
+            document.getElementById('interestsList').innerHTML = topI.length ? topI.map(([i, n]) => `<div class="list-item"><div class="li-label">${esc(i)}</div><span class="li-value">${n}</span></div>`).join('') : '<div class="empty-state"><div class="ei">❤️</div>Sem dados</div>';
+
+            // Cities
+            const cc = count(allUsers.map(u => u.location || u.onboarding?.location || 'Não informado'));
+            const topC = Object.entries(cc).sort((a, b) => b[1] - a[1]).slice(0, 6);
+            document.getElementById('citiesList').innerHTML = topC.length ? topC.map(([c, n]) => `<div class="list-item"><div class="li-label">🏙️ ${esc(c)}</div><span class="li-value">${n}</span></div>`).join('') : '<div class="empty-state"><div class="ei">🏙️</div>Sem dados</div>';
+        }
+
+        function count(arr) { return arr.reduce((a, v) => { const k = String(v || '').trim() || 'Não informado'; a[k] = (a[k] || 0) + 1; return a; }, {}); }
+        function esc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Dashboard — Jornada Admin</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="admin.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+
+    <!-- LOGIN -->
+    <div id="loginScreen" style="display:none">
+        <div class="login-box">
+            <h1>🔐 Admin</h1>
+            <p>Jornada do Intercâmbio</p>
+            <input type="password" id="adminPwd" placeholder="Senha de administrador" />
+            <button class="btn-login" onclick="adminLogin()">Entrar</button>
+            <div class="login-err" id="loginErr">Senha incorreta.</div>
+        </div>
+    </div>
+
+    <!-- APP -->
+    <div id="app">
+        <div class="adm-layout">
+            <div id="sidebar"></div>
+            <main class="adm-main">
+                <div class="topbar">
+                    <div class="page-header">
+                        <div class="page-title">Dashboard</div>
+                        <div class="page-sub" id="lastUpdate">Carregando…</div>
+                    </div>
+                    <div class="topbar-right">
+                        <button class="btn-icon" onclick="loadDashboard()">↻ Atualizar</button>
+                    </div>
+                </div>
+
+                <!-- KPI CARDS -->
+                <div class="stats-grid" id="kpiCards">
+                    <div class="stat-card">
+                        <div class="sc-icon">👥</div>
+                        <div class="sc-label">Total usuários</div>
+                        <div class="sc-value" id="st-total"><span class="spinner"></span></div>
+                    </div>
+                    <div class="stat-card yellow">
+                        <div class="sc-icon">⏳</div>
+                        <div class="sc-label">Em trial</div>
+                        <div class="sc-value" id="st-trial">—</div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="sc-icon">💎</div>
+                        <div class="sc-label">Premium/Plus</div>
+                        <div class="sc-value" id="st-premium">—</div>
+                    </div>
+                    <div class="stat-card red">
+                        <div class="sc-icon">❌</div>
+                        <div class="sc-label">Cancelados</div>
+                        <div class="sc-value" id="st-cancelled">—</div>
+                    </div>
+                    <div class="stat-card orange">
+                        <div class="sc-icon">📉</div>
+                        <div class="sc-label">Taxa cancel.</div>
+                        <div class="sc-value" id="st-churn">—</div>
+                        <div class="sc-delta" id="st-churn-label">dos cadastrados</div>
+                    </div>
+                    <div class="stat-card blue">
+                        <div class="sc-icon">🤖</div>
+                        <div class="sc-label">Leads (chat)</div>
+                        <div class="sc-value" id="st-leads">—</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="sc-icon">🆕</div>
+                        <div class="sc-label">Novos hoje</div>
+                        <div class="sc-value" id="st-today">—</div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="sc-icon">💰</div>
+                        <div class="sc-label">Receita estimada</div>
+                        <div class="sc-value" id="st-revenue">—</div>
+                        <div class="sc-delta">€ /mês</div>
+                    </div>
+                </div>
+
+                <!-- CHARTS ROW 1 -->
+                <div class="panels-grid thirds">
+                    <div class="panel">
+                        <div class="panel-title">Crescimento de usuários <span id="growthRange">últimos 30 dias</span>
+                        </div>
+                        <div class="chart-wrap"><canvas id="chartGrowth"></canvas></div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title">Distribuição de planos</div>
+                        <div class="chart-wrap"><canvas id="chartPlans"></canvas></div>
+                    </div>
+                </div>
+
+                <!-- CHARTS ROW 2 -->
+                <div class="panels-grid">
+                    <div class="panel">
+                        <div class="panel-title">Perfil do usuário — Como conheceu</div>
+                        <div class="chart-wrap"><canvas id="chartHowFound"></canvas></div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title">Fase do intercâmbio</div>
+                        <div class="chart-wrap"><canvas id="chartPhase"></canvas></div>
+                    </div>
+                </div>
+
+                <!-- TABLES ROW -->
+                <div class="panels-grid">
+                    <div class="panel">
+                        <div class="panel-title">Cadastros recentes</div>
+                        <div id="recentList"></div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title">Top países</div>
+                        <div id="countriesList"></div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy, limit }
+            from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // ── Config ────────────────────────────────────────────────────
+        const ADMIN_PWD = "jornada@admin2025";
+        const PREMIUM_PRICE = 29; // € por mês
+
+        const cfg = {
+            apiKey: "AIzaSyAuSaL0-SCYBbcha4Mhu-9bY_2adIfdudM",
+            authDomain: "jornada-intercambio.firebaseapp.com",
+            projectId: "jornada-intercambio",
+            storageBucket: "jornada-intercambio.firebasestorage.app",
+            messagingSenderId: "295607221175",
+            appId: "1:295607221175:web:a7742d1ebeb9ca97120632"
+        };
+
+        let db, allUsers = [], allLeads = [];
+
+        async function initDB() {
+            try {
+                const apps = getApps();
+                const app = apps.length ? apps[0] : initializeApp(cfg);
+                db = getFirestore(app);
+            } catch (e) { console.warn('Firebase:', e.message); }
+        }
+
+        // ── Auth ──────────────────────────────────────────────────────
+        window.adminLogin = function () {
+            const v = document.getElementById('adminPwd').value;
+            const err = document.getElementById('loginErr');
+            if (v === ADMIN_PWD) {
+                sessionStorage.setItem('jdi_admin', '1');
+                boot();
+            } else {
+                err.style.display = 'block';
+                setTimeout(() => err.style.display = 'none', 3000);
+            }
+        };
+        window.adminLogout = function () {
+            sessionStorage.removeItem('jdi_admin'); window.location.reload();
+        };
+
+        async function boot() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            injectSidebar();
+            await initDB();
+            await loadDashboard();
+        }
+
+        if (sessionStorage.getItem('jdi_admin') === '1') boot();
+        else { document.getElementById('loginScreen').style.display = 'flex'; }
+        document.getElementById('adminPwd')?.addEventListener('keydown', e => { if (e.key === 'Enter') window.adminLogin(); });
+
+        // ── Sidebar ───────────────────────────────────────────────────
+        function injectSidebar() {
+            const el = document.getElementById('sidebar');
+            if (!el) return;
+            el.outerHTML = `<div class="sidebar">
+    <div class="sb-logo"><div class="logo-text">Jornada <span>Admin</span></div><div class="logo-sub">Dashboard</div></div>
+    <nav class="sb-nav">
+      <div class="sb-section">Principal</div>
+      <a href="index.html" class="sb-link active"><span class="icon">📊</span> Dashboard</a>
+      <a href="users.html" class="sb-link"><span class="icon">👥</span> Usuários</a>
+      <div class="sb-section">Analytics</div>
+      <a href="analytics.html" class="sb-link"><span class="icon">📈</span> Conteúdo</a>
+      <a href="feedback.html" class="sb-link"><span class="icon">💬</span> Feedbacks</a>
+      <div class="sb-section">Site</div>
+      <a href="../index.html" class="sb-link" target="_blank"><span class="icon">🌐</span> Ver site</a>
+    </nav>
+    <div class="sb-bottom">
+      <div class="sb-user" id="sbTime"></div>
+      <button class="btn-logout" onclick="adminLogout()">↩ Sair</button>
+    </div>
+  </div>`;
+            updateClock();
+        }
+        function updateClock() {
+            const el = document.getElementById('sbTime');
+            if (el) el.textContent = new Date().toLocaleString('pt-BR');
+            setTimeout(updateClock, 30000);
+        }
+
+        // ── Load ──────────────────────────────────────────────────────
+        window.loadDashboard = async function () {
+            [allUsers, allLeads] = await Promise.all([fetchCol('users'), fetchCol('leads')]);
+            renderKPIs();
+            renderCharts();
+            renderRecent();
+            renderCountries();
+            document.getElementById('lastUpdate').textContent =
+                `Atualizado às ${new Date().toLocaleTimeString('pt-BR')} · ${allUsers.length} usuários`;
+        };
+
+        async function fetchCol(col) {
+            if (!db) return readLS(col);
+            try {
+                const snap = await getDocs(query(collection(db, col), orderBy('createdAt', 'desc')));
+                return snap.docs.map(d => {
+                    const data = d.data();
+                    if (data.createdAt?.toDate) data.createdAt = data.createdAt.toDate();
+                    if (data.trialEnd?.toDate) data.trialEnd = data.trialEnd.toDate();
+                    return { id: d.id, ...data };
+                });
+            } catch (e) { console.warn(col, e.message); return readLS(col); }
+        }
+        function readLS(col) {
+            if (col !== 'users') return [];
+            try {
+                const raw = JSON.parse(localStorage.getItem('jdi_users') || '{}');
+                return Object.values(raw).map(u => { const { passwordHash, ...s } = u; s.createdAt = new Date(s.createdAt || Date.now()); return s; });
+            } catch { return []; }
+        }
+
+        // ── KPIs ─────────────────────────────────────────────────────
+        function renderKPIs() {
+            const now = Date.now();
+            const trial = allUsers.filter(u => u.plan === 'trial' && new Date(u.trialEnd || 0) > now).length;
+            const premium = allUsers.filter(u => u.plan === 'premium' || u.plan === 'plus').length;
+            const cancelled = allUsers.filter(u => u.plan === 'cancelled').length;
+            const churn = allUsers.length ? ((cancelled / allUsers.length) * 100).toFixed(1) : '0.0';
+            const today = allUsers.filter(u => (now - new Date(u.createdAt)) < 86400000).length;
+            const revenue = premium * PREMIUM_PRICE;
+
+            document.getElementById('st-total').textContent = allUsers.length;
+            document.getElementById('st-trial').textContent = trial;
+            document.getElementById('st-premium').textContent = premium;
+            document.getElementById('st-cancelled').textContent = cancelled;
+            document.getElementById('st-churn').textContent = churn + '%';
+            document.getElementById('st-leads').textContent = allLeads.length;
+            document.getElementById('st-today').textContent = today;
+            document.getElementById('st-revenue').textContent = '€' + revenue;
+        }
+
+        // ── Charts ────────────────────────────────────────────────────
+        const CHART_OPTS = { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#aaa', boxWidth: 12 } } } };
+        let charts = {};
+
+        function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
+
+        function renderCharts() {
+            // Growth — last 30 days buckets
+            const days = 30;
+            const buckets = Array.from({ length: days }, (_, i) => {
+                const d = new Date(); d.setDate(d.getDate() - (days - 1 - i)); return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+            });
+            const counts = Array(days).fill(0);
+            allUsers.forEach(u => {
+                const daysAgo = Math.floor((Date.now() - new Date(u.createdAt)) / (86400000));
+                if (daysAgo < days) counts[days - 1 - daysAgo]++;
+            });
+            // Cumulative
+            const cumul = counts.reduce((acc, v, i) => [...acc, (acc[i - 1] || 0) + v], []);
+
+            destroyChart('growth');
+            charts.growth = new Chart(document.getElementById('chartGrowth'), {
+                type: 'line',
+                data: {
+                    labels: buckets, datasets: [{
+                        label: 'Usuários acumulados', data: cumul,
+                        borderColor: '#00e676', backgroundColor: 'rgba(0,230,118,.1)',
+                        tension: .4, fill: true, pointRadius: 2
+                    }]
+                },
+                options: { ...CHART_OPTS, scales: { x: { ticks: { color: '#555', maxTicksLimit: 6 } }, y: { ticks: { color: '#555' } } } }
+            });
+
+            // Plans doughnut
+            const trial = allUsers.filter(u => u.plan === 'trial').length;
+            const premium = allUsers.filter(u => u.plan === 'premium').length;
+            const plus = allUsers.filter(u => u.plan === 'plus').length;
+            const cancelled = allUsers.filter(u => u.plan === 'cancelled').length;
+            destroyChart('plans');
+            charts.plans = new Chart(document.getElementById('chartPlans'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Trial', 'Premium', 'Plus', 'Cancelado'],
+                    datasets: [{
+                        data: [trial, premium, plus, cancelled],
+                        backgroundColor: ['#ffd60080', '#00e67680', '#4fc3f780', '#ff4d6d80'],
+                        borderColor: ['#ffd600', '#00e676', '#4fc3f7', '#ff4d6d'], borderWidth: 1
+                    }]
+                },
+                options: { ...CHART_OPTS }
+            });
+
+            // How found
+            const hf = count(allUsers.map(u => u.howFound || u.onboarding?.howFound || 'Não informado'));
+            destroyChart('howFound');
+            charts.howFound = new Chart(document.getElementById('chartHowFound'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(hf), datasets: [{
+                        label: 'Usuários', data: Object.values(hf),
+                        backgroundColor: 'rgba(79,195,247,.6)', borderColor: '#4fc3f7', borderWidth: 1
+                    }]
+                },
+                options: { ...CHART_OPTS, indexAxis: 'y', scales: { x: { ticks: { color: '#555' } }, y: { ticks: { color: '#aaa' } } } }
+            });
+
+            // Phase
+            const ph = count(allUsers.map(u => u.phase || u.onboarding?.phase || 'Não informado'));
+            destroyChart('phase');
+            charts.phase = new Chart(document.getElementById('chartPhase'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(ph), datasets: [{
+                        label: 'Usuários', data: Object.values(ph),
+                        backgroundColor: 'rgba(206,147,216,.6)', borderColor: '#ce93d8', borderWidth: 1
+                    }]
+                },
+                options: { ...CHART_OPTS, indexAxis: 'y', scales: { x: { ticks: { color: '#555' } }, y: { ticks: { color: '#aaa' } } } }
+            });
+        }
+
+        function count(arr) {
+            return arr.reduce((acc, v) => { const k = v || 'Não informado'; acc[k] = (acc[k] || 0) + 1; return acc; }, {});
+        }
+
+        // ── Recent ────────────────────────────────────────────────────
+        function renderRecent() {
+            const recent = allUsers.slice(0, 6);
+            document.getElementById('recentList').innerHTML = recent.length ? recent.map(u => {
+                const plan = u.plan || 'trial';
+                const badge = plan === 'premium' ? 'badge-premium' : plan === 'plus' ? 'badge-plus' : plan === 'cancelled' ? 'badge-cancelled' : 'badge-trial';
+                return `<div class="list-item">
+      <div><div class="li-label">${escHtml(u.name || '—')}</div><div style="font-size:.75rem;color:var(--muted)">${escHtml(u.email)}</div></div>
+      <div style="text-align:right"><span class="badge ${badge}">${plan}</span><div style="font-size:.72rem;color:var(--muted);margin-top:3px">${relTime(u.createdAt)}</div></div>
+    </div>`;
+            }).join('') : '<div class="empty-state"><div class="ei">📭</div>Sem usuários ainda</div>';
+        }
+
+        function renderCountries() {
+            const ct = count(allUsers.map(u => u.country || u.onboarding?.country || '🌍 Não informado'));
+            const sorted = Object.entries(ct).sort((a, b) => b[1] - a[1]).slice(0, 8);
+            const max = sorted[0]?.[1] || 1;
+            document.getElementById('countriesList').innerHTML = sorted.map(([c, n]) => `
+    <div class="list-item">
+      <div class="li-label">${escHtml(c)}</div>
+      <div style="width:120px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:${(n / max * 100).toFixed(0)}%"></div></div>
+          <span class="li-value">${n}</span>
+        </div>
+      </div>
+    </div>`).join('') || '<div class="empty-state"><div class="ei">🌍</div>Sem dados</div>';
+        }
+
+        function escHtml(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        function relTime(d) { if (!d) return '—'; const s = (Date.now() - new Date(d)) / 1000; if (s < 60) return 'agora'; if (s < 3600) return `${Math.floor(s / 60)}min atrás`; if (s < 86400) return `${Math.floor(s / 3600)}h atrás`; return `${Math.floor(s / 86400)}d atrás`; }
+    </script>
+</body>
+
+</html>
