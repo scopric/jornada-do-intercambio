@@ -505,14 +505,14 @@ h5 {
   z-index: 2;
   pointer-events: none;
   background:
-    /* Esquerda — fade profundo nas bordas, centro livre */
-    linear-gradient(to right, #0A0E1A 0%, rgba(10, 14, 26, 0.85) 18%, rgba(10, 14, 26, 0.30) 38%, transparent 62%),
+    /* Esquerda — funde suavemente com o fundo navy da imagem */
+    linear-gradient(to right, #0A0E1A 0%, rgba(10, 14, 26, 0.70) 15%, rgba(10, 14, 26, 0.15) 35%, transparent 55%),
     /* Topo */
-    linear-gradient(to bottom, #0A0E1A 0%, rgba(10, 14, 26, 0.80) 10%, rgba(10, 14, 26, 0.15) 25%, transparent 45%),
+    linear-gradient(to bottom, #0A0E1A 0%, rgba(10, 14, 26, 0.60) 8%, rgba(10, 14, 26, 0.10) 20%, transparent 38%),
     /* Base */
-    linear-gradient(to top, #0A0E1A 0%, rgba(10, 14, 26, 0.80) 14%, rgba(10, 14, 26, 0.15) 30%, transparent 50%),
-    /* Direita — suave */
-    linear-gradient(to left, #0A0E1A 0%, rgba(10, 14, 26, 0.65) 8%, rgba(10, 14, 26, 0.15) 18%, transparent 35%);
+    linear-gradient(to top, #0A0E1A 0%, rgba(10, 14, 26, 0.60) 10%, rgba(10, 14, 26, 0.10) 22%, transparent 40%),
+    /* Direita — verde da imagem funde ao fundo */
+    linear-gradient(to left, rgba(0, 20, 10, 0.7) 0%, rgba(0, 20, 10, 0.30) 8%, transparent 25%);
 }
 
 /* Glow verde — expande a cor da imagem para fundir ao fundo */
@@ -533,8 +533,8 @@ h5 {
   height: 100%;
   object-fit: cover;
   object-position: top center;
-  /* Harmonize com paleta dark: darkening + leve desaturação + hue shift sutil */
-  filter: brightness(1.22) saturate(0.90) hue-rotate(-8deg) contrast(1.06);
+  /* Nova imagem já tem fundo dark — brightness quase natural */
+  filter: brightness(1.05) saturate(1.0) contrast(1.02);
   opacity: 1.0;
   display: block;
 }
