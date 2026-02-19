@@ -494,14 +494,27 @@ h5 {
   z-index: 2;
   pointer-events: none;
   background:
-    /* Esquerda — fade profundo */
-    linear-gradient(to right, #0A0E1A 0%, rgba(10, 14, 26, 0.92) 18%, rgba(10, 14, 26, 0.45) 40%, transparent 68%),
-    /* Topo */
-    linear-gradient(to bottom, #0A0E1A 0%, rgba(10, 14, 26, 0.88) 10%, rgba(10, 14, 26, 0.20) 28%, transparent 52%),
-    /* Base */
-    linear-gradient(to top, #0A0E1A 0%, rgba(10, 14, 26, 0.88) 15%, rgba(10, 14, 26, 0.20) 35%, transparent 58%),
-    /* Direita */
-    linear-gradient(to left, #0A0E1A 0%, rgba(10, 14, 26, 0.80) 8%, rgba(10, 14, 26, 0.20) 20%, transparent 40%);
+    /* Esquerda — fade muito profundo */
+    linear-gradient(to right, #0A0E1A 0%, rgba(10, 14, 26, 0.97) 22%, rgba(10, 14, 26, 0.65) 45%, rgba(10, 14, 26, 0.15) 65%, transparent 82%),
+    /* Topo — arredondado */
+    linear-gradient(to bottom, #0A0E1A 0%, rgba(10, 14, 26, 0.95) 12%, rgba(10, 14, 26, 0.50) 30%, rgba(10, 14, 26, 0.10) 50%, transparent 70%),
+    /* Base — arredondado */
+    linear-gradient(to top, #0A0E1A 0%, rgba(10, 14, 26, 0.95) 18%, rgba(10, 14, 26, 0.50) 38%, rgba(10, 14, 26, 0.10) 55%, transparent 72%),
+    /* Direita — suave */
+    linear-gradient(to left, #0A0E1A 0%, rgba(10, 14, 26, 0.85) 10%, rgba(10, 14, 26, 0.30) 24%, transparent 45%);
+}
+
+/* Glow verde — expande a cor da imagem para fundir ao fundo */
+.hero-right::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: -80px;
+  width: 200px;
+  height: 80%;
+  background: radial-gradient(ellipse at center, rgba(0, 180, 100, 0.14) 0%, rgba(0, 150, 80, 0.07) 50%, transparent 80%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .hero-img {
