@@ -515,8 +515,8 @@ h5 {
   object-fit: cover;
   object-position: top center;
   /* Harmonize com paleta dark: darkening + leve desaturação + hue shift sutil */
-  filter: brightness(0.72) saturate(0.80) hue-rotate(-8deg) contrast(1.05);
-  opacity: 0.90;
+  filter: brightness(0.92) saturate(0.85) hue-rotate(-8deg) contrast(1.05);
+  opacity: 1.0;
   display: block;
 }
 
