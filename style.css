@@ -616,20 +616,22 @@ h5 {
 }
 
 .row-track-wrap {
-  position: relative
+  position: relative;
+  overflow: hidden;
 }
 
 .row-track {
   display: flex;
-  gap: 16px;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-  padding: 6px 40px 14px;
-  scrollbar-width: none;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 }
 
-.row-track::-webkit-scrollbar {
-  display: none
+/* ── Carousel page ───────────────────────────────────── */
+.carousel-page {
+  flex: 0 0 100%;
+  display: flex;
+  gap: 16px;
+  padding: 6px 40px 14px;
 }
 
 /* ── Setas de navegação ─────────────────────────────── */
@@ -677,7 +679,7 @@ h5 {
 
 /* ── CONTENT CARDS ───────────────────────────────────────── */
 .c-card {
-  flex: 0 0 calc(25% - 12px);
+  flex: 1;
   min-width: 0;
   border-radius: var(--r2);
   overflow: hidden;
@@ -685,6 +687,35 @@ h5 {
   border: 1px solid var(--border);
   transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), border-color 0.25s var(--ease);
 }
+
+/* ── Carousel dots ───────────────────────────────────── */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 4px 0 10px;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border2);
+  cursor: pointer;
+  transition: var(--t);
+  border: none;
+  padding: 0;
+}
+
+.carousel-dot.active {
+  background: var(--green);
+  transform: scale(1.35);
+}
+
+.carousel-dot:hover {
+  background: var(--green2);
+}
+
 
 .c-card:hover {
   transform: translateY(-5px);

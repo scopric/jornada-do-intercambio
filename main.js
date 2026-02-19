@@ -186,13 +186,54 @@ navLinks?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
 }));
 
 
-// ── ROW ARROWS ───────────────────────────────────────────────
+// ── ROW CAROUSEL ─────────────────────────────────────────────
+const carouselState = {};
+
+// Initialize state for each row-track
+document.querySelectorAll('.row-track').forEach(track => {
+    const pages = track.querySelectorAll('.carousel-page').length;
+    carouselState[track.id] = { page: 0, total: pages };
+    // Disable left arrow initially (starts at page 0)
+    const wrap = track.closest('.row-track-wrap');
+    const leftBtn = wrap && wrap.querySelector('.row-arrow.left');
+    if (leftBtn) leftBtn.disabled = true;
+});
+
+function goToPage(trackId, page) {
+    const track = document.getElementById(trackId);
+    if (!track) return;
+    const state = carouselState[trackId];
+    if (!state) return;
+
+    state.page = Math.max(0, Math.min(state.total - 1, page));
+    track.style.transform = `translateX(-${state.page * 100}%)`;
+
+    const wrap = track.closest('.row-track-wrap');
+    if (!wrap) return;
+
+    const leftBtn = wrap.querySelector('.row-arrow.left');
+    const rightBtn = wrap.querySelector('.row-arrow.right');
+    if (leftBtn) leftBtn.disabled = state.page === 0;
+    if (rightBtn) rightBtn.disabled = state.page === state.total - 1;
+
+    wrap.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === state.page);
+    });
+}
+
 document.querySelectorAll('.row-arrow').forEach(btn => {
     btn.addEventListener('click', () => {
-        const track = document.getElementById(btn.dataset.row);
-        if (!track) return;
-        const isLeft = btn.classList.contains('left');
-        track.scrollBy({ left: isLeft ? -track.clientWidth : track.clientWidth, behavior: 'smooth' });
+        const id = btn.dataset.row;
+        const state = carouselState[id];
+        if (!state) return;
+        const delta = btn.classList.contains('left') ? -1 : 1;
+        goToPage(id, state.page + delta);
+    });
+});
+
+document.querySelectorAll('.carousel-dot').forEach(dot => {
+    dot.addEventListener('click', () => {
+        goToPage(dot.dataset.row, parseInt(dot.dataset.page, 10));
     });
 });
 
