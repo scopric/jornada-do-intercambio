@@ -176,14 +176,14 @@ h5 {
 }
 
 .btn-primary {
-  background: var(--green);
-  color: #0A0E1A
+  background: var(--gold);
+  color: #0A0E1A;
 }
 
 .btn-primary:hover {
-  background: var(--green2);
+  background: #e8891e;
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(0, 200, 150, 0.25)
+  box-shadow: 0 6px 20px rgba(243, 156, 52, 0.35);
 }
 
 .btn-ghost {
@@ -485,24 +485,23 @@ h5 {
   min-height: 500px;
   max-height: 780px;
   overflow: hidden;
-  /* Fade oval — centro nítido, bordas dissolvidas em elipse */
-  -webkit-mask-image: radial-gradient(ellipse 82% 88% at 55% 50%,
-      black 30%,
-      rgba(0, 0, 0, 0.7) 55%,
-      transparent 80%);
-  mask-image: radial-gradient(ellipse 82% 88% at 55% 50%,
-      black 30%,
-      rgba(0, 0, 0, 0.7) 55%,
-      transparent 80%);
 }
 
-/* Overlay interno — apenas escurecimento sutil */
+/* Overlay com cor exata do fundo — funde a imagem em todas as bordas */
 .hero-img-overlay {
   position: absolute;
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  background: rgba(10, 14, 26, 0.06);
+  background:
+    /* Esquerda — fade profundo */
+    linear-gradient(to right, #0A0E1A 0%, rgba(10, 14, 26, 0.92) 18%, rgba(10, 14, 26, 0.45) 40%, transparent 68%),
+    /* Topo */
+    linear-gradient(to bottom, #0A0E1A 0%, rgba(10, 14, 26, 0.88) 10%, rgba(10, 14, 26, 0.20) 28%, transparent 52%),
+    /* Base */
+    linear-gradient(to top, #0A0E1A 0%, rgba(10, 14, 26, 0.88) 15%, rgba(10, 14, 26, 0.20) 35%, transparent 58%),
+    /* Direita */
+    linear-gradient(to left, #0A0E1A 0%, rgba(10, 14, 26, 0.80) 8%, rgba(10, 14, 26, 0.20) 20%, transparent 40%);
 }
 
 .hero-img {
