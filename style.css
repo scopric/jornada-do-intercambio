@@ -1857,19 +1857,21 @@ h5 {
   .hero-right {
     display: block;
     position: relative;
-    /* era absolute no desktop */
     top: auto;
     right: auto;
     flex: 1;
     width: auto;
-    height: 58vh;
-    min-height: 260px;
-    max-height: 480px;
+    height: 42vh;
+    /* menor — alinha base com os botões */
+    min-height: 180px;
+    max-height: 320px;
     border-radius: 14px;
     overflow: hidden;
+    align-self: flex-end;
+    /* ancora base na linha dos botões */
   }
 
-  /* Overlay mais leve no mobile — imagem é standalone, não precisa fundir com texto */
+  /* Overlay mais leve no mobile — imagem é standalone */
   .hero-img-overlay {
     background:
       linear-gradient(to bottom, rgba(10, 14, 26, 0.35) 0%, transparent 20%),
@@ -1886,21 +1888,24 @@ h5 {
   .hero-p {
     font-size: 0.75rem;
     max-width: none;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
     line-height: 1.6;
   }
 
+  /* Botões — última linha visível do hero-left no mobile */
   .hero-actions {
-    margin-bottom: 28px;
+    margin-bottom: 0;
+    /* remove espaço após os botões */
     gap: 8px;
   }
 
+  /* Oculta divider e stats no mobile — hero-left termina nos botões */
   .hero-divider {
-    margin-bottom: 20px;
+    display: none;
   }
 
   .hero-stats {
-    gap: 20px;
+    display: none;
   }
 
   .cat-grid,
