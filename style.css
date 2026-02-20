@@ -1896,40 +1896,35 @@ h5 {
 
   /* ── Mobile carousel: scroll nativo card-a-card ── */
   .row-track-wrap {
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .row-track-wrap::-webkit-scrollbar {
-    display: none
+    overflow: visible;
+    /* deixa o track se expandir */
   }
 
   .row-track {
+    overflow-x: auto;
+    /* scroll acontece aqui */
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
     transform: none !important;
     transition: none !important;
-    padding: 4px 0 14px;
-    gap: 0;
+    /* padding lateral cria margem de início/fim dentro do scroll */
+    padding: 4px 20px 14px;
+    gap: 12px;
+    /* espaçamento uniforme entre páginas */
   }
 
-  /* Achata os carousel-pages para que os cards fiquem em linha */
+  .row-track::-webkit-scrollbar {
+    display: none
+  }
+
+  /* Cada carousel-page fica inline sem override de largura */
   .carousel-page {
-    flex: none;
+    flex: 0 0 auto;
     width: auto;
     gap: 12px;
-    padding: 0 0 0 12px;
-  }
-
-  .carousel-page:first-child {
-    padding-left: 20px;
-  }
-
-  .carousel-page:last-child::after {
-    content: '';
-    display: block;
-    min-width: 20px;
-    flex: none;
+    padding: 0;
+    /* padding zerado — gap do track cuida do espaço */
   }
 
   .c-card {
