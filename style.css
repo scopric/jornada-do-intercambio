@@ -1838,16 +1838,19 @@ h5 {
     display: none
   }
 
-  /* Hero mobile — layout side-by-side: texto esquerda, imagem direita */
+  /* Hero mobile — remove espaço vazio: hero-inner não usa mais 100vh */
+  .hero {
+    min-height: 0 !important;
+  }
+
   .hero-inner {
-    padding: 72px 0 36px;
-    /* 72px cobre só a navbar fixa */
+    padding: 64px 0 32px !important;
+    /* só o necessário para passar abaixo da navbar */
     flex-direction: row;
     align-items: center;
-    /* centraliza verticalmente — sem vazio no topo */
     gap: 12px;
-    min-height: auto;
-    /* remove a altura excessiva que criava espaço vazio */
+    min-height: 0 !important;
+    /* cancela o 100vh do CSS principal */
   }
 
   .hero-left {
