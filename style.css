@@ -1838,24 +1838,69 @@ h5 {
     display: none
   }
 
+  /* Hero mobile — layout side-by-side: texto esquerda, imagem direita */
   .hero-inner {
-    padding: 120px 0 60px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0;
+    padding: 80px 0 36px;
+    flex-direction: row;
+    /* mantém row — texto e imagem lado a lado */
+    align-items: flex-end;
+    gap: 12px;
+    min-height: 88vh;
   }
 
   .hero-left {
-    flex: none;
-    width: 100%;
+    flex: 0 0 52%;
+    width: 52%;
   }
 
+  /* Reativa a imagem — sai de absolute para participar do flex */
   .hero-right {
-    display: none;
+    display: block;
+    position: relative;
+    /* era absolute no desktop */
+    top: auto;
+    right: auto;
+    flex: 1;
+    width: auto;
+    height: 58vh;
+    min-height: 260px;
+    max-height: 480px;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  /* Overlay mais leve no mobile — imagem é standalone, não precisa fundir com texto */
+  .hero-img-overlay {
+    background:
+      linear-gradient(to bottom, rgba(10, 14, 26, 0.35) 0%, transparent 20%),
+      linear-gradient(to top, rgba(10, 14, 26, 0.35) 0%, transparent 20%),
+      linear-gradient(to left, rgba(10, 14, 26, 0.25) 0%, transparent 30%);
   }
 
   .hero-h1 {
-    font-size: 2.8rem
+    font-size: 1.8rem;
+    line-height: 1.0;
+  }
+
+  /* Subtítulo compacto — fonte menor, sem max-width, bloco uniforme */
+  .hero-p {
+    font-size: 0.75rem;
+    max-width: none;
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    margin-bottom: 28px;
+    gap: 8px;
+  }
+
+  .hero-divider {
+    margin-bottom: 20px;
+  }
+
+  .hero-stats {
+    gap: 20px;
   }
 
   .cat-grid,
@@ -1947,11 +1992,21 @@ h5 {
 
 @media(max-width:480px) {
   .hero-h1 {
-    font-size: 2.2rem
+    font-size: 1.5rem
+      /* ainda menor em telas muito pequenas */
+  }
+
+  .hero-p {
+    font-size: 0.7rem
+  }
+
+  .hero-right {
+    height: 50vh;
+    min-height: 220px;
   }
 
   .hero-stats {
-    gap: 20px
+    gap: 14px
   }
 
   .es-n {
