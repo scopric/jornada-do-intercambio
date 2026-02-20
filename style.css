@@ -1840,12 +1840,14 @@ h5 {
 
   /* Hero mobile — layout side-by-side: texto esquerda, imagem direita */
   .hero-inner {
-    padding: 80px 0 36px;
+    padding: 72px 0 36px;
+    /* 72px cobre só a navbar fixa */
     flex-direction: row;
-    /* mantém row — texto e imagem lado a lado */
-    align-items: flex-end;
+    align-items: center;
+    /* centraliza verticalmente — sem vazio no topo */
     gap: 12px;
-    min-height: 88vh;
+    min-height: auto;
+    /* remove a altura excessiva que criava espaço vazio */
   }
 
   .hero-left {
