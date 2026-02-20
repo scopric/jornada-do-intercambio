@@ -1893,6 +1893,58 @@ h5 {
   .editorial-strip .wrap {
     gap: 28px
   }
+
+  /* ── Mobile carousel: scroll nativo card-a-card ── */
+  .row-track-wrap {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .row-track-wrap::-webkit-scrollbar {
+    display: none
+  }
+
+  .row-track {
+    transform: none !important;
+    transition: none !important;
+    padding: 4px 0 14px;
+    gap: 0;
+  }
+
+  /* Achata os carousel-pages para que os cards fiquem em linha */
+  .carousel-page {
+    flex: none;
+    width: auto;
+    gap: 12px;
+    padding: 0 0 0 12px;
+  }
+
+  .carousel-page:first-child {
+    padding-left: 20px;
+  }
+
+  .carousel-page:last-child::after {
+    content: '';
+    display: block;
+    min-width: 20px;
+    flex: none;
+  }
+
+  .c-card {
+    flex: 0 0 78vw;
+    scroll-snap-align: start;
+  }
+
+  /* Setas e dots ocultos no mobile — gesto de swipe substitui */
+  .row-arrow {
+    display: none;
+  }
+
+  .carousel-dots {
+    display: none;
+  }
 }
 
 @media(max-width:480px) {
@@ -1909,7 +1961,8 @@ h5 {
   }
 
   .c-card {
-    width: 185px
+    flex: 0 0 78vw;
+    /* card ocupa 78% da viewport, mantém consistência com 768px */
   }
 }
 
