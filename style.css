@@ -1894,45 +1894,48 @@ h5 {
     gap: 28px
   }
 
-  /* ── Mobile carousel: scroll nativo card-a-card ── */
+  /* ── Mobile carousel: Grid nativo card-a-card ── */
+  /* O wrap vira o scroll container (mais confiável que scroll no track) */
   .row-track-wrap {
-    overflow: visible;
-    /* deixa o track se expandir */
-  }
-
-  .row-track {
     overflow-x: auto;
-    /* scroll acontece aqui */
+    overflow-y: visible;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+  }
+
+  .row-track-wrap::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Track vira grid horizontal — não é mais flex */
+  .row-track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 78vw;
+    /* cada coluna = 1 card */
+    gap: 12px;
+    padding: 4px 20px 14px;
+    min-width: max-content;
+    /* força expansão do conteúdo */
     transform: none !important;
     transition: none !important;
-    /* padding lateral cria margem de início/fim dentro do scroll */
-    padding: 4px 20px 14px;
-    gap: 12px;
-    /* espaçamento uniforme entre páginas */
+    will-change: auto !important;
+    /* cancela compositing layer que causava overlap iOS */
   }
 
-  .row-track::-webkit-scrollbar {
-    display: none
-  }
-
-  /* Cada carousel-page fica inline sem override de largura */
+  /* Flatten: carousel-page desaparece como container */
   .carousel-page {
-    flex: 0 0 auto;
-    width: auto;
-    gap: 12px;
-    padding: 0;
-    /* padding zerado — gap do track cuida do espaço */
+    display: contents;
   }
 
+  /* Cada card ocupa sua coluna e fica como snap target */
   .c-card {
-    flex: 0 0 78vw;
+    width: 100%;
     scroll-snap-align: start;
   }
 
-  /* Setas e dots ocultos no mobile — gesto de swipe substitui */
+  /* Setas e dots ocultos — swipe nativo substitui */
   .row-arrow {
     display: none;
   }
