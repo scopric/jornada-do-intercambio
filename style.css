@@ -648,6 +648,12 @@ h5 {
   font-weight: 500
 }
 
+/* ── HERO MOBILE TABS (desktop: hidden) ─────────────────── */
+.hero-mobile-tabs {
+  display: none;
+  /* oculto no desktop */
+}
+
 /* ── BROWSE ──────────────────────────────────────────────── */
 .browse {
   background: var(--bg);
@@ -1838,19 +1844,62 @@ h5 {
     display: none
   }
 
-  /* Hero mobile — remove espaço vazio: hero-inner não usa mais 100vh */
+  /* Hero mobile — remove espaço vazio e estrutura para abas */
   .hero {
     min-height: 0 !important;
   }
 
+  .hero>.wrap {
+    min-height: 100dvh;
+    /* preenche a tela inteira */
+    display: flex;
+    flex-direction: column;
+  }
+
   .hero-inner {
-    padding: 64px 0 32px !important;
-    /* só o necessário para passar abaixo da navbar */
+    padding: 64px 0 16px !important;
     flex-direction: row;
+    flex-wrap: wrap;
+    /* abas vão para a segunda linha */
     align-items: center;
+    align-content: center;
     gap: 12px;
     min-height: 0 !important;
-    /* cancela o 100vh do CSS principal */
+    flex: 1;
+  }
+
+  /* Abas mobile — ocupam linha inteira abaixo do texto+imagem */
+  .hero-mobile-tabs {
+    display: flex;
+    flex: 0 0 100%;
+    /* linha própria em flex-wrap */
+    width: 100%;
+    gap: 10px;
+    padding: 16px 0 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    margin-top: auto;
+    /* empurra para baixo dentro do flex */
+  }
+
+  .hero-tab {
+    flex: 1;
+    text-align: center;
+    padding: 10px 6px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+
+  .hero-tab.active,
+  .hero-tab:hover {
+    background: rgba(0, 200, 150, 0.12);
+    color: var(--green);
+    border-color: rgba(0, 200, 150, 0.3);
   }
 
   .hero-left {
