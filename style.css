@@ -2605,6 +2605,266 @@ h5 {
   font-size: 0.8rem
 }
 
+/* ── ASSESSORIA DE CAPITALIZAÇÃO ─────────────────────────── */
+.cap-section {
+  background: var(--bg3);
+  padding: 96px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.cap-section::before {
+  content: '';
+  position: absolute;
+  top: -160px;
+  right: -160px;
+  width: 560px;
+  height: 560px;
+  background: radial-gradient(circle, rgba(63, 175, 142, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cap-section::after {
+  content: '';
+  position: absolute;
+  bottom: -120px;
+  left: -120px;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(243, 156, 52, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cap-header {
+  max-width: 680px;
+  margin-bottom: 48px;
+}
+
+.cap-header .sec-sub strong {
+  color: var(--white);
+  font-weight: 700;
+}
+
+/* Banner de destaque */
+.cap-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  background: linear-gradient(135deg, rgba(63, 175, 142, 0.12), rgba(243, 156, 52, 0.08));
+  border: 1px solid rgba(63, 175, 142, 0.25);
+  border-left: 4px solid var(--green);
+  border-radius: var(--r);
+  padding: 24px 28px;
+  margin-bottom: 56px;
+}
+
+.cap-banner-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.cap-banner-text strong {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--white);
+}
+
+.cap-banner-text span {
+  font-size: 0.9rem;
+  color: var(--muted2);
+  line-height: 1.65;
+}
+
+/* Grid de cards */
+.cap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 56px;
+}
+
+.cap-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 28px 24px;
+  transition: border-color 0.25s var(--ease), background 0.25s var(--ease), transform 0.25s var(--ease);
+  position: relative;
+}
+
+.cap-card:hover {
+  background: var(--surface-h);
+  border-color: rgba(63, 175, 142, 0.3);
+  transform: translateY(-4px);
+}
+
+.cap-card-icon {
+  font-size: 2rem;
+  margin-bottom: 14px;
+  line-height: 1;
+}
+
+.cap-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.cap-card p {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 18px;
+}
+
+.cap-card-tag {
+  display: inline-block;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  border: 1px solid rgba(243, 156, 52, 0.3);
+  padding: 3px 10px;
+  border-radius: 100px;
+  background: rgba(243, 156, 52, 0.07);
+}
+
+/* CTA block */
+.cap-cta {
+  background: linear-gradient(135deg, rgba(63, 175, 142, 0.1), rgba(243, 156, 52, 0.07));
+  border: 1px solid rgba(63, 175, 142, 0.2);
+  border-radius: var(--r2);
+  padding: 56px 52px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 56px;
+  align-items: center;
+}
+
+.cap-cta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(243, 156, 52, 0.1);
+  border: 1px solid rgba(243, 156, 52, 0.25);
+  border-radius: 20px;
+  padding: 5px 14px;
+  margin-bottom: 18px;
+}
+
+.cap-cta-content h3 {
+  font-size: clamp(1.4rem, 2.8vw, 2rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+
+.cap-cta-content p {
+  font-size: 0.9rem;
+  color: var(--muted2);
+  line-height: 1.7;
+  max-width: 520px;
+  margin-bottom: 28px;
+}
+
+.cap-cta-btns {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cap-cta-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  min-width: 240px;
+}
+
+.cap-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 16px;
+  border-left: 3px solid var(--green);
+}
+
+.cap-stat-n {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--green), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+
+.cap-stat-l {
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ── Responsive: cap-section ─────────────────────────────── */
+@media (max-width: 1024px) {
+  .cap-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cap-cta {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .cap-cta-stats {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+    min-width: unset;
+  }
+
+  .cap-stat {
+    flex: 1;
+    min-width: 180px;
+  }
+}
+
+@media (max-width: 600px) {
+  .cap-section {
+    padding: 64px 0;
+  }
+
+  .cap-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cap-banner {
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+  }
+
+  .cap-cta {
+    padding: 32px 24px;
+  }
+
+  .cap-cta-stats {
+    flex-direction: column;
+  }
+}
+
 @media(max-width:600px) {
   .cb-content {
     padding: 16px 20px
